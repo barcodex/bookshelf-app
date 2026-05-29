@@ -15,28 +15,7 @@ import { getFile, listDirectory } from '../services/github';
 import { parse } from '../services/markdown';
 import { getSettings } from '../services/storage';
 import { BookFormData } from '../types/book';
-
-type Section = { title: string; data: BookFormData[] };
-
-const formatDay = (iso: string) =>
-  new Intl.DateTimeFormat(undefined, { day: 'numeric', month: 'long' }).format(
-    new Date(iso + 'T00:00:00')
-  );
-
-const monthKey = (iso: string) =>
-  new Intl.DateTimeFormat('ru', { year: 'numeric', month: 'long' }).format(
-    new Date(iso + 'T00:00:00')
-  );
-
-function groupByMonth(books: BookFormData[]): Section[] {
-  const map = new Map<string, BookFormData[]>();
-  for (const book of books) {
-    const key = monthKey(book.date_finished);
-    if (!map.has(key)) map.set(key, []);
-    map.get(key)!.push(book);
-  }
-  return Array.from(map.entries()).map(([title, data]) => ({ title, data }));
-}
+import { YearSection, formatDisplayDate, groupByYear } from '../utils/groupBooks';
 
 export default function TimelineScreen() {
   const [books, setBooks] = useState<BookFormData[]>([]);
@@ -54,15 +33,15 @@ export default function TimelineScreen() {
       const files = await listDirectory(settings, 'books');
       const loaded = await Promise.all(
         files
-          .filter((f) => f.name.endsWith('.md'))
-          .map(async (f) => {
+          .filter(f => f.name.endsWith('.md'))
+          .map(async f => {
             const { content } = await getFile(settings, f.path);
             return parse(content, f.name.replace('.md', ''));
           })
       );
       setBooks(
         loaded
-          .filter((b) => b.date_finished)
+          .filter(b => b.date_finished)
           .sort((a, b) => b.date_finished.localeCompare(a.date_finished))
       );
     } catch (e) {
@@ -93,28 +72,41 @@ export default function TimelineScreen() {
     );
   }
 
+  const sections = groupByYear(books);
+
   return (
     <SafeAreaView style={styles.container}>
-      <SectionList<BookFormData, Section>
-        sections={groupByMonth(books)}
-        keyExtractor={(item) => item.slug}
+      <SectionList<BookFormData, YearSection>
+        sections={sections}
+        keyExtractor={item => item.slug}
         stickySectionHeadersEnabled
         renderSectionHeader={({ section }) => (
-          <View style={styles.monthHeader}>
-            <Text style={styles.monthText}>{section.title}</Text>
+          <View style={[styles.yearHeader, { backgroundColor: section.backgroundColor }]}>
+            <Text style={styles.yearText}>{section.year}</Text>
+            <Text style={styles.yearCount}>{section.data.length} книг</Text>
           </View>
         )}
-        renderItem={({ item }) => (
-          <Pressable style={styles.item} onPress={() => setSelected(item)}>
-            <Text style={styles.itemDate}>{formatDay(item.date_finished)}</Text>
-            <View style={styles.itemMeta}>
-              <Text style={styles.itemTitle} numberOfLines={1}>{item.title}</Text>
-              <Text style={styles.itemAuthor} numberOfLines={1}>{item.author}</Text>
-            </View>
-          </Pressable>
-        )}
+        renderSectionFooter={() => <View style={styles.sectionGap} />}
+        renderItem={({ item, section }) => {
+          const dateStr = formatDisplayDate(item.date_finished);
+          return (
+            <Pressable
+              style={[styles.item, { backgroundColor: section.backgroundColor }]}
+              onPress={() => setSelected(item)}
+            >
+              <Text style={[styles.itemDate, !dateStr && styles.itemDateEmpty]}>
+                {dateStr || '—'}
+              </Text>
+              <View style={styles.itemMeta}>
+                <Text style={styles.itemTitle} numberOfLines={1}>{item.title}</Text>
+                <Text style={styles.itemAuthor} numberOfLines={1}>{item.author}</Text>
+              </View>
+            </Pressable>
+          );
+        }}
         contentContainerStyle={styles.listContent}
       />
+
       {selected && (
         <BookDetailModal
           book={selected}
@@ -140,24 +132,28 @@ const styles = StyleSheet.create({
   retryBtn: { paddingHorizontal: 20, paddingVertical: 10, backgroundColor: '#111', borderRadius: 8 },
   retryLabel: { color: '#fff', fontWeight: '600' },
   listContent: { paddingBottom: 32 },
-  monthHeader: {
-    backgroundColor: '#f5f5f5',
+  yearHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
     paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    paddingTop: 14,
+    paddingBottom: 6,
   },
-  monthText: { fontSize: 13, fontWeight: '700', color: '#555', textTransform: 'uppercase', letterSpacing: 0.5 },
+  yearText: { fontSize: 22, fontWeight: '700', color: '#111' },
+  yearCount: { fontSize: 13, color: '#888' },
+  sectionGap: { height: 20, backgroundColor: '#fff' },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: 13,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: 'rgba(0,0,0,0.05)',
     gap: 14,
   },
-  itemDate: { fontSize: 13, color: '#888', width: 80 },
+  itemDate: { fontSize: 13, color: '#888', width: 72 },
+  itemDateEmpty: { color: '#ccc' },
   itemMeta: { flex: 1 },
   itemTitle: { fontSize: 15, fontWeight: '600', color: '#111', marginBottom: 2 },
   itemAuthor: { fontSize: 13, color: '#666' },

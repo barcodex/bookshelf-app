@@ -17,6 +17,7 @@ import { getFile, listDirectory } from '../services/github';
 import { parse } from '../services/markdown';
 import { getSettings } from '../services/storage';
 import { BookFormData, BookMedia } from '../types/book';
+import { YearSection, formatDisplayDate, groupByYear } from '../utils/groupBooks';
 
 const MEDIA_OPTIONS: { value: BookMedia; label: string }[] = [
   { value: 'бумажная', label: 'Бумажная' },
@@ -24,27 +25,6 @@ const MEDIA_OPTIONS: { value: BookMedia; label: string }[] = [
   { value: 'аудио', label: 'Аудио' },
 ];
 
-type Section = { title: string; data: BookFormData[] };
-
-const monthKey = (iso: string) =>
-  new Intl.DateTimeFormat('ru', { year: 'numeric', month: 'long' }).format(
-    new Date(iso + 'T00:00:00')
-  );
-
-const formatDay = (iso: string) =>
-  new Intl.DateTimeFormat(undefined, { day: 'numeric', month: 'long' }).format(
-    new Date(iso + 'T00:00:00')
-  );
-
-function groupByMonth(books: BookFormData[]): Section[] {
-  const map = new Map<string, BookFormData[]>();
-  for (const book of books) {
-    const key = monthKey(book.date_finished);
-    if (!map.has(key)) map.set(key, []);
-    map.get(key)!.push(book);
-  }
-  return Array.from(map.entries()).map(([title, data]) => ({ title, data }));
-}
 
 export default function SearchScreen() {
   const [allBooks, setAllBooks] = useState<BookFormData[]>([]);
@@ -153,7 +133,7 @@ export default function SearchScreen() {
   const hasFilters = query.trim().length > 0 || minRating > 0 || activeTags.length > 0 || activeMedia.length > 0;
   const resetFilters = () => { setQuery(''); setDebouncedQuery(''); setMinRating(0); setActiveTags([]); setActiveMedia([]); };
 
-  const sections = filtered ? groupByMonth(filtered) : [];
+  const sections = filtered ? groupByYear(filtered) : [];
 
   const Header = (
     <View style={styles.filters}>
@@ -246,28 +226,38 @@ export default function SearchScreen() {
           <ActivityIndicator style={{ marginTop: 40 }} size="large" />
         </>
       ) : (
-        <SectionList<BookFormData, Section>
+        <SectionList<BookFormData, YearSection>
           sections={sections}
           keyExtractor={item => item.slug}
           ListHeaderComponent={Header}
           stickySectionHeadersEnabled
           renderSectionHeader={({ section }) => (
-            <View style={styles.monthHeader}>
-              <Text style={styles.monthText}>{section.title}</Text>
+            <View style={[styles.yearHeader, { backgroundColor: section.backgroundColor }]}>
+              <Text style={styles.yearText}>{section.year}</Text>
+              <Text style={styles.yearCount}>{section.data.length} книг</Text>
             </View>
           )}
-          renderItem={({ item }) => (
-            <Pressable style={styles.item} onPress={() => setSelected(item)}>
-              <Text style={styles.itemDate}>{formatDay(item.date_finished)}</Text>
-              <View style={styles.itemMeta}>
-                <Text style={styles.itemTitle} numberOfLines={1}>{item.title}</Text>
-                <Text style={styles.itemAuthor} numberOfLines={1}>{item.author}</Text>
-              </View>
-              {item.rating > 0 && (
-                <Text style={styles.itemRating}>{'★'.repeat(item.rating > 5 ? 1 : 0)}{item.rating}</Text>
-              )}
-            </Pressable>
-          )}
+          renderSectionFooter={() => <View style={styles.sectionGap} />}
+          renderItem={({ item, section }) => {
+            const dateStr = formatDisplayDate(item.date_finished);
+            return (
+              <Pressable
+                style={[styles.item, { backgroundColor: section.backgroundColor }]}
+                onPress={() => setSelected(item)}
+              >
+                <Text style={[styles.itemDate, !dateStr && styles.itemDateEmpty]}>
+                  {dateStr || '—'}
+                </Text>
+                <View style={styles.itemMeta}>
+                  <Text style={styles.itemTitle} numberOfLines={1}>{item.title}</Text>
+                  <Text style={styles.itemAuthor} numberOfLines={1}>{item.author}</Text>
+                </View>
+                {item.rating > 0 && (
+                  <Text style={styles.itemRating}>{item.rating}★</Text>
+                )}
+              </Pressable>
+            );
+          }}
           ListEmptyComponent={
             filtered !== null
               ? <Text style={styles.empty}>Ничего не найдено</Text>
@@ -319,17 +309,20 @@ const styles = StyleSheet.create({
   resultsRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   resultsCount: { fontSize: 13, color: '#888' },
   reset: { fontSize: 13, color: '#007AFF' },
-  monthHeader: {
-    backgroundColor: '#f5f5f5', paddingHorizontal: 16, paddingVertical: 8,
-    borderBottomWidth: 1, borderBottomColor: '#eee',
+  yearHeader: {
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline',
+    paddingHorizontal: 16, paddingTop: 14, paddingBottom: 6,
   },
-  monthText: { fontSize: 13, fontWeight: '700', color: '#555', textTransform: 'uppercase', letterSpacing: 0.5 },
+  yearText: { fontSize: 22, fontWeight: '700', color: '#111' },
+  yearCount: { fontSize: 13, color: '#888' },
+  sectionGap: { height: 20, backgroundColor: '#fff' },
   item: {
     flexDirection: 'row', alignItems: 'center',
-    paddingHorizontal: 16, paddingVertical: 14,
-    borderBottomWidth: 1, borderBottomColor: '#f0f0f0', gap: 14,
+    paddingHorizontal: 16, paddingVertical: 13,
+    borderBottomWidth: 1, borderBottomColor: 'rgba(0,0,0,0.05)', gap: 14,
   },
-  itemDate: { fontSize: 13, color: '#888', width: 80 },
+  itemDate: { fontSize: 13, color: '#888', width: 72 },
+  itemDateEmpty: { color: '#ccc' },
   itemMeta: { flex: 1 },
   itemTitle: { fontSize: 15, fontWeight: '600', color: '#111', marginBottom: 2 },
   itemAuthor: { fontSize: 13, color: '#666' },
