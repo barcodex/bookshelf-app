@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ActivityIndicator, Pressable, SafeAreaView, StyleSheet, Text } from 'react-native';
 import BookForm from '../components/BookForm';
+import { useCacheContext } from '../context/CacheContext';
 import { getFile, saveFile } from '../services/github';
 import { serialize } from '../services/markdown';
 import { getSettings } from '../services/storage';
@@ -9,6 +10,7 @@ import { BookFormData, emptyBook } from '../types/book';
 export default function AddBookScreen() {
   const [data, setData] = useState<BookFormData>(emptyBook);
   const [saving, setSaving] = useState(false);
+  const { invalidate } = useCacheContext();
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -39,6 +41,7 @@ export default function AddBookScreen() {
         // файл не существует — создаём новый
       }
       await saveFile(settings, path, serialize(data), sha);
+      invalidate();
       setSuccess(`Сохранено: books/${data.slug}.md`);
       setData(emptyBook);
     } catch (e) {

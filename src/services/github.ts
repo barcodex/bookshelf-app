@@ -75,6 +75,13 @@ export async function listDirectory(settings: Settings, path: string) {
   return request<GithubDirEntry[]>(settings, 'GET', `/repos/${settings.repo}/contents/${path}`);
 }
 
+export async function getLatestCommitSha(settings: Settings): Promise<string> {
+  const data = await request<{ object: { sha: string } }>(
+    settings, 'GET', `/repos/${settings.repo}/git/refs/heads/main`
+  );
+  return data.object.sha;
+}
+
 export async function validateAccess(settings: Settings): Promise<void> {
   await request(settings, 'GET', `/repos/${settings.repo}`);
 }

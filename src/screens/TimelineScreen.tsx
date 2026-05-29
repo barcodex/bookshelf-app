@@ -1,5 +1,5 @@
 import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -11,7 +11,9 @@ import {
 } from 'react-native';
 import BookDetailModal from '../components/BookDetailModal';
 import EditBookModal from '../components/EditBookModal';
-import { getFile, listDirectory } from '../services/github';
+import { useCacheContext } from '../context/CacheContext';
+import { getFile, getLatestCommitSha, listDirectory } from '../services/github';
+import { getCachedBooks, setCachedBooks } from '../services/booksCache';
 import { parse } from '../services/markdown';
 import { getSettings } from '../services/storage';
 import { BookFormData } from '../types/book';
@@ -23,14 +25,31 @@ export default function TimelineScreen() {
   const [error, setError] = useState('');
   const [selected, setSelected] = useState<BookFormData | null>(null);
   const [editing, setEditing] = useState<BookFormData | null>(null);
+  const { cacheVersion, invalidate } = useCacheContext();
+  const isFocused = useRef(false);
 
   const loadBooks = useCallback(async () => {
     const settings = getSettings();
     if (!settings) return;
+
+    const cached = getCachedBooks();
+    if (cached) {
+      setBooks(
+        cached.books
+          .filter(b => b.date_finished)
+          .sort((a, b) => b.date_finished.localeCompare(a.date_finished))
+      );
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError('');
     try {
-      const files = await listDirectory(settings, 'books');
+      const [files, commitSha] = await Promise.all([
+        listDirectory(settings, 'books'),
+        getLatestCommitSha(settings),
+      ]);
       const loaded = await Promise.all(
         files
           .filter(f => f.name.endsWith('.md'))
@@ -39,6 +58,7 @@ export default function TimelineScreen() {
             return parse(content, f.name.replace('.md', ''));
           })
       );
+      setCachedBooks(loaded, commitSha);
       setBooks(
         loaded
           .filter(b => b.date_finished)
@@ -51,7 +71,16 @@ export default function TimelineScreen() {
     }
   }, []);
 
-  useFocusEffect(useCallback(() => { loadBooks(); }, [loadBooks]));
+  useFocusEffect(useCallback(() => {
+    isFocused.current = true;
+    loadBooks();
+    return () => { isFocused.current = false; };
+  }, [loadBooks]));
+
+  // Перезагружаем если кэш инвалидирован пока вкладка открыта
+  useEffect(() => {
+    if (isFocused.current) loadBooks();
+  }, [cacheVersion]);
 
   if (loading) {
     return (
@@ -72,12 +101,10 @@ export default function TimelineScreen() {
     );
   }
 
-  const sections = groupByYear(books);
-
   return (
     <SafeAreaView style={styles.container}>
       <SectionList<BookFormData, YearSection>
-        sections={sections}
+        sections={groupByYear(books)}
         keyExtractor={item => item.slug}
         stickySectionHeadersEnabled
         renderSectionHeader={({ section }) => (
@@ -118,7 +145,7 @@ export default function TimelineScreen() {
         <EditBookModal
           book={editing}
           onClose={() => setEditing(null)}
-          onSaved={() => { setEditing(null); loadBooks(); }}
+          onSaved={() => { setEditing(null); invalidate(); }}
         />
       )}
     </SafeAreaView>
@@ -133,24 +160,16 @@ const styles = StyleSheet.create({
   retryLabel: { color: '#fff', fontWeight: '600' },
   listContent: { paddingBottom: 32 },
   yearHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'baseline',
-    paddingHorizontal: 16,
-    paddingTop: 14,
-    paddingBottom: 6,
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline',
+    paddingHorizontal: 16, paddingTop: 14, paddingBottom: 6,
   },
   yearText: { fontSize: 22, fontWeight: '700', color: '#111' },
   yearCount: { fontSize: 13, color: '#888' },
   sectionGap: { height: 20, backgroundColor: '#fff' },
   item: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 13,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0,0,0,0.05)',
-    gap: 14,
+    flexDirection: 'row', alignItems: 'center',
+    paddingHorizontal: 16, paddingVertical: 13,
+    borderBottomWidth: 1, borderBottomColor: 'rgba(0,0,0,0.05)', gap: 14,
   },
   itemDate: { fontSize: 13, color: '#888', width: 72 },
   itemDateEmpty: { color: '#ccc' },

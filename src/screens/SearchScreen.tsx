@@ -1,5 +1,5 @@
 import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -13,7 +13,9 @@ import {
 import BookDetailModal from '../components/BookDetailModal';
 import EditBookModal from '../components/EditBookModal';
 import StarRating from '../components/StarRating';
-import { getFile, listDirectory } from '../services/github';
+import { useCacheContext } from '../context/CacheContext';
+import { getCachedBooks, setCachedBooks } from '../services/booksCache';
+import { getFile, getLatestCommitSha, listDirectory } from '../services/github';
 import { parse } from '../services/markdown';
 import { getSettings } from '../services/storage';
 import { BookFormData, BookMedia } from '../types/book';
@@ -37,14 +39,31 @@ export default function SearchScreen() {
   const [activeMedia, setActiveMedia] = useState<BookMedia[]>([]);
   const [selected, setSelected] = useState<BookFormData | null>(null);
   const [editing, setEditing] = useState<BookFormData | null>(null);
+  const { cacheVersion, invalidate } = useCacheContext();
+  const isFocused = useRef(false);
 
   const loadBooks = useCallback(async () => {
     const settings = getSettings();
     if (!settings) return;
+
+    const cached = getCachedBooks();
+    if (cached) {
+      setAllBooks(
+        cached.books
+          .filter(b => b.date_finished)
+          .sort((a, b) => b.date_finished.localeCompare(a.date_finished))
+      );
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError('');
     try {
-      const files = await listDirectory(settings, 'books');
+      const [files, commitSha] = await Promise.all([
+        listDirectory(settings, 'books'),
+        getLatestCommitSha(settings),
+      ]);
       const loaded = await Promise.all(
         files
           .filter(f => f.name.endsWith('.md'))
@@ -53,6 +72,7 @@ export default function SearchScreen() {
             return parse(content, f.name.replace('.md', ''));
           })
       );
+      setCachedBooks(loaded, commitSha);
       setAllBooks(
         loaded
           .filter(b => b.date_finished)
@@ -65,7 +85,15 @@ export default function SearchScreen() {
     }
   }, []);
 
-  useFocusEffect(useCallback(() => { loadBooks(); }, [loadBooks]));
+  useFocusEffect(useCallback(() => {
+    isFocused.current = true;
+    loadBooks();
+    return () => { isFocused.current = false; };
+  }, [loadBooks]));
+
+  useEffect(() => {
+    if (isFocused.current) loadBooks();
+  }, [cacheVersion]);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedQuery(query), 300);
@@ -278,7 +306,7 @@ export default function SearchScreen() {
         <EditBookModal
           book={editing}
           onClose={() => setEditing(null)}
-          onSaved={() => { setEditing(null); loadBooks(); }}
+          onSaved={() => { setEditing(null); invalidate(); }}
         />
       )}
     </SafeAreaView>
