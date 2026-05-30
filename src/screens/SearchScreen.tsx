@@ -14,7 +14,7 @@ import BookDetailModal from '../components/BookDetailModal';
 import EditBookModal from '../components/EditBookModal';
 import StarRating from '../components/StarRating';
 import { useCacheContext } from '../context/CacheContext';
-import { getCachedBooks, setCachedBooks } from '../services/booksCache';
+import { getCachedBooks, setCachedBooks, upsertCachedBook, updateCachedCommitSha } from '../services/booksCache';
 import { getFile, getLatestCommitSha, listDirectory } from '../services/github';
 import { parse } from '../services/markdown';
 import { getSettings } from '../services/storage';
@@ -46,10 +46,10 @@ export default function SearchScreen() {
     const settings = getSettings();
     if (!settings) return;
 
-    const cached = getCachedBooks();
+    const cached = await getCachedBooks();
     if (cached) {
       setAllBooks(
-        cached.books
+        cached
           .filter(b => b.date_finished)
           .sort((a, b) => b.date_finished.localeCompare(a.date_finished))
       );
@@ -306,7 +306,12 @@ export default function SearchScreen() {
         <EditBookModal
           book={editing}
           onClose={() => setEditing(null)}
-          onSaved={() => { setEditing(null); invalidate(); }}
+          onSaved={(updated, sha) => {
+            setEditing(null);
+            setAllBooks(prev => prev.map(b => b.slug === updated.slug ? updated : b));
+            upsertCachedBook(updated);
+            updateCachedCommitSha(sha);
+          }}
         />
       )}
     </SafeAreaView>

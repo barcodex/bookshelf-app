@@ -17,7 +17,7 @@ import { BookFormData } from '../types/book';
 interface Props {
   book: BookFormData;
   onClose: () => void;
-  onSaved: () => void;
+  onSaved: (updated: BookFormData, commitSha: string) => void;
 }
 
 export default function EditBookModal({ book, onClose, onSaved }: Props) {
@@ -37,8 +37,8 @@ export default function EditBookModal({ book, onClose, onSaved }: Props) {
     try {
       const path = `books/${data.slug}.md`;
       const { sha } = await getFile(settings, path);
-      await saveFile(settings, path, serialize(data), sha);
-      onSaved();
+      const commitSha = await saveFile(settings, path, serialize(data), sha);
+      onSaved(data, commitSha);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Ошибка сохранения');
     } finally {

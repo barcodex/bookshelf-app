@@ -63,12 +63,15 @@ export async function saveFile(
   content: string,
   sha: string | undefined,
   message?: string,
-) {
-  await request(settings, 'PUT', `/repos/${settings.repo}/contents/${path}`, {
-    message: message ?? (sha ? `Update ${path}` : `Add ${path}`),
-    content: toBase64(content),
-    ...(sha ? { sha } : {}),
-  });
+): Promise<string> {
+  const result = await request<{ commit: { sha: string } }>(
+    settings, 'PUT', `/repos/${settings.repo}/contents/${path}`, {
+      message: message ?? (sha ? `Update ${path}` : `Add ${path}`),
+      content: toBase64(content),
+      ...(sha ? { sha } : {}),
+    }
+  );
+  return result.commit.sha;
 }
 
 export async function listDirectory(settings: Settings, path: string) {

@@ -22,8 +22,10 @@ export default function App() {
     if (!settings) return;
     const poll = async () => {
       try {
-        const remoteSha = await getLatestCommitSha(settings);
-        const cachedSha = getCachedCommitSha();
+        const [remoteSha, cachedSha] = await Promise.all([
+          getLatestCommitSha(settings),
+          getCachedCommitSha(),
+        ]);
         if (cachedSha !== null && remoteSha !== cachedSha) {
           cache.invalidate();
         }

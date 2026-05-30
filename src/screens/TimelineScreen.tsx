@@ -13,7 +13,7 @@ import BookDetailModal from '../components/BookDetailModal';
 import EditBookModal from '../components/EditBookModal';
 import { useCacheContext } from '../context/CacheContext';
 import { getFile, getLatestCommitSha, listDirectory } from '../services/github';
-import { getCachedBooks, setCachedBooks } from '../services/booksCache';
+import { getCachedBooks, setCachedBooks, upsertCachedBook, updateCachedCommitSha } from '../services/booksCache';
 import { parse } from '../services/markdown';
 import { getSettings } from '../services/storage';
 import { BookFormData } from '../types/book';
@@ -32,10 +32,10 @@ export default function TimelineScreen() {
     const settings = getSettings();
     if (!settings) return;
 
-    const cached = getCachedBooks();
+    const cached = await getCachedBooks();
     if (cached) {
       setBooks(
-        cached.books
+        cached
           .filter(b => b.date_finished)
           .sort((a, b) => b.date_finished.localeCompare(a.date_finished))
       );
@@ -145,7 +145,12 @@ export default function TimelineScreen() {
         <EditBookModal
           book={editing}
           onClose={() => setEditing(null)}
-          onSaved={() => { setEditing(null); invalidate(); }}
+          onSaved={(updated, sha) => {
+            setEditing(null);
+            setBooks(prev => prev.map(b => b.slug === updated.slug ? updated : b));
+            upsertCachedBook(updated);
+            updateCachedCommitSha(sha);
+          }}
         />
       )}
     </SafeAreaView>

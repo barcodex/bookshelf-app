@@ -1,6 +1,8 @@
 import { createContext, useCallback, useContext, useState } from 'react';
 import { clearBooksCache } from '../services/booksCache';
 
+// invalidate используется только polling-ом при обнаружении внешних изменений в GitHub
+
 interface CacheContextType {
   cacheVersion: number;
   invalidate: () => void;
