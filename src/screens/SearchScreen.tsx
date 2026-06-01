@@ -285,7 +285,9 @@ export default function SearchScreen() {
             return (
               <View style={[styles.yearHeader, { backgroundColor: section.backgroundColor }]}>
                 <Text style={styles.yearText}>{section.year}</Text>
-                <View style={styles.mediaCounts}>
+                <View style={styles.yearStats}>
+                  <Text style={styles.yearCount}>{section.data.length} книг</Text>
+                  <View style={styles.mediaCounts}>
                   {counts.audio > 0 && (
                     <View style={styles.mediaCount}>
                       <MediaIcon media="аудио" size="sm" color="#555" />
@@ -304,6 +306,7 @@ export default function SearchScreen() {
                       <Text style={styles.mediaCountText}>{counts.digital}</Text>
                     </View>
                   )}
+                  </View>
                 </View>
               </View>
             );
@@ -390,6 +393,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16, paddingTop: 14, paddingBottom: 6,
   },
   yearText: { fontSize: 22, fontWeight: '700', color: '#111' },
+  yearStats: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  yearCount: { fontSize: 13, color: '#666', fontWeight: '500' },
   mediaCounts: { flexDirection: 'row', gap: 12, alignItems: 'center' },
   mediaCount: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   mediaCountText: { fontSize: 13, color: '#666', fontWeight: '500' },
