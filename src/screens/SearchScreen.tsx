@@ -284,28 +284,30 @@ export default function SearchScreen() {
             const counts = getMediaCounts(section.data);
             return (
               <View style={[styles.yearHeader, { backgroundColor: section.backgroundColor }]}>
-                <Text style={styles.yearText}>{section.year}</Text>
-                <View style={styles.yearStats}>
-                  <Text style={styles.yearCount}>{section.data.length} книг</Text>
-                  <View style={styles.mediaCounts}>
-                  {counts.audio > 0 && (
-                    <View style={styles.mediaCount}>
-                      <MediaIcon media="аудио" size="sm" color="#555" />
-                      <Text style={styles.mediaCountText}>{counts.audio}</Text>
+                <View style={styles.yearLeft}>
+                  <Text style={styles.yearText}>{section.year}</Text>
+                  <View style={styles.yearStats}>
+                    <Text style={styles.yearCount}>{section.data.length} книг</Text>
+                    <View style={styles.mediaCounts}>
+                      {counts.audio > 0 && (
+                        <View style={styles.mediaCount}>
+                          <MediaIcon media="аудио" size="sm" color="#555" />
+                          <Text style={styles.mediaCountText}>{counts.audio}</Text>
+                        </View>
+                      )}
+                      {counts.paper > 0 && (
+                        <View style={styles.mediaCount}>
+                          <MediaIcon media="бумажная" size="sm" color="#555" />
+                          <Text style={styles.mediaCountText}>{counts.paper}</Text>
+                        </View>
+                      )}
+                      {counts.digital > 0 && (
+                        <View style={styles.mediaCount}>
+                          <MediaIcon media="электронная" size="sm" color="#555" />
+                          <Text style={styles.mediaCountText}>{counts.digital}</Text>
+                        </View>
+                      )}
                     </View>
-                  )}
-                  {counts.paper > 0 && (
-                    <View style={styles.mediaCount}>
-                      <MediaIcon media="бумажная" size="sm" color="#555" />
-                      <Text style={styles.mediaCountText}>{counts.paper}</Text>
-                    </View>
-                  )}
-                  {counts.digital > 0 && (
-                    <View style={styles.mediaCount}>
-                      <MediaIcon media="электронная" size="sm" color="#555" />
-                      <Text style={styles.mediaCountText}>{counts.digital}</Text>
-                    </View>
-                  )}
                   </View>
                 </View>
               </View>
@@ -389,9 +391,10 @@ const styles = StyleSheet.create({
   resultsCount: { fontSize: 13, color: '#888' },
   reset: { fontSize: 13, color: '#007AFF' },
   yearHeader: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    flexDirection: 'row', alignItems: 'flex-start',
     paddingHorizontal: 16, paddingTop: 14, paddingBottom: 6,
   },
+  yearLeft: { flexDirection: 'column', gap: 6 },
   yearText: { fontSize: 22, fontWeight: '700', color: '#111' },
   yearStats: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   yearCount: { fontSize: 13, color: '#666', fontWeight: '500' },
