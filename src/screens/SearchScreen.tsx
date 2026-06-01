@@ -1,4 +1,4 @@
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -44,6 +44,8 @@ export default function SearchScreen() {
   const [githubError, setGithubError] = useState<GitHubError | null>(null);
   const { cacheVersion, forceReload } = useCacheContext();
   const isFocused = useRef(false);
+  const route = useRoute<any>();
+  const [pendingTag, setPendingTag] = useState<string | null>(null);
 
   const loadBooks = useCallback(async () => {
     const settings = getSettings();
@@ -103,6 +105,21 @@ export default function SearchScreen() {
       .sort((a, b) => b[1] - a[1])
       .map(([tag]) => tag);
   }, [allBooks]);
+
+  // Если пришли из карточки книги с тегом, сохраняем его
+  useEffect(() => {
+    if (route.params?.tag) {
+      setPendingTag(route.params.tag);
+    }
+  }, [route.params?.tag]);
+
+  // После загрузки книг применяем выбранный тег
+  useEffect(() => {
+    if (pendingTag && allTags.includes(pendingTag) && !activeTags.includes(pendingTag)) {
+      setActiveTags([pendingTag]);
+      setPendingTag(null);
+    }
+  }, [allTags, pendingTag]);
 
   const filtered = useMemo(() => {
     const q = debouncedQuery.trim().toLowerCase();

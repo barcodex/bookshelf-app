@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import StarRating from './StarRating';
 import { BookFormData } from '../types/book';
@@ -24,6 +25,7 @@ function Row({ label, value }: { label: string; value: string }) {
 }
 
 export default function BookDetailModal({ book, onClose, onEdit }: Props) {
+  const navigation = useNavigation<any>();
   return (
     <Modal visible animationType="slide" presentationStyle="pageSheet" onRequestClose={onClose}>
       <View style={styles.container}>
@@ -61,9 +63,16 @@ export default function BookDetailModal({ book, onClose, onEdit }: Props) {
           {book.tags.length > 0 && (
             <View style={styles.tagsRow}>
               {book.tags.map(tag => (
-                <View key={tag} style={styles.tag}>
+                <Pressable
+                  key={tag}
+                  style={styles.tag}
+                  onPress={() => {
+                    onClose();
+                    navigation.navigate('Search', { tag });
+                  }}
+                >
                   <Text style={styles.tagText}>{tag}</Text>
-                </View>
+                </Pressable>
               ))}
             </View>
           )}
@@ -136,6 +145,13 @@ const styles = StyleSheet.create({
   },
   sectionText: { fontSize: 15, color: '#222', lineHeight: 22 },
   tagsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
-  tag: { backgroundColor: '#f0f0f0', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 4 },
-  tagText: { fontSize: 13, color: '#444' },
+  tag: {
+    backgroundColor: '#f0f0f0',
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  tagText: { fontSize: 13, color: '#444', fontWeight: '500' },
 });
