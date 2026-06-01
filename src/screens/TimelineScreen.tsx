@@ -119,24 +119,24 @@ export default function TimelineScreen() {
               <View style={styles.yearStats}>
                 <Text style={styles.yearCount}>{section.data.length} книг</Text>
                 <View style={styles.mediaCounts}>
-                {counts.audio > 0 && (
-                  <View style={styles.mediaCount}>
-                    <MediaIcon media="аудио" size="sm" color="#555" />
-                    <Text style={styles.mediaCountText}>{counts.audio}</Text>
-                  </View>
-                )}
-                {counts.paper > 0 && (
-                  <View style={styles.mediaCount}>
-                    <MediaIcon media="бумажная" size="sm" color="#555" />
-                    <Text style={styles.mediaCountText}>{counts.paper}</Text>
-                  </View>
-                )}
-                {counts.digital > 0 && (
-                  <View style={styles.mediaCount}>
-                    <MediaIcon media="электронная" size="sm" color="#555" />
-                    <Text style={styles.mediaCountText}>{counts.digital}</Text>
-                  </View>
-                )}
+                  {counts.audio > 0 && (
+                    <View style={styles.mediaCount}>
+                      <MediaIcon media="аудио" size="sm" color="#555" />
+                      <Text style={styles.mediaCountText}>{counts.audio}</Text>
+                    </View>
+                  )}
+                  {counts.paper > 0 && (
+                    <View style={styles.mediaCount}>
+                      <MediaIcon media="бумажная" size="sm" color="#555" />
+                      <Text style={styles.mediaCountText}>{counts.paper}</Text>
+                    </View>
+                  )}
+                  {counts.digital > 0 && (
+                    <View style={styles.mediaCount}>
+                      <MediaIcon media="электронная" size="sm" color="#555" />
+                      <Text style={styles.mediaCountText}>{counts.digital}</Text>
+                    </View>
+                  )}
                 </View>
               </View>
             </View>
