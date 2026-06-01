@@ -5,6 +5,7 @@ import { Text } from 'react-native';
 import { CacheContext, useCacheProvider } from './src/context/CacheContext';
 import { getCachedCommitSha } from './src/services/booksCache';
 import { getLatestCommitSha } from './src/services/github';
+import { applyIncrementalUpdate } from './src/services/booksService';
 import { Settings, getSettings, saveSettings } from './src/services/storage';
 import SetupScreen from './src/screens/SetupScreen';
 import TimelineScreen from './src/screens/TimelineScreen';
@@ -27,7 +28,8 @@ export default function App() {
           getCachedCommitSha(),
         ]);
         if (cachedSha !== null && remoteSha !== cachedSha) {
-          cache.invalidate();
+          await applyIncrementalUpdate(settings, cachedSha, remoteSha);
+          cache.bumpVersion();
         }
       } catch {
         // сетевые ошибки при опросе — игнорируем

@@ -14,10 +14,11 @@ import BookDetailModal from '../components/BookDetailModal';
 import EditBookModal from '../components/EditBookModal';
 import StarRating from '../components/StarRating';
 import { useCacheContext } from '../context/CacheContext';
-import { getCachedBooks, setCachedBooks, upsertCachedBook, updateCachedCommitSha } from '../services/booksCache';
-import { getFile, getLatestCommitSha, listDirectory } from '../services/github';
-import { parse } from '../services/markdown';
+import { getCachedBooks, upsertCachedBook, updateCachedCommitSha } from '../services/booksCache';
+import { GitHubError } from '../services/github';
+import { LoadProgress, loadAllBooks } from '../services/booksService';
 import { getSettings } from '../services/storage';
+import { GitHubErrorScreen, GitHubOfflineBanner } from '../components/GitHubErrorView';
 import { BookFormData, BookMedia } from '../types/book';
 import { YearSection, formatDisplayDate, groupByYear } from '../utils/groupBooks';
 
@@ -39,7 +40,9 @@ export default function SearchScreen() {
   const [activeMedia, setActiveMedia] = useState<BookMedia[]>([]);
   const [selected, setSelected] = useState<BookFormData | null>(null);
   const [editing, setEditing] = useState<BookFormData | null>(null);
-  const { cacheVersion, invalidate } = useCacheContext();
+  const [progress, setProgress] = useState<LoadProgress | null>(null);
+  const [githubError, setGithubError] = useState<GitHubError | null>(null);
+  const { cacheVersion, forceReload } = useCacheContext();
   const isFocused = useRef(false);
 
   const loadBooks = useCallback(async () => {
@@ -58,30 +61,21 @@ export default function SearchScreen() {
     }
 
     setLoading(true);
-    setError('');
+    setProgress(null);
+    setGithubError(null);
     try {
-      const [files, commitSha] = await Promise.all([
-        listDirectory(settings, 'books'),
-        getLatestCommitSha(settings),
-      ]);
-      const loaded = await Promise.all(
-        files
-          .filter(f => f.name.endsWith('.md'))
-          .map(async f => {
-            const { content } = await getFile(settings, f.path);
-            return parse(content, f.name.replace('.md', ''));
-          })
-      );
-      setCachedBooks(loaded, commitSha);
+      const books = await loadAllBooks(settings, p => setProgress(p));
       setAllBooks(
-        loaded
+        books
           .filter(b => b.date_finished)
           .sort((a, b) => b.date_finished.localeCompare(a.date_finished))
       );
+      setGithubError(null);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Ошибка загрузки');
+      if (e instanceof GitHubError) setGithubError(e);
     } finally {
       setLoading(false);
+      setProgress(null);
     }
   }, []);
 
@@ -93,7 +87,7 @@ export default function SearchScreen() {
 
   useEffect(() => {
     if (isFocused.current) loadBooks();
-  }, [cacheVersion]);
+  }, [cacheVersion, loadBooks]);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedQuery(query), 300);
@@ -235,23 +229,22 @@ export default function SearchScreen() {
     </View>
   );
 
-  if (error) {
-    return (
-      <SafeAreaView style={styles.center}>
-        <Text style={styles.errorText}>{error}</Text>
-        <Pressable style={styles.retryBtn} onPress={loadBooks}>
-          <Text style={styles.retryLabel}>Повторить</Text>
-        </Pressable>
-      </SafeAreaView>
-    );
+  if (githubError && allBooks.length === 0) {
+    return <GitHubErrorScreen error={githubError} onRetry={forceReload} />;
   }
 
   return (
     <SafeAreaView style={styles.container}>
+      {githubError && <GitHubOfflineBanner error={githubError} onRetry={forceReload} />}
       {loading ? (
         <>
           {Header}
           <ActivityIndicator style={{ marginTop: 40 }} size="large" />
+          {progress && (
+            <Text style={styles.progressText}>
+              Загрузка библиотеки… {progress.current} / {progress.total}
+            </Text>
+          )}
         </>
       ) : (
         <SectionList<BookFormData, YearSection>
@@ -362,7 +355,5 @@ const styles = StyleSheet.create({
   itemRating: { fontSize: 13, color: '#f5a623', fontWeight: '600' },
   empty: { textAlign: 'center', marginTop: 40, color: '#aaa', fontSize: 15 },
   listContent: { paddingBottom: 32 },
-  errorText: { fontSize: 15, color: '#c00', textAlign: 'center', paddingHorizontal: 24 },
-  retryBtn: { paddingHorizontal: 20, paddingVertical: 10, backgroundColor: '#111', borderRadius: 8 },
-  retryLabel: { color: '#fff', fontWeight: '600' },
+  progressText: { fontSize: 14, color: '#888', textAlign: 'center', marginTop: 8 },
 });

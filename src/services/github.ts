@@ -2,24 +2,49 @@ import { Settings } from './storage';
 
 const BASE = 'https://api.github.com';
 
+export type GitHubErrorType = 'auth' | 'not_found' | 'rate_limit' | 'server' | 'network';
+
+export class GitHubError extends Error {
+  constructor(
+    message: string,
+    public readonly status: number | null,
+    public readonly type: GitHubErrorType,
+  ) {
+    super(message);
+    this.name = 'GitHubError';
+  }
+}
+
+function classifyStatus(status: number): GitHubErrorType {
+  if (status === 401 || status === 403) return 'auth';
+  if (status === 404) return 'not_found';
+  if (status === 429) return 'rate_limit';
+  return 'server';
+}
+
 async function request<T = unknown>(
   settings: Settings,
   method: string,
   path: string,
   body?: unknown,
 ): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, {
-    method,
-    headers: {
-      Authorization: `Bearer ${settings.token}`,
-      Accept: 'application/vnd.github.v3+json',
-      'Content-Type': 'application/json',
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${BASE}${path}`, {
+      method,
+      headers: {
+        Authorization: `Bearer ${settings.token}`,
+        Accept: 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json',
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch {
+    throw new GitHubError('Нет подключения к GitHub', null, 'network');
+  }
   if (!res.ok) {
     const msg = await res.text().catch(() => res.statusText);
-    throw new Error(`GitHub ${res.status}: ${msg}`);
+    throw new GitHubError(`GitHub ${res.status}: ${msg}`, res.status, classifyStatus(res.status));
   }
   return res.json() as Promise<T>;
 }
@@ -83,6 +108,22 @@ export async function getLatestCommitSha(settings: Settings): Promise<string> {
     settings, 'GET', `/repos/${settings.repo}/git/refs/heads/main`
   );
   return data.object.sha;
+}
+
+interface ChangedFile {
+  filename: string;
+  status: 'added' | 'modified' | 'removed' | 'renamed';
+}
+
+export async function getChangedFiles(
+  settings: Settings,
+  oldSha: string,
+  newSha: string,
+): Promise<ChangedFile[]> {
+  const data = await request<{ files?: ChangedFile[] }>(
+    settings, 'GET', `/repos/${settings.repo}/compare/${oldSha}...${newSha}`
+  );
+  return data.files ?? [];
 }
 
 export async function validateAccess(settings: Settings): Promise<void> {

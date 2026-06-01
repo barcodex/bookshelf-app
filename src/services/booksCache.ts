@@ -48,6 +48,12 @@ export async function setCachedBooks(books: BookFormData[], commitSha: string): 
   } catch {}
 }
 
+export async function deleteCachedBook(slug: string): Promise<void> {
+  try {
+    await (await db()).delete('books', slug);
+  } catch {}
+}
+
 // Точечное обновление/добавление одной книги после сохранения
 export async function upsertCachedBook(book: BookFormData): Promise<void> {
   try {

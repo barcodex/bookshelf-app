@@ -1,16 +1,16 @@
 import { createContext, useCallback, useContext, useState } from 'react';
 import { clearBooksCache } from '../services/booksCache';
 
-// invalidate используется только polling-ом при обнаружении внешних изменений в GitHub
-
 interface CacheContextType {
   cacheVersion: number;
-  invalidate: () => void;
+  bumpVersion: () => void;   // сигнал экранам перечитать кэш (после инкрементального обновления)
+  forceReload: () => void;   // очистить кэш + сигнал (кнопка Retry на экране ошибки)
 }
 
 export const CacheContext = createContext<CacheContextType>({
   cacheVersion: 0,
-  invalidate: () => {},
+  bumpVersion: () => {},
+  forceReload: () => {},
 });
 
 export function useCacheContext() {
@@ -19,9 +19,11 @@ export function useCacheContext() {
 
 export function useCacheProvider(): CacheContextType {
   const [cacheVersion, setCacheVersion] = useState(0);
-  const invalidate = useCallback(() => {
+  const bump = useCallback(() => setCacheVersion(v => v + 1), []);
+  const bumpVersion = bump;
+  const forceReload = useCallback(() => {
     clearBooksCache();
     setCacheVersion(v => v + 1);
   }, []);
-  return { cacheVersion, invalidate };
+  return { cacheVersion, bumpVersion, forceReload };
 }

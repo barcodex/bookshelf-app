@@ -11,21 +11,29 @@ import {
 } from 'react-native';
 import BookDetailModal from '../components/BookDetailModal';
 import EditBookModal from '../components/EditBookModal';
+import { GitHubErrorScreen, GitHubOfflineBanner } from '../components/GitHubErrorView';
 import { useCacheContext } from '../context/CacheContext';
-import { getFile, getLatestCommitSha, listDirectory } from '../services/github';
-import { getCachedBooks, setCachedBooks, upsertCachedBook, updateCachedCommitSha } from '../services/booksCache';
-import { parse } from '../services/markdown';
+import { getCachedBooks, upsertCachedBook, updateCachedCommitSha } from '../services/booksCache';
+import { GitHubError } from '../services/github';
+import { LoadProgress, loadAllBooks } from '../services/booksService';
 import { getSettings } from '../services/storage';
 import { BookFormData } from '../types/book';
 import { YearSection, formatDisplayDate, groupByYear } from '../utils/groupBooks';
 
+function sorted(books: BookFormData[]) {
+  return books
+    .filter(b => b.date_finished)
+    .sort((a, b) => b.date_finished.localeCompare(a.date_finished));
+}
+
 export default function TimelineScreen() {
   const [books, setBooks] = useState<BookFormData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [progress, setProgress] = useState<LoadProgress | null>(null);
+  const [githubError, setGithubError] = useState<GitHubError | null>(null);
   const [selected, setSelected] = useState<BookFormData | null>(null);
   const [editing, setEditing] = useState<BookFormData | null>(null);
-  const { cacheVersion, invalidate } = useCacheContext();
+  const { cacheVersion, forceReload } = useCacheContext();
   const isFocused = useRef(false);
 
   const loadBooks = useCallback(async () => {
@@ -34,40 +42,25 @@ export default function TimelineScreen() {
 
     const cached = await getCachedBooks();
     if (cached) {
-      setBooks(
-        cached
-          .filter(b => b.date_finished)
-          .sort((a, b) => b.date_finished.localeCompare(a.date_finished))
-      );
+      setBooks(sorted(cached));
       setLoading(false);
       return;
     }
 
     setLoading(true);
-    setError('');
+    setProgress(null);
+    setGithubError(null);
     try {
-      const [files, commitSha] = await Promise.all([
-        listDirectory(settings, 'books'),
-        getLatestCommitSha(settings),
-      ]);
-      const loaded = await Promise.all(
-        files
-          .filter(f => f.name.endsWith('.md'))
-          .map(async f => {
-            const { content } = await getFile(settings, f.path);
-            return parse(content, f.name.replace('.md', ''));
-          })
-      );
-      setCachedBooks(loaded, commitSha);
-      setBooks(
-        loaded
-          .filter(b => b.date_finished)
-          .sort((a, b) => b.date_finished.localeCompare(a.date_finished))
-      );
+      const books = await loadAllBooks(settings, p => setProgress(p));
+      setBooks(sorted(books));
+      setGithubError(null);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Ошибка загрузки');
+      if (e instanceof GitHubError) {
+        setGithubError(e);
+      }
     } finally {
       setLoading(false);
+      setProgress(null);
     }
   }, []);
 
@@ -77,7 +70,6 @@ export default function TimelineScreen() {
     return () => { isFocused.current = false; };
   }, [loadBooks]));
 
-  // Перезагружаем если кэш инвалидирован пока вкладка открыта
   useEffect(() => {
     if (isFocused.current) loadBooks();
   }, [cacheVersion]);
@@ -86,23 +78,24 @@ export default function TimelineScreen() {
     return (
       <SafeAreaView style={styles.center}>
         <ActivityIndicator size="large" />
+        {progress && (
+          <Text style={styles.progressText}>
+            Загрузка библиотеки… {progress.current} / {progress.total}
+          </Text>
+        )}
       </SafeAreaView>
     );
   }
 
-  if (error) {
-    return (
-      <SafeAreaView style={styles.center}>
-        <Text style={styles.error}>{error}</Text>
-        <Pressable style={styles.retryBtn} onPress={loadBooks}>
-          <Text style={styles.retryLabel}>Повторить</Text>
-        </Pressable>
-      </SafeAreaView>
-    );
+  if (githubError && books.length === 0) {
+    return <GitHubErrorScreen error={githubError} onRetry={forceReload} />;
   }
 
   return (
     <SafeAreaView style={styles.container}>
+      {githubError && (
+        <GitHubOfflineBanner error={githubError} onRetry={forceReload} />
+      )}
       <SectionList<BookFormData, YearSection>
         sections={groupByYear(books)}
         keyExtractor={item => item.slug}
@@ -160,9 +153,7 @@ export default function TimelineScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16 },
-  error: { fontSize: 15, color: '#c00', textAlign: 'center', paddingHorizontal: 24 },
-  retryBtn: { paddingHorizontal: 20, paddingVertical: 10, backgroundColor: '#111', borderRadius: 8 },
-  retryLabel: { color: '#fff', fontWeight: '600' },
+  progressText: { fontSize: 14, color: '#888' },
   listContent: { paddingBottom: 32 },
   yearHeader: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline',
