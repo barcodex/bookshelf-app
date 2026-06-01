@@ -28,6 +28,20 @@ const MEDIA_OPTIONS: { value: BookMedia; label: string }[] = [
   { value: 'аудио', label: 'Аудио' },
 ];
 
+function formatMediaCounts(books: BookFormData[]): string {
+  const counts: Record<string, number> = { бумажная: 0, электронная: 0, аудио: 0 };
+  for (const book of books) {
+    if (counts[book.media] !== undefined) counts[book.media]++;
+  }
+
+  const parts: string[] = [];
+  if (counts.аудио > 0) parts.push(`${counts.аудио} аудио`);
+  if (counts.бумажная > 0) parts.push(`${counts.бумажная} бумажн${counts.бумажная === 1 ? 'ая' : 'ых'}`);
+  if (counts.электронная > 0) parts.push(`${counts.электронная} электронн${counts.электронная === 1 ? 'ая' : 'ых'}`);
+
+  return parts.length > 0 ? ` (${parts.join(', ')})` : '';
+}
+
 
 export default function SearchScreen() {
   const [allBooks, setAllBooks] = useState<BookFormData[]>([]);
@@ -272,7 +286,9 @@ export default function SearchScreen() {
           renderSectionHeader={({ section }) => (
             <View style={[styles.yearHeader, { backgroundColor: section.backgroundColor }]}>
               <Text style={styles.yearText}>{section.year}</Text>
-              <Text style={styles.yearCount}>{section.data.length} книг</Text>
+              <Text style={styles.yearCount}>
+                {section.data.length} книг{formatMediaCounts(section.data)}
+              </Text>
             </View>
           )}
           renderSectionFooter={() => <View style={styles.sectionGap} />}
