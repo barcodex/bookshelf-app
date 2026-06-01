@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import MediaIcon from './MediaIcon';
 import StarRating from './StarRating';
 import { BookFormData } from '../types/book';
 
@@ -76,7 +77,15 @@ export default function BookDetailModal({ book, onClose, onEdit }: Props) {
               ))}
             </View>
           )}
-          {book.media   && <Row label="Формат"   value={book.media} />}
+          {book.media && (
+            <View style={styles.row}>
+              <Text style={styles.rowLabel}>Формат</Text>
+              <View style={styles.mediaWithIcon}>
+                <MediaIcon media={book.media} size="sm" color="#111" />
+                <Text style={styles.rowValue}>{book.media}</Text>
+              </View>
+            </View>
+          )}
           {book.source  && <Row label="Источник" value={book.source} />}
           {book.date_started  && <Row label="Начало чтения" value={formatDate(book.date_started)} />}
           {book.date_finished && <Row label="Конец чтения"  value={formatDate(book.date_finished)} />}
@@ -144,6 +153,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   sectionText: { fontSize: 15, color: '#222', lineHeight: 22 },
+  mediaWithIcon: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 6 },
   tagsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   tag: {
     backgroundColor: '#f0f0f0',

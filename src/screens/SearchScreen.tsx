@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import BookDetailModal from '../components/BookDetailModal';
 import EditBookModal from '../components/EditBookModal';
+import MediaIcon from '../components/MediaIcon';
 import StarRating from '../components/StarRating';
 import { useCacheContext } from '../context/CacheContext';
 import { getCachedBooks, upsertCachedBook, updateCachedCommitSha } from '../services/booksCache';
@@ -28,18 +29,14 @@ const MEDIA_OPTIONS: { value: BookMedia; label: string }[] = [
   { value: 'аудио', label: 'Аудио' },
 ];
 
-function formatMediaCounts(books: BookFormData[]): string {
-  const counts: Record<string, number> = { бумажная: 0, электронная: 0, аудио: 0 };
+function getMediaCounts(books: BookFormData[]): { бумажная: number; электронная: number; аудио: number } {
+  const counts = { бумажная: 0, электронная: 0, аудио: 0 };
   for (const book of books) {
-    if (counts[book.media] !== undefined) counts[book.media]++;
+    if (book.media === 'бумажная' || book.media === 'электронная' || book.media === 'аудио') {
+      counts[book.media]++;
+    }
   }
-
-  const parts: string[] = [];
-  if (counts.аудио > 0) parts.push(`${counts.аудио} аудио`);
-  if (counts.бумажная > 0) parts.push(`${counts.бумажная} бумажн${counts.бумажная === 1 ? 'ая' : 'ых'}`);
-  if (counts.электронная > 0) parts.push(`${counts.электронная} электронн${counts.электронная === 1 ? 'ая' : 'ых'}`);
-
-  return parts.length > 0 ? ` (${parts.join(', ')})` : '';
+  return counts;
 }
 
 
@@ -283,14 +280,34 @@ export default function SearchScreen() {
           keyExtractor={item => item.slug}
           ListHeaderComponent={Header}
           stickySectionHeadersEnabled
-          renderSectionHeader={({ section }) => (
-            <View style={[styles.yearHeader, { backgroundColor: section.backgroundColor }]}>
-              <Text style={styles.yearText}>{section.year}</Text>
-              <Text style={styles.yearCount}>
-                {section.data.length} книг{formatMediaCounts(section.data)}
-              </Text>
-            </View>
-          )}
+          renderSectionHeader={({ section }) => {
+            const counts = getMediaCounts(section.data);
+            return (
+              <View style={[styles.yearHeader, { backgroundColor: section.backgroundColor }]}>
+                <Text style={styles.yearText}>{section.year}</Text>
+                <View style={styles.mediaCounts}>
+                  {counts.аудио > 0 && (
+                    <View style={styles.mediaCount}>
+                      <MediaIcon media="аудио" size="sm" color="#555" />
+                      <Text style={styles.mediaCountText}>{counts.аудио}</Text>
+                    </View>
+                  )}
+                  {counts.бумажная > 0 && (
+                    <View style={styles.mediaCount}>
+                      <MediaIcon media="бумажная" size="sm" color="#555" />
+                      <Text style={styles.mediaCountText}>{counts.бумажная}</Text>
+                    </View>
+                  )}
+                  {counts.электронная > 0 && (
+                    <View style={styles.mediaCount}>
+                      <MediaIcon media="электронная" size="sm" color="#555" />
+                      <Text style={styles.mediaCountText}>{counts.электронная}</Text>
+                    </View>
+                  )}
+                </View>
+              </View>
+            );
+          }}
           renderSectionFooter={() => <View style={styles.sectionGap} />}
           renderItem={({ item, section }) => {
             const dateStr = formatDisplayDate(item.date_finished);
@@ -369,11 +386,13 @@ const styles = StyleSheet.create({
   resultsCount: { fontSize: 13, color: '#888' },
   reset: { fontSize: 13, color: '#007AFF' },
   yearHeader: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline',
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
     paddingHorizontal: 16, paddingTop: 14, paddingBottom: 6,
   },
   yearText: { fontSize: 22, fontWeight: '700', color: '#111' },
-  yearCount: { fontSize: 13, color: '#888' },
+  mediaCounts: { flexDirection: 'row', gap: 12, alignItems: 'center' },
+  mediaCount: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  mediaCountText: { fontSize: 13, color: '#666', fontWeight: '500' },
   sectionGap: { height: 20, backgroundColor: '#fff' },
   item: {
     flexDirection: 'row', alignItems: 'center',
