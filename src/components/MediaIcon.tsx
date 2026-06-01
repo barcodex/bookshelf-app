@@ -10,7 +10,7 @@ interface Props {
   color?: string;
 }
 
-const sizes: Record<Size, number> = {
+const sizeMap: Record<Size, number> = {
   xs: 12,
   sm: 16,
   md: 20,
@@ -18,7 +18,7 @@ const sizes: Record<Size, number> = {
   xl: 32,
 };
 
-const icons: Record<MediaType, string> = {
+const iconMap: Record<MediaType, string> = {
   бумажная: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     <path d="M4 2C2.9 2 2 2.9 2 4V20C2 21.1 2.9 22 4 22H20C21.1 22 22 21.1 22 20V4C22 2.9 21.1 2 20 2H4ZM4 4H12V20H4V4ZM20 4V20H14V4H20ZM12 6H18V8H12V6ZM12 10H18V12H12V10ZM12 14H18V16H12V14ZM6 6H10V8H6V6ZM6 10H10V12H6V10ZM6 14H10V16H6V14Z" fill="currentColor"/>
   </svg>`,
@@ -33,8 +33,8 @@ const icons: Record<MediaType, string> = {
 };
 
 export default function MediaIcon({ media, size = 'md', color = '#111' }: Props) {
-  const dimension = sizes[size];
-  const svg = icons[media].replace('currentColor', color);
+  const dimension = sizeMap[size];
+  const svg = iconMap[media].replace('currentColor', color);
 
   return <SvgXml xml={svg} width={dimension} height={dimension} />;
 }

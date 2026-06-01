@@ -27,12 +27,12 @@ function sorted(books: BookFormData[]) {
     .sort((a, b) => b.date_finished.localeCompare(a.date_finished));
 }
 
-function getMediaCounts(books: BookFormData[]): { бумажная: number; электронная: number; аудио: number } {
-  const counts = { бумажная: 0, электронная: 0, аудио: 0 };
+function getMediaCounts(books: BookFormData[]): { paper: number; digital: number; audio: number } {
+  const counts = { paper: 0, digital: 0, audio: 0 };
   for (const book of books) {
-    if (book.media === 'бумажная' || book.media === 'электронная' || book.media === 'аудио') {
-      counts[book.media]++;
-    }
+    if (book.media === 'бумажная') counts.paper++;
+    else if (book.media === 'электронная') counts.digital++;
+    else if (book.media === 'аудио') counts.audio++;
   }
   return counts;
 }
@@ -117,22 +117,22 @@ export default function TimelineScreen() {
             <View style={[styles.yearHeader, { backgroundColor: section.backgroundColor }]}>
               <Text style={styles.yearText}>{section.year}</Text>
               <View style={styles.mediaCounts}>
-                {counts.аудио > 0 && (
+                {counts.audio > 0 && (
                   <View style={styles.mediaCount}>
                     <MediaIcon media="аудио" size="sm" color="#555" />
-                    <Text style={styles.mediaCountText}>{counts.аудио}</Text>
+                    <Text style={styles.mediaCountText}>{counts.audio}</Text>
                   </View>
                 )}
-                {counts.бумажная > 0 && (
+                {counts.paper > 0 && (
                   <View style={styles.mediaCount}>
                     <MediaIcon media="бумажная" size="sm" color="#555" />
-                    <Text style={styles.mediaCountText}>{counts.бумажная}</Text>
+                    <Text style={styles.mediaCountText}>{counts.paper}</Text>
                   </View>
                 )}
-                {counts.электронная > 0 && (
+                {counts.digital > 0 && (
                   <View style={styles.mediaCount}>
                     <MediaIcon media="электронная" size="sm" color="#555" />
-                    <Text style={styles.mediaCountText}>{counts.электронная}</Text>
+                    <Text style={styles.mediaCountText}>{counts.digital}</Text>
                   </View>
                 )}
               </View>
