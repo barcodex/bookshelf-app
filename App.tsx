@@ -11,6 +11,7 @@ import SetupScreen from './src/screens/SetupScreen';
 import TimelineScreen from './src/screens/TimelineScreen';
 import AddBookScreen from './src/screens/AddBookScreen';
 import SearchScreen from './src/screens/SearchScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -82,6 +83,14 @@ export default function App() {
             options={{
               title: 'Поиск',
               tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>🔍</Text>,
+            }}
+          />
+          <Tab.Screen
+            name="Settings"
+            component={SettingsScreen}
+            options={{
+              title: 'Ещё',
+              tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>⚙️</Text>,
             }}
           />
         </Tab.Navigator>
