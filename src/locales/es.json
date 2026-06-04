@@ -1,0 +1,80 @@
+{
+  "language": {
+    "select": "Seleccionar idioma",
+    "english": "English",
+    "russian": "Русский",
+    "german": "Deutsch",
+    "french": "Français",
+    "spanish": "Español",
+    "italian": "Italiano"
+  },
+  "onboarding": {
+    "welcome": "Bienvenido a Bookshelf",
+    "welcomeDesc": "Una aplicación simple que respeta tu privacidad para rastrear los libros que has leído.\n\nTus libros se almacenan en tu propio repositorio de GitHub. No almacenamos nada en nuestros servidores.",
+    "github": "Conectar GitHub",
+    "githubDesc": "Bookshelf sincroniza tus datos de libros a través de GitHub. Todos tus libros se almacenan en tu propio repositorio privado.",
+    "token": "Obtener token de GitHub",
+    "tokenDesc": "Necesitarás un Token de Acceso Personal para autorizar Bookshelf.\n\n1. Ve a github.com/settings/tokens\n2. Haz clic en \"Generate new token (classic)\"\n3. Dale un nombre (p.ej. \"Bookshelf\")\n4. Marca \"repo\"\n5. Haz clic en \"Generate token\"\n6. Copia el token aquí",
+    "next": "Siguiente",
+    "skip": "Saltar",
+    "done": "Empezar"
+  },
+  "setup": {
+    "title": "Configuración de GitHub",
+    "token": "Token de Acceso Personal",
+    "tokenPlaceholder": "ghp_...",
+    "repo": "Nombre del repositorio",
+    "repoPlaceholder": "bookshelf-books",
+    "repoHint": "Crea este repositorio en GitHub primero, o lo crearemos para ti",
+    "save": "Guardar",
+    "connecting": "Conectando...",
+    "error": "Falló la conexión. Verifica tu token e intenta de nuevo."
+  },
+  "timeline": {
+    "title": "Línea de tiempo",
+    "empty": "Sin libros aún. ¡Añade uno para empezar!"
+  },
+  "search": {
+    "title": "Buscar",
+    "hint": "1-2 caracteres — por inicio de palabra; 3+ — búsqueda de texto completo",
+    "minRating": "Calificación mínima",
+    "empty": "Nada encontrado",
+    "loading": "Cargando...",
+    "noFilter": "Ingresa una consulta o selecciona un filtro"
+  },
+  "addBook": {
+    "title": "Añadir libro",
+    "title_label": "Título",
+    "author": "Autor",
+    "year": "Año",
+    "rating": "Calificación",
+    "tags": "Tags (separados por comas)",
+    "media": "Formato",
+    "dateFinished": "Fecha de término",
+    "summary": "Resumen",
+    "review": "Reseña",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "validationError": "Por favor completa título, autor y fecha de término",
+    "success": "¡Guardado!"
+  },
+  "settings": {
+    "title": "Más",
+    "language": "Idioma",
+    "legal": "Legal",
+    "privacyPolicy": "Política de privacidad",
+    "version": "Versión",
+    "about": "Acerca de",
+    "aboutText": "Bookshelf — tus libros, tus datos, tu privacidad"
+  },
+  "common": {
+    "back": "Atrás",
+    "close": "Cerrar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "ok": "OK",
+    "error": "Error",
+    "loading": "Cargando..."
+  }
+}

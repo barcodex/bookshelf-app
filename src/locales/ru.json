@@ -1,0 +1,80 @@
+{
+  "language": {
+    "select": "Выберите язык",
+    "english": "English",
+    "russian": "Русский",
+    "german": "Deutsch",
+    "french": "Français",
+    "spanish": "Español",
+    "italian": "Italiano"
+  },
+  "onboarding": {
+    "welcome": "Добро пожаловать в Bookshelf",
+    "welcomeDesc": "Простое приложение для учёта прочитанных книг.\n\nВаши книги хранятся в вашем GitHub репозитории. Мы ничего не сохраняем на своих серверах.",
+    "github": "Подключить GitHub",
+    "githubDesc": "Bookshelf синхронизирует данные о ваших книгах через GitHub. Все книги хранятся в вашем приватном репозитории.",
+    "token": "Получить токен GitHub",
+    "tokenDesc": "Вам понадобится Personal Access Token для авторизации Bookshelf.\n\n1. Перейдите на github.com/settings/tokens\n2. Нажмите \"Generate new token (classic)\"\n3. Дайте ему имя (например, \"Bookshelf\")\n4. Отметьте галочку \"repo\"\n5. Нажмите \"Generate token\"\n6. Скопируйте токен сюда",
+    "next": "Дальше",
+    "skip": "Пропустить",
+    "done": "Начать"
+  },
+  "setup": {
+    "title": "Настройка GitHub",
+    "token": "Personal Access Token",
+    "tokenPlaceholder": "ghp_...",
+    "repo": "Имя репозитория",
+    "repoPlaceholder": "bookshelf-books",
+    "repoHint": "Сначала создайте репозиторий на GitHub, или мы создадим его автоматически",
+    "save": "Сохранить",
+    "connecting": "Подключение...",
+    "error": "Ошибка подключения. Проверьте токен и попробуйте снова."
+  },
+  "timeline": {
+    "title": "Таймлайн",
+    "empty": "Книг ещё нет. Добавьте первую!"
+  },
+  "search": {
+    "title": "Поиск",
+    "hint": "1-2 символа — по началу слова; 3+ — полнотекстовый поиск",
+    "minRating": "Минимальный рейтинг",
+    "empty": "Ничего не найдено",
+    "loading": "Загрузка...",
+    "noFilter": "Введите запрос или выберите фильтр"
+  },
+  "addBook": {
+    "title": "Добавить книгу",
+    "title_label": "Название",
+    "author": "Автор",
+    "year": "Год",
+    "rating": "Рейтинг",
+    "tags": "Теги (через запятую)",
+    "media": "Формат",
+    "dateFinished": "Дата конца чтения",
+    "summary": "Резюме",
+    "review": "Отзыв",
+    "save": "Сохранить",
+    "saving": "Сохраняю...",
+    "validationError": "Заполните название, автора и дату конца чтения",
+    "success": "Сохранено!"
+  },
+  "settings": {
+    "title": "Ещё",
+    "language": "Язык",
+    "legal": "Документы",
+    "privacyPolicy": "Политика приватности",
+    "version": "Версия",
+    "about": "О приложении",
+    "aboutText": "Bookshelf — ваши книги, ваши данные, ваша приватность"
+  },
+  "common": {
+    "back": "Назад",
+    "close": "Закрыть",
+    "edit": "Изменить",
+    "delete": "Удалить",
+    "cancel": "Отмена",
+    "ok": "ОК",
+    "error": "Ошибка",
+    "loading": "Загружаю..."
+  }
+}

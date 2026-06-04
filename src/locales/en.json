@@ -1,0 +1,80 @@
+{
+  "language": {
+    "select": "Select Language",
+    "english": "English",
+    "russian": "Русский",
+    "german": "Deutsch",
+    "french": "Français",
+    "spanish": "Español",
+    "italian": "Italiano"
+  },
+  "onboarding": {
+    "welcome": "Welcome to Bookshelf",
+    "welcomeDesc": "A simple, privacy-first book tracker.\n\nYour books stay in your own GitHub repository. Nothing is stored on our servers.",
+    "github": "Connect GitHub",
+    "githubDesc": "Bookshelf syncs your book data through GitHub. All your books are stored in your own private repository.",
+    "token": "Get GitHub Token",
+    "tokenDesc": "You'll need a Personal Access Token to authorize Bookshelf.\n\n1. Go to github.com/settings/tokens\n2. Click \"Generate new token (classic)\"\n3. Give it a name (e.g., \"Bookshelf\")\n4. Check \"repo\" scope\n5. Click \"Generate token\"\n6. Copy the token here",
+    "next": "Next",
+    "skip": "Skip",
+    "done": "Get Started"
+  },
+  "setup": {
+    "title": "GitHub Setup",
+    "token": "Personal Access Token",
+    "tokenPlaceholder": "ghp_...",
+    "repo": "Repository Name",
+    "repoPlaceholder": "bookshelf-books",
+    "repoHint": "Create this repository on GitHub first, or we'll create it for you",
+    "save": "Save Settings",
+    "connecting": "Connecting...",
+    "error": "Connection failed. Check your token and try again."
+  },
+  "timeline": {
+    "title": "Timeline",
+    "empty": "No books yet. Add one to get started!"
+  },
+  "search": {
+    "title": "Search",
+    "hint": "1-2 chars — by word start; 3+ — full text search",
+    "minRating": "Min Rating",
+    "empty": "Nothing found",
+    "loading": "Loading...",
+    "noFilter": "Enter a query or select a filter"
+  },
+  "addBook": {
+    "title": "Add Book",
+    "title_label": "Title",
+    "author": "Author",
+    "year": "Year",
+    "rating": "Rating",
+    "tags": "Tags (comma-separated)",
+    "media": "Format",
+    "dateFinished": "Finished Reading",
+    "summary": "Summary",
+    "review": "Review",
+    "save": "Save",
+    "saving": "Saving...",
+    "validationError": "Please fill in title, author, and finish date",
+    "success": "Saved!"
+  },
+  "settings": {
+    "title": "More",
+    "language": "Language",
+    "legal": "Legal",
+    "privacyPolicy": "Privacy Policy",
+    "version": "Version",
+    "about": "About",
+    "aboutText": "Bookshelf — your books, your data, your privacy"
+  },
+  "common": {
+    "back": "Back",
+    "close": "Close",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "ok": "OK",
+    "error": "Error",
+    "loading": "Loading..."
+  }
+}

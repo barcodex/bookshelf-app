@@ -1,9 +1,14 @@
 import { ScrollView, SafeAreaView, StyleSheet, Text, View, Pressable } from 'react-native';
 import { useState } from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { t, getLanguageName } from '../services/i18n';
 import LegalScreen from './LegalScreen';
+import LanguageSelectScreen from './LanguageSelectScreen';
 
 export default function SettingsScreen() {
+  const { language } = useLanguage();
   const [showPrivacy, setShowPrivacy] = useState(false);
+  const [showLanguage, setShowLanguage] = useState(false);
 
   if (showPrivacy) {
     return (
@@ -12,9 +17,23 @@ export default function SettingsScreen() {
           style={styles.backButton}
           onPress={() => setShowPrivacy(false)}
         >
-          <Text style={styles.backText}>← Назад</Text>
+          <Text style={styles.backText}>← {t(language, 'common.back')}</Text>
         </Pressable>
         <LegalScreen />
+      </View>
+    );
+  }
+
+  if (showLanguage) {
+    return (
+      <View style={styles.container}>
+        <Pressable
+          style={styles.backButton}
+          onPress={() => setShowLanguage(false)}
+        >
+          <Text style={styles.backText}>← {t(language, 'common.back')}</Text>
+        </Pressable>
+        <LanguageSelectScreen onComplete={() => setShowLanguage(false)} />
       </View>
     );
   }
@@ -23,17 +42,21 @@ export default function SettingsScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Приложение</Text>
+          <Text style={styles.sectionTitle}>{t(language, 'settings.legal')}</Text>
+          <Pressable style={styles.row} onPress={() => setShowLanguage(true)}>
+            <Text style={styles.rowText}>{t(language, 'settings.language')}</Text>
+            <Text style={styles.rowValue}>{getLanguageName(language)}</Text>
+          </Pressable>
           <Pressable style={styles.row} onPress={() => setShowPrivacy(true)}>
-            <Text style={styles.rowText}>Политика приватности</Text>
+            <Text style={styles.rowText}>{t(language, 'settings.privacyPolicy')}</Text>
             <Text style={styles.rowArrow}>›</Text>
           </Pressable>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>О приложении</Text>
+          <Text style={styles.sectionTitle}>{t(language, 'settings.about')}</Text>
           <View style={styles.row}>
-            <Text style={styles.rowText}>Версия</Text>
+            <Text style={styles.rowText}>{t(language, 'settings.version')}</Text>
             <Text style={styles.rowValue}>1.0.0</Text>
           </View>
           <View style={styles.row}>
@@ -44,7 +67,7 @@ export default function SettingsScreen() {
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>
-            Bookshelf — приложение для учёта прочитанных книг с полным контролем данных
+            {t(language, 'settings.aboutText')}
           </Text>
         </View>
       </ScrollView>

@@ -1,8 +1,10 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useEffect, useState } from 'react';
-import { Text } from 'react-native';
+import { Text, ActivityIndicator, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CacheContext, useCacheProvider } from './src/context/CacheContext';
+import { LanguageProvider, useLanguage } from './src/context/LanguageContext';
 import { getCachedCommitSha } from './src/services/booksCache';
 import { getLatestCommitSha } from './src/services/github';
 import { applyIncrementalUpdate } from './src/services/booksService';
@@ -12,12 +14,41 @@ import TimelineScreen from './src/screens/TimelineScreen';
 import AddBookScreen from './src/screens/AddBookScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
+import LanguageSelectScreen from './src/screens/LanguageSelectScreen';
 
 const Tab = createBottomTabNavigator();
 
-export default function App() {
+function AppContent() {
+  const { isLoading: languageLoading } = useLanguage();
   const [settings, setSettings] = useState<Settings | null>(() => getSettings());
+  const [hasSeenLanguageScreen, setHasSeenLanguageScreen] = useState(true);
   const cache = useCacheProvider();
+
+  useEffect(() => {
+    checkLanguageScreenStatus();
+  }, []);
+
+  const checkLanguageScreenStatus = async () => {
+    const seen = await AsyncStorage.getItem('hasSeenLanguageScreen');
+    setHasSeenLanguageScreen(!!seen);
+  };
+
+  const handleLanguageScreenComplete = async () => {
+    await AsyncStorage.setItem('hasSeenLanguageScreen', 'true');
+    setHasSeenLanguageScreen(true);
+  };
+
+  if (languageLoading) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
+        <ActivityIndicator size="large" color="#111" />
+      </View>
+    );
+  }
+
+  if (!hasSeenLanguageScreen) {
+    return <LanguageSelectScreen onComplete={handleLanguageScreenComplete} />;
+  }
 
   // Polling: раз в минуту сверяем SHA последнего коммита
   useEffect(() => {
@@ -65,7 +96,7 @@ export default function App() {
             name="Timeline"
             component={TimelineScreen}
             options={{
-              title: 'Таймлайн',
+              title: 'Timeline',
               tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>📅</Text>,
             }}
           />
@@ -73,7 +104,7 @@ export default function App() {
             name="AddBook"
             component={AddBookScreen}
             options={{
-              title: 'Добавить',
+              title: 'Add',
               tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>＋</Text>,
             }}
           />
@@ -81,7 +112,7 @@ export default function App() {
             name="Search"
             component={SearchScreen}
             options={{
-              title: 'Поиск',
+              title: 'Search',
               tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>🔍</Text>,
             }}
           />
@@ -89,12 +120,20 @@ export default function App() {
             name="Settings"
             component={SettingsScreen}
             options={{
-              title: 'Ещё',
+              title: 'More',
               tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>⚙️</Text>,
             }}
           />
         </Tab.Navigator>
       </NavigationContainer>
     </CacheContext.Provider>
+  );
+}
+
+export default function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 }

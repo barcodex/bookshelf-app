@@ -1,0 +1,80 @@
+{
+  "language": {
+    "select": "Sélectionner la langue",
+    "english": "English",
+    "russian": "Русский",
+    "german": "Deutsch",
+    "french": "Français",
+    "spanish": "Español",
+    "italian": "Italiano"
+  },
+  "onboarding": {
+    "welcome": "Bienvenue sur Bookshelf",
+    "welcomeDesc": "Une application simple et respectueuse de la vie privée pour suivre vos livres lus.\n\nVos livres sont stockés dans votre propre référentiel GitHub. Nous ne stockons rien sur nos serveurs.",
+    "github": "Connecter GitHub",
+    "githubDesc": "Bookshelf synchronise vos données de livres via GitHub. Tous vos livres sont stockés dans votre propre référentiel privé.",
+    "token": "Obtenir un jeton GitHub",
+    "tokenDesc": "Vous aurez besoin d'un jeton d'accès personnel pour autoriser Bookshelf.\n\n1. Allez à github.com/settings/tokens\n2. Cliquez sur \"Generate new token (classic)\"\n3. Donnez-lui un nom (par ex. \"Bookshelf\")\n4. Cochez \"repo\"\n5. Cliquez sur \"Generate token\"\n6. Copiez le jeton ici",
+    "next": "Suivant",
+    "skip": "Passer",
+    "done": "Commencer"
+  },
+  "setup": {
+    "title": "Configuration GitHub",
+    "token": "Jeton d'accès personnel",
+    "tokenPlaceholder": "ghp_...",
+    "repo": "Nom du référentiel",
+    "repoPlaceholder": "bookshelf-books",
+    "repoHint": "Créez ce référentiel sur GitHub d'abord, ou nous le créerons pour vous",
+    "save": "Enregistrer",
+    "connecting": "Connexion...",
+    "error": "Échec de la connexion. Vérifiez votre jeton et réessayez."
+  },
+  "timeline": {
+    "title": "Chronologie",
+    "empty": "Aucun livre pour le moment. Ajoutez-en un pour commencer!"
+  },
+  "search": {
+    "title": "Rechercher",
+    "hint": "1-2 caractères — par début de mot; 3+ — recherche plein texte",
+    "minRating": "Note minimale",
+    "empty": "Rien trouvé",
+    "loading": "Chargement...",
+    "noFilter": "Entrez une requête ou sélectionnez un filtre"
+  },
+  "addBook": {
+    "title": "Ajouter un livre",
+    "title_label": "Titre",
+    "author": "Auteur",
+    "year": "Année",
+    "rating": "Note",
+    "tags": "Tags (séparés par des virgules)",
+    "media": "Format",
+    "dateFinished": "Date de fin de lecture",
+    "summary": "Résumé",
+    "review": "Avis",
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+    "validationError": "Veuillez remplir le titre, l'auteur et la date de fin de lecture",
+    "success": "Enregistré!"
+  },
+  "settings": {
+    "title": "Plus",
+    "language": "Langue",
+    "legal": "Juridique",
+    "privacyPolicy": "Politique de confidentialité",
+    "version": "Version",
+    "about": "À propos",
+    "aboutText": "Bookshelf — vos livres, vos données, votre vie privée"
+  },
+  "common": {
+    "back": "Retour",
+    "close": "Fermer",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "ok": "OK",
+    "error": "Erreur",
+    "loading": "Chargement..."
+  }
+}
