@@ -20,14 +20,34 @@ const Tab = createBottomTabNavigator();
 
 function AppContent() {
   const { isLoading: languageLoading } = useLanguage();
+  const cache = useCacheProvider();
   const [settings, setSettings] = useState<Settings | null>(() => getSettings());
   const [hasSeenLanguageScreen, setHasSeenLanguageScreen] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
-  const cache = useCacheProvider();
 
   useEffect(() => {
     initializeApp();
   }, []);
+
+  useEffect(() => {
+    if (!settings) return;
+    const poll = async () => {
+      try {
+        const [remoteSha, cachedSha] = await Promise.all([
+          getLatestCommitSha(settings),
+          getCachedCommitSha(),
+        ]);
+        if (cachedSha !== null && remoteSha !== cachedSha) {
+          await applyIncrementalUpdate(settings, cachedSha, remoteSha);
+          cache.bumpVersion();
+        }
+      } catch {
+        // network errors ignored
+      }
+    };
+    const id = setInterval(poll, 60_000);
+    return () => clearInterval(id);
+  }, [settings, cache]);
 
   const initializeApp = async () => {
     try {
@@ -60,27 +80,6 @@ function AppContent() {
   if (!hasSeenLanguageScreen) {
     return <LanguageSelectScreen onComplete={handleLanguageScreenComplete} />;
   }
-
-  // Polling: раз в минуту сверяем SHA последнего коммита
-  useEffect(() => {
-    if (!settings) return;
-    const poll = async () => {
-      try {
-        const [remoteSha, cachedSha] = await Promise.all([
-          getLatestCommitSha(settings),
-          getCachedCommitSha(),
-        ]);
-        if (cachedSha !== null && remoteSha !== cachedSha) {
-          await applyIncrementalUpdate(settings, cachedSha, remoteSha);
-          cache.bumpVersion();
-        }
-      } catch {
-        // сетевые ошибки при опросе — игнорируем
-      }
-    };
-    const id = setInterval(poll, 60_000);
-    return () => clearInterval(id);
-  }, [settings]);
 
   if (!settings) {
     return (
