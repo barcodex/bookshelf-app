@@ -21,29 +21,35 @@ const Tab = createBottomTabNavigator();
 function AppContent() {
   const { isLoading: languageLoading } = useLanguage();
   const [settings, setSettings] = useState<Settings | null>(() => getSettings());
-  const [hasSeenLanguageScreen, setHasSeenLanguageScreen] = useState<boolean | null>(null);
+  const [hasSeenLanguageScreen, setHasSeenLanguageScreen] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
   const cache = useCacheProvider();
 
   useEffect(() => {
-    checkLanguageScreenStatus();
+    initializeApp();
   }, []);
 
-  const checkLanguageScreenStatus = async () => {
+  const initializeApp = async () => {
     try {
       const seen = await AsyncStorage.getItem('hasSeenLanguageScreen');
       setHasSeenLanguageScreen(!!seen);
     } catch (error) {
       console.log('Error checking language screen status:', error);
-      setHasSeenLanguageScreen(false);
+    } finally {
+      setIsInitialized(true);
     }
   };
 
   const handleLanguageScreenComplete = async () => {
-    await AsyncStorage.setItem('hasSeenLanguageScreen', 'true');
-    setHasSeenLanguageScreen(true);
+    try {
+      await AsyncStorage.setItem('hasSeenLanguageScreen', 'true');
+      setHasSeenLanguageScreen(true);
+    } catch (error) {
+      console.log('Error saving language screen status:', error);
+    }
   };
 
-  if (languageLoading || hasSeenLanguageScreen === null) {
+  if (languageLoading || !isInitialized) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
         <ActivityIndicator size="large" color="#111" />
