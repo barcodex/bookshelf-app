@@ -21,7 +21,7 @@ const Tab = createBottomTabNavigator();
 function AppContent() {
   const { isLoading: languageLoading } = useLanguage();
   const [settings, setSettings] = useState<Settings | null>(() => getSettings());
-  const [hasSeenLanguageScreen, setHasSeenLanguageScreen] = useState(true);
+  const [hasSeenLanguageScreen, setHasSeenLanguageScreen] = useState<boolean | null>(null);
   const cache = useCacheProvider();
 
   useEffect(() => {
@@ -29,8 +29,13 @@ function AppContent() {
   }, []);
 
   const checkLanguageScreenStatus = async () => {
-    const seen = await AsyncStorage.getItem('hasSeenLanguageScreen');
-    setHasSeenLanguageScreen(!!seen);
+    try {
+      const seen = await AsyncStorage.getItem('hasSeenLanguageScreen');
+      setHasSeenLanguageScreen(!!seen);
+    } catch (error) {
+      console.log('Error checking language screen status:', error);
+      setHasSeenLanguageScreen(false);
+    }
   };
 
   const handleLanguageScreenComplete = async () => {
@@ -38,7 +43,7 @@ function AppContent() {
     setHasSeenLanguageScreen(true);
   };
 
-  if (languageLoading) {
+  if (languageLoading || hasSeenLanguageScreen === null) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
         <ActivityIndicator size="large" color="#111" />
