@@ -30,6 +30,21 @@
     "connecting": "Connecting...",
     "error": "Connection failed. Check your token and try again."
   },
+  "book": {
+    "title": "Title",
+    "author": "Author",
+    "year": "Year",
+    "originalTitle": "Original Title",
+    "originalLanguage": "Original Language",
+    "rating": "Rating",
+    "format": "Format",
+    "source": "Source",
+    "dateStarted": "Started Reading",
+    "dateFinished": "Finished Reading",
+    "summary": "Summary",
+    "review": "Review",
+    "tags": "Tags"
+  },
   "timeline": {
     "title": "Timeline",
     "empty": "No books yet. Add one to get started!"
@@ -44,15 +59,6 @@
   },
   "addBook": {
     "title": "Add Book",
-    "title_label": "Title",
-    "author": "Author",
-    "year": "Year",
-    "rating": "Rating",
-    "tags": "Tags (comma-separated)",
-    "media": "Format",
-    "dateFinished": "Finished Reading",
-    "summary": "Summary",
-    "review": "Review",
     "save": "Save",
     "saving": "Saving...",
     "validationError": "Please fill in title, author, and finish date",

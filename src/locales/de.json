@@ -42,20 +42,26 @@
     "loading": "Wird geladen...",
     "noFilter": "Geben Sie eine Suchanfrage ein oder wählen Sie einen Filter"
   },
-  "addBook": {
-    "title": "Buch hinzufügen",
-    "title_label": "Titel",
+  "book": {
+    "title": "Titel",
     "author": "Autor",
     "year": "Jahr",
+    "originalTitle": "Originaltitel",
+    "originalLanguage": "Originalsprache",
     "rating": "Bewertung",
-    "tags": "Tags (kommagetrennt)",
-    "media": "Format",
-    "dateFinished": "Lesedatum",
+    "format": "Format",
+    "source": "Quelle",
+    "dateStarted": "Lesebeginn",
+    "dateFinished": "Leseende",
     "summary": "Zusammenfassung",
     "review": "Rezension",
+    "tags": "Tags"
+  },
+  "addBook": {
+    "title": "Buch hinzufügen",
     "save": "Speichern",
     "saving": "Speichere...",
-    "validationError": "Bitte füllen Sie Titel, Autor und Lesedatum aus",
+    "validationError": "Bitte füllen Sie Titel, Autor und Leseende aus",
     "success": "Gespeichert!"
   },
   "settings": {

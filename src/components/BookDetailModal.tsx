@@ -1,5 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useLanguage } from '../context/LanguageContext';
+import { t } from '../services/i18n';
 import MediaIcon from './MediaIcon';
 import StarRating from './StarRating';
 import { BookFormData } from '../types/book';
@@ -10,10 +12,12 @@ interface Props {
   onEdit?: () => void;
 }
 
-const formatDate = (iso: string) =>
-  new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'long', day: 'numeric' }).format(
-    new Date(iso + 'T00:00:00')
-  );
+const formatDate = (iso: string, locale: string) =>
+  new Intl.DateTimeFormat(locale === 'ru' ? 'ru-RU' : locale === 'de' ? 'de-DE' : locale === 'fr' ? 'fr-FR' : locale === 'es' ? 'es-ES' : locale === 'it' ? 'it-IT' : 'en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(new Date(iso + 'T00:00:00'));
 
 function Row({ label, value }: { label: string; value: string }) {
   if (!value.trim()) return null;
@@ -27,6 +31,8 @@ function Row({ label, value }: { label: string; value: string }) {
 
 export default function BookDetailModal({ book, onClose, onEdit }: Props) {
   const navigation = useNavigation<any>();
+  const { language } = useLanguage();
+
   return (
     <Modal visible animationType="slide" presentationStyle="pageSheet" onRequestClose={onClose}>
       <View style={styles.container}>
@@ -38,7 +44,7 @@ export default function BookDetailModal({ book, onClose, onEdit }: Props) {
           <View style={styles.headerActions}>
             {onEdit && (
               <Pressable style={styles.editBtn} onPress={onEdit}>
-                <Text style={styles.editBtnText}>Изменить</Text>
+                <Text style={styles.editBtnText}>{t(language, 'common.edit')}</Text>
               </Pressable>
             )}
             <Pressable style={styles.closeBtn} onPress={onClose}>
@@ -49,15 +55,15 @@ export default function BookDetailModal({ book, onClose, onEdit }: Props) {
 
         <ScrollView contentContainerStyle={styles.content}>
           {book.original_title && book.original_title !== book.title && (
-            <Row label="Оригинал" value={book.original_title} />
+            <Row label={t(language, 'book.originalTitle')} value={book.original_title} />
           )}
-          <Row label="Год" value={book.year} />
+          <Row label={t(language, 'book.year')} value={book.year} />
           {book.original_language !== 'ru' && (
-            <Row label="Язык оригинала" value={book.original_language.toUpperCase()} />
+            <Row label={t(language, 'book.originalLanguage')} value={book.original_language.toUpperCase()} />
           )}
           {book.rating > 0 && (
             <View style={styles.row}>
-              <Text style={styles.rowLabel}>Рейтинг</Text>
+              <Text style={styles.rowLabel}>{t(language, 'book.rating')}</Text>
               <StarRating value={book.rating} onChange={() => {}} size="sm" />
             </View>
           )}
@@ -79,27 +85,27 @@ export default function BookDetailModal({ book, onClose, onEdit }: Props) {
           )}
           {book.media && (
             <View style={styles.row}>
-              <Text style={styles.rowLabel}>Формат</Text>
+              <Text style={styles.rowLabel}>{t(language, 'book.format')}</Text>
               <View style={styles.mediaWithIcon}>
                 <MediaIcon media={book.media} size="sm" color="#111" />
                 <Text style={styles.rowValue}>{book.media}</Text>
               </View>
             </View>
           )}
-          {book.source  && <Row label="Источник" value={book.source} />}
-          {book.date_started  && <Row label="Начало чтения" value={formatDate(book.date_started)} />}
-          {book.date_finished && <Row label="Конец чтения"  value={formatDate(book.date_finished)} />}
+          {book.source  && <Row label={t(language, 'book.source')} value={book.source} />}
+          {book.date_started  && <Row label={t(language, 'book.dateStarted')} value={formatDate(book.date_started, language)} />}
+          {book.date_finished && <Row label={t(language, 'book.dateFinished')} value={formatDate(book.date_finished, language)} />}
 
           {book.summary ? (
             <View style={styles.section}>
-              <Text style={styles.sectionLabel}>Резюме</Text>
+              <Text style={styles.sectionLabel}>{t(language, 'book.summary')}</Text>
               <Text style={styles.sectionText}>{book.summary}</Text>
             </View>
           ) : null}
 
           {book.review ? (
             <View style={styles.section}>
-              <Text style={styles.sectionLabel}>Отзыв</Text>
+              <Text style={styles.sectionLabel}>{t(language, 'book.review')}</Text>
               <Text style={styles.sectionText}>{book.review}</Text>
             </View>
           ) : null}
