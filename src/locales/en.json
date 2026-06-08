@@ -11,13 +11,32 @@
   "onboarding": {
     "welcome": "Welcome to Bookshelf",
     "welcomeDesc": "A simple, privacy-first book tracker.\n\nYour books stay in your own GitHub repository. Nothing is stored on our servers.",
-    "github": "Connect GitHub",
+    "github": "What is a Private GitHub Repository?",
     "githubDesc": "Bookshelf syncs your book data through GitHub. All your books are stored in your own private repository.",
     "token": "Get GitHub Token",
     "tokenDesc": "You'll need a Personal Access Token to authorize Bookshelf.\n\n1. Go to github.com/settings/tokens\n2. Click \"Generate new token (classic)\"\n3. Give it a name (e.g., \"Bookshelf\")\n4. Check \"repo\" scope\n5. Click \"Generate token\"\n6. Copy the token here",
     "next": "Next",
     "skip": "Skip",
-    "done": "Get Started"
+    "done": "Get Started",
+    "setup": "Let's Set Up Your Repository",
+    "section": {
+      "whatIs": "What's a private repository?",
+      "whatIsDesc": "A GitHub repository is a storage space for your files. When you mark it as private, only you and people you give access to can see it. Your books will be stored here, synced automatically with Bookshelf.",
+      "privacy": "Why private repositories?",
+      "privacyDesc": "Your book list is personal data. By keeping it in your own private repository, you control who can see your reading history. No third-party servers store your data – only GitHub, and only because you put it there.",
+      "yourControl": "You stay in control",
+      "yourControlDesc": "You own your data. You can download it anytime, delete it, or stop using Bookshelf. Your private repository remains yours forever."
+    },
+    "step": {
+      "createRepo": "Create a new repository",
+      "createRepoDesc": "Go to github.com/new and create a new repository. Give it any name you like (e.g., \"bookshelf-books\" or \"my-reading-list\").",
+      "private": "Mark it as private",
+      "privateDesc": "When creating the repository, select \"Private\" so only you can access it. Don't add a README or any files yet.",
+      "initBooks": "Create the books folder",
+      "initBooksDesc": "Add a \"books\" folder to your repository. You can do this by creating an empty file like \"books/.gitkeep\" through GitHub's web interface.",
+      "token": "Generate a Personal Access Token",
+      "tokenDesc": "Go to github.com/settings/tokens and create a new token with \"repo\" scope. This allows Bookshelf to read and write to your repository."
+    }
   },
   "setup": {
     "appName": "Bookshelf",

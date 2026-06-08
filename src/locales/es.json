@@ -11,13 +11,32 @@
   "onboarding": {
     "welcome": "Bienvenido a Bookshelf",
     "welcomeDesc": "Una aplicación simple que respeta tu privacidad para rastrear los libros que has leído.\n\nTus libros se almacenan en tu propio repositorio de GitHub. No almacenamos nada en nuestros servidores.",
-    "github": "Conectar GitHub",
+    "github": "¿Qué es un repositorio privado de GitHub?",
     "githubDesc": "Bookshelf sincroniza tus datos de libros a través de GitHub. Todos tus libros se almacenan en tu propio repositorio privado.",
     "token": "Obtener token de GitHub",
     "tokenDesc": "Necesitarás un Token de Acceso Personal para autorizar Bookshelf.\n\n1. Ve a github.com/settings/tokens\n2. Haz clic en \"Generate new token (classic)\"\n3. Dale un nombre (p.ej. \"Bookshelf\")\n4. Marca \"repo\"\n5. Haz clic en \"Generate token\"\n6. Copia el token aquí",
     "next": "Siguiente",
     "skip": "Saltar",
-    "done": "Empezar"
+    "done": "Empezar",
+    "setup": "Configuremos tu repositorio",
+    "section": {
+      "whatIs": "¿Qué es un repositorio privado?",
+      "whatIsDesc": "Un repositorio de GitHub es un espacio de almacenamiento para tus archivos. Cuando lo marcas como privado, solo tú y las personas a quienes les des acceso puedes verlo. Tus libros se almacenarán aquí y se sincronizarán automáticamente con Bookshelf.",
+      "privacy": "¿Por qué repositorios privados?",
+      "privacyDesc": "Tu lista de libros es información personal. Al mantenerla en tu propio repositorio privado, controlas quién puede ver tu historial de lectura. Ningún servidor de terceros almacena tus datos – solo GitHub, y solo porque los pusiste allí.",
+      "yourControl": "Tú tienes el control",
+      "yourControlDesc": "Tus datos son tuyos. Puedes descargarlos en cualquier momento, eliminarlos o dejar de usar Bookshelf. Tu repositorio privado sigue siendo tuyo por siempre."
+    },
+    "step": {
+      "createRepo": "Crea un nuevo repositorio",
+      "createRepoDesc": "Ve a github.com/new y crea un nuevo repositorio. Dale el nombre que quieras (p.ej. \"bookshelf-books\" o \"my-reading-list\").",
+      "private": "Márcalo como privado",
+      "privateDesc": "Al crear el repositorio, selecciona \"Private\" para que solo tú puedas acceder a él. No agregues README ni otros archivos aún.",
+      "initBooks": "Crea la carpeta books",
+      "initBooksDesc": "Agrega una carpeta \"books\" a tu repositorio. Puedes hacer esto creando un archivo vacío como \"books/.gitkeep\" a través de la interfaz web de GitHub.",
+      "token": "Genera un Token de Acceso Personal",
+      "tokenDesc": "Ve a github.com/settings/tokens y crea un nuevo token con el alcance \"repo\". Esto le permitirá a Bookshelf leer y escribir en tu repositorio."
+    }
   },
   "setup": {
     "appName": "Bookshelf",

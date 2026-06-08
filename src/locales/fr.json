@@ -11,13 +11,32 @@
   "onboarding": {
     "welcome": "Bienvenue sur Bookshelf",
     "welcomeDesc": "Une application simple et respectueuse de la vie privée pour suivre vos livres lus.\n\nVos livres sont stockés dans votre propre référentiel GitHub. Nous ne stockons rien sur nos serveurs.",
-    "github": "Connecter GitHub",
+    "github": "Qu'est-ce qu'un référentiel GitHub privé?",
     "githubDesc": "Bookshelf synchronise vos données de livres via GitHub. Tous vos livres sont stockés dans votre propre référentiel privé.",
     "token": "Obtenir un jeton GitHub",
     "tokenDesc": "Vous aurez besoin d'un jeton d'accès personnel pour autoriser Bookshelf.\n\n1. Allez à github.com/settings/tokens\n2. Cliquez sur \"Generate new token (classic)\"\n3. Donnez-lui un nom (par ex. \"Bookshelf\")\n4. Cochez \"repo\"\n5. Cliquez sur \"Generate token\"\n6. Copiez le jeton ici",
     "next": "Suivant",
     "skip": "Passer",
-    "done": "Commencer"
+    "done": "Commencer",
+    "setup": "Configurons votre référentiel",
+    "section": {
+      "whatIs": "Qu'est-ce qu'un référentiel privé?",
+      "whatIsDesc": "Un référentiel GitHub est un espace de stockage pour vos fichiers. Lorsque vous le marquez comme privé, seuls vous et les personnes à qui vous donnez accès pouvez le voir. Vos livres seront stockés ici et synchronisés automatiquement avec Bookshelf.",
+      "privacy": "Pourquoi les référentiels privés?",
+      "privacyDesc": "Votre liste de livres est une donnée personnelle. En la conservant dans votre propre référentiel privé, vous contrôlez qui peut voir votre historique de lecture. Aucun serveur tiers ne stocke vos données – seulement GitHub, et seulement parce que vous les y avez mises.",
+      "yourControl": "Vous gardez le contrôle",
+      "yourControlDesc": "Vos données vous appartiennent. Vous pouvez les télécharger à tout moment, les supprimer ou cesser d'utiliser Bookshelf. Votre référentiel privé reste le vôtre pour toujours."
+    },
+    "step": {
+      "createRepo": "Créez un nouveau référentiel",
+      "createRepoDesc": "Allez à github.com/new et créez un nouveau référentiel. Donnez-lui le nom que vous voulez (par ex. \"bookshelf-books\" ou \"my-reading-list\").",
+      "private": "Marquez-le comme privé",
+      "privateDesc": "Lors de la création du référentiel, sélectionnez \"Private\" pour que seul vous puissiez y accéder. N'ajoutez pas encore de README ni d'autres fichiers.",
+      "initBooks": "Créez le dossier books",
+      "initBooksDesc": "Ajoutez un dossier \"books\" à votre référentiel. Vous pouvez le faire en créant un fichier vide comme \"books/.gitkeep\" via l'interface Web de GitHub.",
+      "token": "Générez un jeton d'accès personnel",
+      "tokenDesc": "Allez à github.com/settings/tokens et créez un nouveau jeton avec la portée \"repo\". Cela permettra à Bookshelf de lire et d'écrire dans votre référentiel."
+    }
   },
   "setup": {
     "appName": "Bookshelf",

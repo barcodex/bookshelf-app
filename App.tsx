@@ -15,6 +15,8 @@ import AddBookScreen from './src/screens/AddBookScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import LanguageSelectScreen from './src/screens/LanguageSelectScreen';
+import OnboardingRepositoryScreen from './src/screens/OnboardingRepositoryScreen';
+import OnboardingSetupScreen from './src/screens/OnboardingSetupScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -23,6 +25,7 @@ function AppContent() {
   const cache = useCacheProvider();
   const [settings, setSettings] = useState<Settings | null>(() => getSettings());
   const [hasSeenLanguageScreen, setHasSeenLanguageScreen] = useState(false);
+  const [onboardingStep, setOnboardingStep] = useState<'repository' | 'setup' | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
@@ -51,10 +54,14 @@ function AppContent() {
 
   const initializeApp = async () => {
     try {
-      const seen = await AsyncStorage.getItem('hasSeenLanguageScreen');
-      setHasSeenLanguageScreen(!!seen);
+      const seenLanguage = await AsyncStorage.getItem('hasSeenLanguageScreen');
+      setHasSeenLanguageScreen(!!seenLanguage);
+      const seenOnboarding = await AsyncStorage.getItem('hasSeenOnboarding');
+      if (!seenOnboarding) {
+        setOnboardingStep('repository');
+      }
     } catch (error) {
-      console.log('Error checking language screen status:', error);
+      console.log('Error checking screen status:', error);
     } finally {
       setIsInitialized(true);
     }
@@ -69,6 +76,19 @@ function AppContent() {
     }
   };
 
+  const handleOnboardingRepositoryComplete = () => {
+    setOnboardingStep('setup');
+  };
+
+  const handleOnboardingSetupComplete = async () => {
+    try {
+      await AsyncStorage.setItem('hasSeenOnboarding', 'true');
+      setOnboardingStep(null);
+    } catch (error) {
+      console.log('Error saving onboarding status:', error);
+    }
+  };
+
   if (languageLoading || !isInitialized) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
@@ -79,6 +99,14 @@ function AppContent() {
 
   if (!hasSeenLanguageScreen) {
     return <LanguageSelectScreen onComplete={handleLanguageScreenComplete} />;
+  }
+
+  if (onboardingStep === 'repository') {
+    return <OnboardingRepositoryScreen onComplete={handleOnboardingRepositoryComplete} />;
+  }
+
+  if (onboardingStep === 'setup') {
+    return <OnboardingSetupScreen onComplete={handleOnboardingSetupComplete} />;
   }
 
   if (!settings) {
