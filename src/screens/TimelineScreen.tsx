@@ -9,6 +9,8 @@ import {
   Text,
   View,
 } from 'react-native';
+import { useLanguage } from '../context/LanguageContext';
+import { t } from '../services/i18n';
 import BookDetailModal from '../components/BookDetailModal';
 import EditBookModal from '../components/EditBookModal';
 import MediaIcon from '../components/MediaIcon';
@@ -38,6 +40,7 @@ function getMediaCounts(books: BookFormData[]): { paper: number; digital: number
 }
 
 export default function TimelineScreen() {
+  const { language } = useLanguage();
   const [books, setBooks] = useState<BookFormData[]>([]);
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState<LoadProgress | null>(null);
@@ -91,7 +94,7 @@ export default function TimelineScreen() {
         <ActivityIndicator size="large" />
         {progress && (
           <Text style={styles.progressText}>
-            Загрузка библиотеки… {progress.current} / {progress.total}
+            {t(language, 'common.loading')} {progress.current} / {progress.total}
           </Text>
         )}
       </SafeAreaView>

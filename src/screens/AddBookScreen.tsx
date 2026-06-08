@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { ActivityIndicator, Pressable, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { useLanguage } from '../context/LanguageContext';
+import { t } from '../services/i18n';
 import BookForm from '../components/BookForm';
 import { GitHubErrorScreen } from '../components/GitHubErrorView';
 import { upsertCachedBook, updateCachedCommitSha } from '../services/booksCache';
@@ -9,6 +11,7 @@ import { getSettings } from '../services/storage';
 import { BookFormData, emptyBook } from '../types/book';
 
 export default function AddBookScreen() {
+  const { language } = useLanguage();
   const [data, setData] = useState<BookFormData>(emptyBook);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -24,11 +27,11 @@ export default function AddBookScreen() {
     setGithubError(null);
 
     if (!data.title.trim() || !data.author.trim() || !data.date_finished.trim()) {
-      setError('Укажите автора, название и дату конца чтения');
+      setError(t(language, 'addBook.validationError'));
       return;
     }
     if (!data.slug.trim()) {
-      setError('Не удалось сгенерировать имя файла');
+      setError(t(language, 'common.error'));
       return;
     }
 
@@ -44,13 +47,13 @@ export default function AddBookScreen() {
       const commitSha = await saveFile(settings, path, serialize(data), sha);
       upsertCachedBook(data);
       updateCachedCommitSha(commitSha);
-      setSuccess(`Сохранено: books/${data.slug}.md`);
+      setSuccess(t(language, 'addBook.success'));
       setData(emptyBook);
     } catch (e) {
       if (e instanceof GitHubError) {
         setGithubError(e);
       } else {
-        setError(e instanceof Error ? e.message : 'Ошибка сохранения');
+        setError(e instanceof Error ? e.message : t(language, 'common.error'));
       }
     } finally {
       setSaving(false);
@@ -74,7 +77,7 @@ export default function AddBookScreen() {
         {saving ? (
           <ActivityIndicator color="#fff" />
         ) : (
-          <Text style={styles.saveLabel}>Сохранить</Text>
+          <Text style={styles.saveLabel}>{t(language, 'addBook.save')}</Text>
         )}
       </Pressable>
     </SafeAreaView>

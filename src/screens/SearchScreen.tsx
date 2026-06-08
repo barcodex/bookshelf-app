@@ -10,6 +10,8 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { useLanguage } from '../context/LanguageContext';
+import { t } from '../services/i18n';
 import BookDetailModal from '../components/BookDetailModal';
 import EditBookModal from '../components/EditBookModal';
 import MediaIcon from '../components/MediaIcon';
@@ -41,6 +43,7 @@ function getMediaCounts(books: BookFormData[]): { paper: number; digital: number
 
 
 export default function SearchScreen() {
+  const { language } = useLanguage();
   const [allBooks, setAllBooks] = useState<BookFormData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -191,12 +194,12 @@ export default function SearchScreen() {
         style={styles.searchInput}
         value={query}
         onChangeText={setQuery}
-        placeholder="Поиск по всем полям…"
+        placeholder={t(language, 'search.hint')}
         placeholderTextColor="#aaa"
         clearButtonMode="while-editing"
       />
       <Text style={styles.searchHint}>
-        1–2 символа — по началу слов в названии и авторе; 3+ — полнотекстовый поиск
+        {t(language, 'search.hint')}
       </Text>
 
       <View style={styles.mediaRow}>
@@ -243,9 +246,9 @@ export default function SearchScreen() {
       <View style={styles.resultsRow}>
         <Text style={styles.resultsCount}>
           {loading
-            ? 'Загрузка…'
+            ? t(language, 'common.loading')
             : filtered === null
-            ? 'Введите запрос или выберите фильтр'
+            ? t(language, 'search.noFilter')
             : `${filtered.length} книг`}
         </Text>
         {hasFilters && (
@@ -336,7 +339,7 @@ export default function SearchScreen() {
           }}
           ListEmptyComponent={
             filtered !== null
-              ? <Text style={styles.empty}>Ничего не найдено</Text>
+              ? <Text style={styles.empty}>{t(language, 'search.empty')}</Text>
               : null
           }
           contentContainerStyle={styles.listContent}
