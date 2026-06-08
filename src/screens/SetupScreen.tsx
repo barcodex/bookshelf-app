@@ -10,6 +10,8 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { useLanguage } from '../context/LanguageContext';
+import { t } from '../services/i18n';
 import { validateAccess } from '../services/github';
 import { Settings } from '../services/storage';
 
@@ -25,6 +27,7 @@ function normalizeRepo(input: string): string {
 }
 
 export default function SetupScreen({ onComplete }: Props) {
+  const { language } = useLanguage();
   const [repo, setRepo] = useState('');
   const [token, setToken] = useState('');
   const [error, setError] = useState('');
@@ -34,7 +37,7 @@ export default function SetupScreen({ onComplete }: Props) {
     setError('');
     const normalized = normalizeRepo(repo);
     if (!normalized || !token.trim()) {
-      setError('Заполните оба поля');
+      setError(t(language, 'setup.fillBoth'));
       return;
     }
     setLoading(true);
@@ -43,7 +46,7 @@ export default function SetupScreen({ onComplete }: Props) {
       await validateAccess(settings);
       onComplete(settings);
     } catch {
-      setError('Не удалось подключиться. Проверьте адрес репозитория и токен.');
+      setError(t(language, 'setup.connectionError'));
     } finally {
       setLoading(false);
     }
@@ -56,20 +59,20 @@ export default function SetupScreen({ onComplete }: Props) {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <View style={styles.header}>
-          <Text style={styles.title}>Книжная полка</Text>
+          <Text style={styles.title}>{t(language, 'setup.appName')}</Text>
           <Text style={styles.subtitle}>
-            Укажите GitHub-репозиторий с контентом и Personal Access Token.
+            {t(language, 'setup.subtitle')}
           </Text>
         </View>
 
         <View style={styles.form}>
           <View style={styles.field}>
-            <Text style={styles.label}>Репозиторий</Text>
+            <Text style={styles.label}>{t(language, 'setup.repo')}</Text>
             <TextInput
               style={styles.input}
               value={repo}
               onChangeText={setRepo}
-              placeholder="owner/repo"
+              placeholder={t(language, 'setup.repoPlaceholder')}
               placeholderTextColor="#aaa"
               autoCapitalize="none"
               autoCorrect={false}
@@ -77,19 +80,19 @@ export default function SetupScreen({ onComplete }: Props) {
           </View>
 
           <View style={styles.field}>
-            <Text style={styles.label}>Personal Access Token</Text>
+            <Text style={styles.label}>{t(language, 'setup.token')}</Text>
             <TextInput
               style={styles.input}
               value={token}
               onChangeText={setToken}
-              placeholder="ghp_..."
+              placeholder={t(language, 'setup.tokenPlaceholder')}
               placeholderTextColor="#aaa"
               autoCapitalize="none"
               autoCorrect={false}
               secureTextEntry
             />
             <Text style={styles.hint}>
-              github.com → Settings → Developer settings → Personal access tokens → Tokens (classic), scope: repo
+              {t(language, 'setup.tokenHint')}
             </Text>
           </View>
 
@@ -103,7 +106,7 @@ export default function SetupScreen({ onComplete }: Props) {
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={styles.buttonLabel}>Подключить</Text>
+              <Text style={styles.buttonLabel}>{t(language, 'setup.connect')}</Text>
             )}
           </Pressable>
         </View>

@@ -20,14 +20,20 @@
     "done": "Начать"
   },
   "setup": {
+    "appName": "Книжная полка",
     "title": "Настройка GitHub",
+    "subtitle": "Укажите GitHub-репозиторий с контентом и Personal Access Token.",
     "token": "Personal Access Token",
     "tokenPlaceholder": "ghp_...",
-    "repo": "Имя репозитория",
-    "repoPlaceholder": "bookshelf-books",
+    "tokenHint": "github.com → Settings → Developer settings → Personal access tokens → Tokens (classic), scope: repo",
+    "repo": "Репозиторий",
+    "repoPlaceholder": "owner/repo",
     "repoHint": "Сначала создайте репозиторий на GitHub, или мы создадим его автоматически",
     "save": "Сохранить",
+    "connect": "Подключить",
     "connecting": "Подключение...",
+    "fillBoth": "Заполните оба поля",
+    "connectionError": "Не удалось подключиться. Проверьте адрес репозитория и токен.",
     "error": "Ошибка подключения. Проверьте токен и попробуйте снова."
   },
   "timeline": {
@@ -40,7 +46,10 @@
     "minRating": "Минимальный рейтинг",
     "empty": "Ничего не найдено",
     "loading": "Загрузка...",
-    "noFilter": "Введите запрос или выберите фильтр"
+    "noFilter": "Введите запрос или выберите фильтр",
+    "results": "{count} книг",
+    "reset": "Сбросить",
+    "loadingBooks": "Загрузка библиотеки…"
   },
   "book": {
     "title": "Название",
@@ -63,6 +72,11 @@
     "saving": "Сохраняю...",
     "validationError": "Заполните название, автора и дату конца чтения",
     "success": "Сохранено!"
+  },
+  "media": {
+    "paper": "Бумажная",
+    "digital": "Электронная",
+    "audio": "Аудио"
   },
   "settings": {
     "title": "Ещё",

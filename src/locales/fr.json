@@ -20,14 +20,20 @@
     "done": "Commencer"
   },
   "setup": {
+    "appName": "Bookshelf",
     "title": "Configuration GitHub",
+    "subtitle": "Spécifiez votre référentiel GitHub et votre jeton d'accès personnel.",
     "token": "Jeton d'accès personnel",
     "tokenPlaceholder": "ghp_...",
-    "repo": "Nom du référentiel",
-    "repoPlaceholder": "bookshelf-books",
+    "tokenHint": "github.com → Settings → Developer settings → Personal access tokens → Tokens (classic), scope: repo",
+    "repo": "Référentiel",
+    "repoPlaceholder": "owner/repo",
     "repoHint": "Créez ce référentiel sur GitHub d'abord, ou nous le créerons pour vous",
     "save": "Enregistrer",
+    "connect": "Connecter",
     "connecting": "Connexion...",
+    "fillBoth": "Veuillez remplir les deux champs",
+    "connectionError": "Impossible de se connecter. Vérifiez l'adresse du référentiel et le jeton.",
     "error": "Échec de la connexion. Vérifiez votre jeton et réessayez."
   },
   "timeline": {
@@ -40,7 +46,10 @@
     "minRating": "Note minimale",
     "empty": "Rien trouvé",
     "loading": "Chargement...",
-    "noFilter": "Entrez une requête ou sélectionnez un filtre"
+    "noFilter": "Entrez une requête ou sélectionnez un filtre",
+    "results": "{count} livres",
+    "reset": "Réinitialiser",
+    "loadingBooks": "Chargement des livres…"
   },
   "book": {
     "title": "Titre",
@@ -63,6 +72,11 @@
     "saving": "Enregistrement...",
     "validationError": "Veuillez remplir le titre, l'auteur et la date de fin de lecture",
     "success": "Enregistré!"
+  },
+  "media": {
+    "paper": "Papier",
+    "digital": "Numérique",
+    "audio": "Audio"
   },
   "settings": {
     "title": "Plus",

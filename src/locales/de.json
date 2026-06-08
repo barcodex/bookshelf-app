@@ -20,14 +20,20 @@
     "done": "Starten"
   },
   "setup": {
+    "appName": "Bookshelf",
     "title": "GitHub-Setup",
+    "subtitle": "Geben Sie Ihr GitHub-Repository und Personal Access Token an.",
     "token": "Personal Access Token",
     "tokenPlaceholder": "ghp_...",
-    "repo": "Repository-Name",
-    "repoPlaceholder": "bookshelf-books",
+    "tokenHint": "github.com → Settings → Developer settings → Personal access tokens → Tokens (classic), scope: repo",
+    "repo": "Repository",
+    "repoPlaceholder": "owner/repo",
     "repoHint": "Erstellen Sie dieses Repository zuerst auf GitHub oder wir erstellen es für Sie",
     "save": "Speichern",
+    "connect": "Verbinden",
     "connecting": "Verbinde...",
+    "fillBoth": "Bitte füllen Sie beide Felder aus",
+    "connectionError": "Verbindung konnte nicht hergestellt werden. Überprüfen Sie Repository-Adresse und Token.",
     "error": "Verbindung fehlgeschlagen. Überprüfen Sie Ihr Token und versuchen Sie es erneut."
   },
   "timeline": {
@@ -40,7 +46,10 @@
     "minRating": "Mindestbewertung",
     "empty": "Nichts gefunden",
     "loading": "Wird geladen...",
-    "noFilter": "Geben Sie eine Suchanfrage ein oder wählen Sie einen Filter"
+    "noFilter": "Geben Sie eine Suchanfrage ein oder wählen Sie einen Filter",
+    "results": "{count} Bücher",
+    "reset": "Zurücksetzen",
+    "loadingBooks": "Bücher werden geladen…"
   },
   "book": {
     "title": "Titel",
@@ -63,6 +72,11 @@
     "saving": "Speichere...",
     "validationError": "Bitte füllen Sie Titel, Autor und Leseende aus",
     "success": "Gespeichert!"
+  },
+  "media": {
+    "paper": "Papierbuch",
+    "digital": "E-Book",
+    "audio": "Hörbuch"
   },
   "settings": {
     "title": "Mehr",

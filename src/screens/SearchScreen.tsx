@@ -25,12 +25,6 @@ import { GitHubErrorScreen, GitHubOfflineBanner } from '../components/GitHubErro
 import { BookFormData, BookMedia } from '../types/book';
 import { YearSection, formatDisplayDate, groupByYear } from '../utils/groupBooks';
 
-const MEDIA_OPTIONS: { value: BookMedia; label: string }[] = [
-  { value: 'бумажная', label: 'Бумажная' },
-  { value: 'электронная', label: 'Электронная' },
-  { value: 'аудио', label: 'Аудио' },
-];
-
 function getMediaCounts(books: BookFormData[]): { paper: number; digital: number; audio: number } {
   const counts = { paper: 0, digital: 0, audio: 0 };
   for (const book of books) {
@@ -44,6 +38,11 @@ function getMediaCounts(books: BookFormData[]): { paper: number; digital: number
 
 export default function SearchScreen() {
   const { language } = useLanguage();
+  const mediaOptions: { value: BookMedia; label: string }[] = [
+    { value: 'бумажная', label: t(language, 'media.paper') },
+    { value: 'электронная', label: t(language, 'media.digital') },
+    { value: 'аудио', label: t(language, 'media.audio') },
+  ];
   const [allBooks, setAllBooks] = useState<BookFormData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -203,7 +202,7 @@ export default function SearchScreen() {
       </Text>
 
       <View style={styles.mediaRow}>
-        {MEDIA_OPTIONS.map(opt => {
+        {mediaOptions.map(opt => {
           const active = activeMedia.includes(opt.value);
           return (
             <Pressable
@@ -220,7 +219,7 @@ export default function SearchScreen() {
       </View>
 
       <View style={styles.ratingRow}>
-        <Text style={styles.ratingLabel}>Минимальный рейтинг</Text>
+        <Text style={styles.ratingLabel}>{t(language, 'search.minRating')}</Text>
         <StarRating value={minRating} onChange={setMinRating} size="sm" />
       </View>
 
@@ -249,11 +248,11 @@ export default function SearchScreen() {
             ? t(language, 'common.loading')
             : filtered === null
             ? t(language, 'search.noFilter')
-            : `${filtered.length} книг`}
+            : t(language, 'search.results').replace('{count}', filtered.length.toString())}
         </Text>
         {hasFilters && (
           <Pressable onPress={resetFilters}>
-            <Text style={styles.reset}>Сбросить</Text>
+            <Text style={styles.reset}>{t(language, 'search.reset')}</Text>
           </Pressable>
         )}
       </View>
@@ -273,7 +272,7 @@ export default function SearchScreen() {
           <ActivityIndicator style={{ marginTop: 40 }} size="large" />
           {progress && (
             <Text style={styles.progressText}>
-              Загрузка библиотеки… {progress.current} / {progress.total}
+              {t(language, 'search.loadingBooks')} {progress.current} / {progress.total}
             </Text>
           )}
         </>

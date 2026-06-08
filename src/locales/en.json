@@ -20,14 +20,20 @@
     "done": "Get Started"
   },
   "setup": {
+    "appName": "Bookshelf",
     "title": "GitHub Setup",
+    "subtitle": "Specify your GitHub repository with content and Personal Access Token.",
     "token": "Personal Access Token",
     "tokenPlaceholder": "ghp_...",
-    "repo": "Repository Name",
-    "repoPlaceholder": "bookshelf-books",
+    "tokenHint": "github.com → Settings → Developer settings → Personal access tokens → Tokens (classic), scope: repo",
+    "repo": "Repository",
+    "repoPlaceholder": "owner/repo",
     "repoHint": "Create this repository on GitHub first, or we'll create it for you",
     "save": "Save Settings",
+    "connect": "Connect",
     "connecting": "Connecting...",
+    "fillBoth": "Please fill in both fields",
+    "connectionError": "Could not connect. Check repository address and token.",
     "error": "Connection failed. Check your token and try again."
   },
   "book": {
@@ -55,7 +61,10 @@
     "minRating": "Min Rating",
     "empty": "Nothing found",
     "loading": "Loading...",
-    "noFilter": "Enter a query or select a filter"
+    "noFilter": "Enter a query or select a filter",
+    "results": "{count} books",
+    "reset": "Reset",
+    "loadingBooks": "Loading books…"
   },
   "addBook": {
     "title": "Add Book",
@@ -63,6 +72,11 @@
     "saving": "Saving...",
     "validationError": "Please fill in title, author, and finish date",
     "success": "Saved!"
+  },
+  "media": {
+    "paper": "Paper",
+    "digital": "Digital",
+    "audio": "Audio"
   },
   "settings": {
     "title": "More",
