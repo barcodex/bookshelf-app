@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ActivityIndicator, Pressable, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../services/i18n';
 import BookForm from '../components/BookForm';
@@ -19,7 +20,7 @@ export default function AddBookScreen() {
   const [githubError, setGithubError] = useState<GitHubError | null>(null);
 
   const handleSave = async () => {
-    const settings = getSettings();
+    const settings = await getSettings();
     if (!settings) return;
 
     setError('');

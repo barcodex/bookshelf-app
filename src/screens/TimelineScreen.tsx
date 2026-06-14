@@ -3,12 +3,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Pressable,
-  SafeAreaView,
   SectionList,
   StyleSheet,
   Text,
   View,
+  RefreshControl,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../services/i18n';
 import BookDetailModal from '../components/BookDetailModal';
@@ -24,9 +25,13 @@ import { BookFormData, BookMedia } from '../types/book';
 import { YearSection, formatDisplayDate, groupByYear } from '../utils/groupBooks';
 
 function sorted(books: BookFormData[]) {
-  return books
-    .filter(b => b.date_finished)
-    .sort((a, b) => b.date_finished.localeCompare(a.date_finished));
+  const withDate = books.filter(b => b.date_finished);
+  const result = withDate.sort((a, b) => b.date_finished.localeCompare(a.date_finished));
+  console.log(`[Timeline] Sorting ${books.length} books. ${withDate.length} have date_finished.`);
+  if (result.length > 0) {
+    console.log(`[Timeline] Top book: ${result[0].title} (${result[0].date_finished})`);
+  }
+  return result;
 }
 
 function getMediaCounts(books: BookFormData[]): { paper: number; digital: number; audio: number } {
@@ -43,6 +48,7 @@ export default function TimelineScreen() {
   const { language } = useLanguage();
   const [books, setBooks] = useState<BookFormData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [progress, setProgress] = useState<LoadProgress | null>(null);
   const [githubError, setGithubError] = useState<GitHubError | null>(null);
   const [selected, setSelected] = useState<BookFormData | null>(null);
@@ -51,7 +57,7 @@ export default function TimelineScreen() {
   const isFocused = useRef(false);
 
   const loadBooks = useCallback(async () => {
-    const settings = getSettings();
+    const settings = await getSettings();
     if (!settings) return;
 
     const cached = await getCachedBooks();
@@ -75,6 +81,21 @@ export default function TimelineScreen() {
     } finally {
       setLoading(false);
       setProgress(null);
+    }
+  }, []);
+
+  const handleRefresh = useCallback(async () => {
+    const settings = await getSettings();
+    if (!settings) return;
+    setRefreshing(true);
+    setGithubError(null);
+    try {
+      const books = await loadAllBooks(settings);
+      setBooks(sorted(books));
+    } catch (e) {
+      if (e instanceof GitHubError) setGithubError(e);
+    } finally {
+      setRefreshing(false);
     }
   }, []);
 
@@ -114,6 +135,9 @@ export default function TimelineScreen() {
         sections={groupByYear(books)}
         keyExtractor={item => item.slug}
         stickySectionHeadersEnabled
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
         renderSectionHeader={({ section }) => {
           const counts = getMediaCounts(section.data);
           return (

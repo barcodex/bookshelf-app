@@ -3,11 +3,11 @@ import {
   ActivityIndicator,
   Modal,
   Pressable,
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import BookForm from './BookForm';
 import { getFile, saveFile } from '../services/github';
 import { serialize } from '../services/markdown';
@@ -26,7 +26,7 @@ export default function EditBookModal({ book, onClose, onSaved }: Props) {
   const [error, setError] = useState('');
 
   const handleSave = async () => {
-    const settings = getSettings();
+    const settings = await getSettings();
     if (!settings) return;
     if (!data.title.trim() || !data.author.trim() || !data.date_finished.trim()) {
       setError('Укажите автора, название и дату конца чтения');
@@ -47,7 +47,13 @@ export default function EditBookModal({ book, onClose, onSaved }: Props) {
   };
 
   return (
-    <Modal visible animationType="slide" presentationStyle="pageSheet" onRequestClose={onClose}>
+    <Modal
+      visible
+      animationType="slide"
+      presentationStyle="pageSheet"
+      onRequestClose={onClose}
+      statusBarTranslucent
+    >
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>Редактирование</Text>

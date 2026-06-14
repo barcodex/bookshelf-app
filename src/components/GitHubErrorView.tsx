@@ -1,4 +1,5 @@
-import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { GitHubError, GitHubErrorType } from '../services/github';
 import { clearSettings } from '../services/storage';
 import { clearBooksCache } from '../services/booksCache';
@@ -31,10 +32,10 @@ const ERROR_CONTENT: Record<GitHubErrorType, { title: string; message: string; c
   },
 };
 
-function handleReset() {
-  clearSettings();
-  clearBooksCache();
-  if (typeof window !== 'undefined') window.location.reload();
+async function handleReset() {
+  await clearSettings();
+  await clearBooksCache();
+  // В React Native нет window.location.reload()
 }
 
 // Полноэкранный вид — когда кэша нет и GitHub недоступен

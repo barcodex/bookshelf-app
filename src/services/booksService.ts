@@ -27,6 +27,8 @@ export async function loadAllBooks(
   ]);
 
   const mdFiles = files.filter(f => f.name.endsWith('.md'));
+  console.log(`[booksService] loadAllBooks found ${mdFiles.length} markdown files. Commit: ${commitSha}`);
+  console.log(`[booksService] Files: ${mdFiles.map(f => f.name).join(', ')}`);
   const total = mdFiles.length;
   const books: BookFormData[] = [];
 

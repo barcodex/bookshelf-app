@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../services/i18n';
 import MediaIcon from './MediaIcon';
@@ -32,10 +33,17 @@ function Row({ label, value }: { label: string; value: string }) {
 export default function BookDetailModal({ book, onClose, onEdit }: Props) {
   const navigation = useNavigation<any>();
   const { language } = useLanguage();
+  const insets = useSafeAreaInsets();
 
   return (
-    <Modal visible animationType="slide" presentationStyle="pageSheet" onRequestClose={onClose}>
-      <View style={styles.container}>
+    <Modal
+      visible
+      animationType="slide"
+      presentationStyle="pageSheet"
+      onRequestClose={onClose}
+      statusBarTranslucent
+    >
+      <View style={[styles.container, { paddingTop: insets.top }]}>
         <View style={styles.header}>
           <View style={styles.headerText}>
             <Text style={styles.title}>{book.title}</Text>
@@ -110,7 +118,7 @@ export default function BookDetailModal({ book, onClose, onEdit }: Props) {
             </View>
           ) : null}
         </ScrollView>
-      </View>
+      </SafeAreaView>
     </Modal>
   );
 }

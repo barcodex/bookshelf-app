@@ -1,3 +1,5 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export interface Settings {
   repo: string;  // "owner/repo"
   token: string; // GitHub PAT
@@ -5,19 +7,19 @@ export interface Settings {
 
 const KEY = 'bookshelf_settings';
 
-export function getSettings(): Settings | null {
+export async function getSettings(): Promise<Settings | null> {
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = await AsyncStorage.getItem(KEY);
     return raw ? (JSON.parse(raw) as Settings) : null;
   } catch {
     return null;
   }
 }
 
-export function saveSettings(settings: Settings): void {
-  localStorage.setItem(KEY, JSON.stringify(settings));
+export async function saveSettings(settings: Settings): Promise<void> {
+  await AsyncStorage.setItem(KEY, JSON.stringify(settings));
 }
 
-export function clearSettings(): void {
-  localStorage.removeItem(KEY);
+export async function clearSettings(): Promise<void> {
+  await AsyncStorage.removeItem(KEY);
 }

@@ -3,13 +3,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Pressable,
-  SafeAreaView,
   SectionList,
   StyleSheet,
   Text,
   TextInput,
   View,
+  RefreshControl,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../services/i18n';
 import BookDetailModal from '../components/BookDetailModal';
@@ -45,6 +46,7 @@ export default function SearchScreen() {
   ];
   const [allBooks, setAllBooks] = useState<BookFormData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -61,7 +63,7 @@ export default function SearchScreen() {
   const [pendingTag, setPendingTag] = useState<string | null>(null);
 
   const loadBooks = useCallback(async () => {
-    const settings = getSettings();
+    const settings = await getSettings();
     if (!settings) return;
 
     const cached = await getCachedBooks();
@@ -91,6 +93,25 @@ export default function SearchScreen() {
     } finally {
       setLoading(false);
       setProgress(null);
+    }
+  }, []);
+
+  const handleRefresh = useCallback(async () => {
+    const settings = await getSettings();
+    if (!settings) return;
+    setRefreshing(true);
+    setGithubError(null);
+    try {
+      const books = await loadAllBooks(settings);
+      setAllBooks(
+        books
+          .filter(b => b.date_finished)
+          .sort((a, b) => b.date_finished.localeCompare(a.date_finished))
+      );
+    } catch (e) {
+      if (e instanceof GitHubError) setGithubError(e);
+    } finally {
+      setRefreshing(false);
     }
   }, []);
 
@@ -137,7 +158,6 @@ export default function SearchScreen() {
   const filtered = useMemo(() => {
     const q = debouncedQuery.trim().toLowerCase();
     const hasQuery = q.length > 0;
-    const hasFiltersOnly = !hasQuery && (minRating > 0 || activeTags.length > 0);
 
     // Нет никаких фильтров — ничего не показываем
     if (!hasQuery && minRating === 0 && activeTags.length === 0 && activeMedia.length === 0) return null;
@@ -282,6 +302,9 @@ export default function SearchScreen() {
           keyExtractor={item => item.slug}
           ListHeaderComponent={Header}
           stickySectionHeadersEnabled
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
           renderSectionHeader={({ section }) => {
             const counts = getMediaCounts(section.data);
             return (

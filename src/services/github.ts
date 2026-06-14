@@ -28,25 +28,34 @@ async function request<T = unknown>(
   path: string,
   body?: unknown,
 ): Promise<T> {
+  const url = `${BASE}${path}${path.includes('?') ? '&' : '?'}t=${Date.now()}`;
+  console.log(`[GitHub API Request] ${method} ${path} | Repo: ${settings.repo}`);
   let res: Response;
   try {
-    res = await fetch(`${BASE}${path}`, {
+    res = await fetch(url, {
       method,
       headers: {
         Authorization: `Bearer ${settings.token}`,
         Accept: 'application/vnd.github.v3+json',
         'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache',
       },
       body: body ? JSON.stringify(body) : undefined,
     });
-  } catch {
+  } catch (e) {
+    console.log('[GitHub API Network Error]', e);
     throw new GitHubError('Нет подключения к GitHub', null, 'network');
   }
+
+  console.log(`[GitHub API Response] ${path} Status: ${res.status}`);
+
   if (!res.ok) {
     const msg = await res.text().catch(() => res.statusText);
+    console.log(`[GitHub API Error] ${res.status}: ${msg}`);
     throw new GitHubError(`GitHub ${res.status}: ${msg}`, res.status, classifyStatus(res.status));
   }
-  return res.json() as Promise<T>;
+  const data = await res.json();
+  return data as T;
 }
 
 const toBase64 = (str: string): string => {

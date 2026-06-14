@@ -1,4 +1,5 @@
-import { ScrollView, SafeAreaView, StyleSheet, Text, View, Pressable } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Pressable } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { t, getLanguageName } from '../services/i18n';

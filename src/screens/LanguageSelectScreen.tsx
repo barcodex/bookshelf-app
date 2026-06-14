@@ -1,4 +1,5 @@
-import { SafeAreaView, StyleSheet, Text, View, Pressable, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Pressable, FlatList } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLanguage } from '../context/LanguageContext';
 import { Language, languageList, getLanguageName, t } from '../services/i18n';
 

@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useEffect, useState } from 'react';
 import { Text, ActivityIndicator, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CacheContext, useCacheProvider } from './src/context/CacheContext';
 import { LanguageProvider, useLanguage } from './src/context/LanguageContext';
@@ -23,7 +24,7 @@ const Tab = createBottomTabNavigator();
 function AppContent() {
   const { isLoading: languageLoading } = useLanguage();
   const cache = useCacheProvider();
-  const [settings, setSettings] = useState<Settings | null>(() => getSettings());
+  const [settings, setSettings] = useState<Settings | null>(null);
   const [hasSeenLanguageScreen, setHasSeenLanguageScreen] = useState(false);
   const [onboardingStep, setOnboardingStep] = useState<'repository' | 'setup' | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -40,7 +41,9 @@ function AppContent() {
           getLatestCommitSha(settings),
           getCachedCommitSha(),
         ]);
+        console.log(`[Poller] Remote SHA: ${remoteSha} | Cached SHA: ${cachedSha}`);
         if (cachedSha !== null && remoteSha !== cachedSha) {
+          console.log('[Poller] SHA mismatch detected, updating cache...');
           await applyIncrementalUpdate(settings, cachedSha, remoteSha);
           cache.bumpVersion();
         }
@@ -54,6 +57,9 @@ function AppContent() {
 
   const initializeApp = async () => {
     try {
+      const storedSettings = await getSettings();
+      setSettings(storedSettings);
+
       const seenLanguage = await AsyncStorage.getItem('hasSeenLanguageScreen');
       setHasSeenLanguageScreen(!!seenLanguage);
       const seenOnboarding = await AsyncStorage.getItem('hasSeenOnboarding');
@@ -112,8 +118,8 @@ function AppContent() {
   if (!settings) {
     return (
       <SetupScreen
-        onComplete={(s) => {
-          saveSettings(s);
+        onComplete={async (s) => {
+          await saveSettings(s);
           setSettings(s);
         }}
       />
@@ -170,8 +176,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <LanguageProvider>
-      <AppContent />
-    </LanguageProvider>
+    <SafeAreaProvider>
+      <LanguageProvider>
+        <AppContent />
+      </LanguageProvider>
+    </SafeAreaProvider>
   );
 }

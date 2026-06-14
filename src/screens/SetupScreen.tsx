@@ -4,19 +4,19 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
-  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../services/i18n';
 import { validateAccess } from '../services/github';
 import { Settings } from '../services/storage';
 
 interface Props {
-  onComplete: (settings: Settings) => void;
+  onComplete: (settings: Settings) => void | Promise<void>;
 }
 
 function normalizeRepo(input: string): string {
@@ -44,8 +44,9 @@ export default function SetupScreen({ onComplete }: Props) {
     try {
       const settings: Settings = { repo: normalized, token: token.trim() };
       await validateAccess(settings);
-      onComplete(settings);
-    } catch {
+      await onComplete(settings);
+    } catch (e) {
+      console.log('[SetupScreen] Connection error:', e);
       setError(t(language, 'setup.connectionError'));
     } finally {
       setLoading(false);
