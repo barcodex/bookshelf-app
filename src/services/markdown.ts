@@ -59,8 +59,8 @@ export function parse(raw: string, slug: string): BookFormData {
   }
 
   const body = parts.slice(2).join('---');
-  const summaryMatch = body.match(/##\s+Резюме\s*\n([\s\S]*?)(?=\n##|$)/);
-  const reviewMatch = body.match(/##\s+Отзыв\s*\n([\s\S]*?)(?=\n##|$)/);
+  const summaryMatch = body.match(/##\s+Резюме\s*\n([\s\S]*?)(?=\n##(?!#)|$)/);
+  const reviewMatch = body.match(/##\s+Отзыв\s*\n([\s\S]*?)(?=\n##(?!#)|$)/);
 
   return {
     slug,
