@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../services/i18n';
@@ -61,6 +61,12 @@ export default function AddBookScreen() {
     }
   };
 
+  const handleCancel = () => {
+    setData(emptyBook);
+    setError('');
+    setSuccess('');
+  };
+
   if (githubError) {
     return <GitHubErrorScreen error={githubError} onRetry={() => setGithubError(null)} />;
   }
@@ -70,17 +76,26 @@ export default function AddBookScreen() {
       <BookForm value={data} onChange={setData} showSlug />
       {error ? <Text style={styles.error}>{error}</Text> : null}
       {success ? <Text style={styles.success}>{success}</Text> : null}
-      <Pressable
-        style={[styles.saveButton, saving && styles.saveButtonDisabled]}
-        onPress={handleSave}
-        disabled={saving}
-      >
-        {saving ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.saveLabel}>{t(language, 'addBook.save')}</Text>
-        )}
-      </Pressable>
+      <View style={styles.buttonRow}>
+        <Pressable
+          style={[styles.cancelButton, saving && styles.saveButtonDisabled]}
+          onPress={handleCancel}
+          disabled={saving}
+        >
+          <Text style={styles.cancelLabel}>{t(language, 'common.cancel')}</Text>
+        </Pressable>
+        <Pressable
+          style={[styles.saveButton, saving && styles.saveButtonDisabled]}
+          onPress={handleSave}
+          disabled={saving}
+        >
+          {saving ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.saveLabel}>{t(language, 'addBook.save')}</Text>
+          )}
+        </Pressable>
+      </View>
     </SafeAreaView>
   );
 }
@@ -89,8 +104,9 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   error: { marginHorizontal: 16, marginBottom: 4, fontSize: 14, color: '#c00' },
   success: { marginHorizontal: 16, marginBottom: 4, fontSize: 14, color: '#080' },
+  buttonRow: { flexDirection: 'row', margin: 16, gap: 12 },
   saveButton: {
-    margin: 16,
+    flex: 1,
     backgroundColor: '#111',
     borderRadius: 10,
     paddingVertical: 14,
@@ -98,4 +114,14 @@ const styles = StyleSheet.create({
   },
   saveButtonDisabled: { opacity: 0.5 },
   saveLabel: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  cancelButton: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    paddingVertical: 14,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  cancelLabel: { color: '#111', fontSize: 16, fontWeight: '600' },
 });

@@ -8,6 +8,8 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useLanguage } from '../context/LanguageContext';
+import { t } from '../services/i18n';
 import BookForm from './BookForm';
 import { getFile, saveFile } from '../services/github';
 import { serialize } from '../services/markdown';
@@ -21,6 +23,7 @@ interface Props {
 }
 
 export default function EditBookModal({ book, onClose, onSaved }: Props) {
+  const { language } = useLanguage();
   const [data, setData] = useState<BookFormData>(book);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -58,7 +61,7 @@ export default function EditBookModal({ book, onClose, onSaved }: Props) {
         <View style={styles.header}>
           <Text style={styles.title}>Редактирование</Text>
           <Pressable onPress={onClose} disabled={saving}>
-            <Text style={styles.cancel}>Отмена</Text>
+            <Text style={styles.cancel}>{t(language, 'common.cancel')}</Text>
           </Pressable>
         </View>
 
