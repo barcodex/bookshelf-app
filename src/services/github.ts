@@ -38,7 +38,6 @@ async function request<T = unknown>(
         Authorization: `Bearer ${settings.token}`,
         Accept: 'application/vnd.github.v3+json',
         'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache',
       },
       body: body ? JSON.stringify(body) : undefined,
     });
