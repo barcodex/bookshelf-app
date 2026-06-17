@@ -2,7 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLanguage } from '../context/LanguageContext';
-import { t } from '../services/i18n';
+import { Language, t, toIntlLocale } from '../services/i18n';
+import MarkdownText from './MarkdownText';
 import MediaIcon from './MediaIcon';
 import StarRating from './StarRating';
 import { BookFormData } from '../types/book';
@@ -13,8 +14,8 @@ interface Props {
   onEdit?: () => void;
 }
 
-const formatDate = (iso: string, locale: string) =>
-  new Intl.DateTimeFormat(locale === 'ru' ? 'ru-RU' : locale === 'de' ? 'de-DE' : locale === 'fr' ? 'fr-FR' : locale === 'es' ? 'es-ES' : locale === 'it' ? 'it-IT' : 'en-US', {
+const formatDate = (iso: string, language: Language) =>
+  new Intl.DateTimeFormat(toIntlLocale(language), {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
@@ -62,7 +63,7 @@ export default function BookDetailModal({ book, onClose, onEdit }: Props) {
         </View>
 
         <ScrollView contentContainerStyle={styles.content}>
-          {book.original_title && book.original_title !== book.title && (
+          {!!book.original_title && book.original_title !== book.title && (
             <Row label={t(language, 'book.originalTitle')} value={book.original_title} />
           )}
           <Row label={t(language, 'book.year')} value={book.year} />
@@ -91,7 +92,7 @@ export default function BookDetailModal({ book, onClose, onEdit }: Props) {
               ))}
             </View>
           )}
-          {book.media && (
+          {!!book.media && (
             <View style={styles.row}>
               <Text style={styles.rowLabel}>{t(language, 'book.format')}</Text>
               <View style={styles.mediaWithIcon}>
@@ -100,21 +101,21 @@ export default function BookDetailModal({ book, onClose, onEdit }: Props) {
               </View>
             </View>
           )}
-          {book.source  && <Row label={t(language, 'book.source')} value={book.source} />}
-          {book.date_started  && <Row label={t(language, 'book.dateStarted')} value={formatDate(book.date_started, language)} />}
-          {book.date_finished && <Row label={t(language, 'book.dateFinished')} value={formatDate(book.date_finished, language)} />}
+          {!!book.source && <Row label={t(language, 'book.source')} value={book.source} />}
+          {!!book.date_started && <Row label={t(language, 'book.dateStarted')} value={formatDate(book.date_started, language)} />}
+          {!!book.date_finished && <Row label={t(language, 'book.dateFinished')} value={formatDate(book.date_finished, language)} />}
 
           {book.summary ? (
             <View style={styles.section}>
               <Text style={styles.sectionLabel}>{t(language, 'book.summary')}</Text>
-              <Text style={styles.sectionText}>{book.summary}</Text>
+              <MarkdownText text={book.summary} />
             </View>
           ) : null}
 
           {book.review ? (
             <View style={styles.section}>
               <Text style={styles.sectionLabel}>{t(language, 'book.review')}</Text>
-              <Text style={styles.sectionText}>{book.review}</Text>
+              <MarkdownText text={book.review} />
             </View>
           ) : null}
         </ScrollView>
@@ -166,7 +167,6 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
-  sectionText: { fontSize: 15, color: '#222', lineHeight: 22 },
   mediaWithIcon: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 6 },
   tagsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   tag: {
