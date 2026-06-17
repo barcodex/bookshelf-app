@@ -33,4 +33,17 @@ export function getLanguageName(language: Language): string {
   return languageNames[language];
 }
 
+const intlLocales: Record<Language, string> = {
+  en: 'en-US',
+  ru: 'ru-RU',
+  de: 'de-DE',
+  fr: 'fr-FR',
+  es: 'es-ES',
+  it: 'it-IT',
+};
+
+export function toIntlLocale(language: Language): string {
+  return intlLocales[language];
+}
+
 export const languageList: Language[] = ['en', 'ru', 'de', 'fr', 'es', 'it'];

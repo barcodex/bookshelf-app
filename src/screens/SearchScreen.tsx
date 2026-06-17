@@ -340,7 +340,7 @@ export default function SearchScreen() {
           }}
           renderSectionFooter={() => <View style={styles.sectionGap} />}
           renderItem={({ item, section }) => {
-            const dateStr = formatDisplayDate(item.date_finished);
+            const dateStr = formatDisplayDate(item.date_finished, language);
             return (
               <Pressable
                 style={[styles.item, { backgroundColor: section.backgroundColor }]}

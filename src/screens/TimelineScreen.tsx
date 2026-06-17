@@ -145,7 +145,9 @@ export default function TimelineScreen() {
               <View style={styles.yearLeft}>
                 <Text style={styles.yearText}>{section.year}</Text>
                 <View style={styles.yearStats}>
-                  <Text style={styles.yearCount}>{section.data.length} книг</Text>
+                  <Text style={styles.yearCount}>
+                    {t(language, 'timeline.booksCount').replace('{count}', section.data.length.toString())}
+                  </Text>
                   <View style={styles.mediaCounts}>
                   {counts.audio > 0 && (
                     <View style={styles.mediaCount}>
@@ -173,7 +175,7 @@ export default function TimelineScreen() {
         }}
         renderSectionFooter={() => <View style={styles.sectionGap} />}
         renderItem={({ item, section }) => {
-          const dateStr = formatDisplayDate(item.date_finished);
+          const dateStr = formatDisplayDate(item.date_finished, language);
           return (
             <Pressable
               style={[styles.item, { backgroundColor: section.backgroundColor }]}

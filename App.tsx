@@ -6,6 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CacheContext, useCacheProvider } from './src/context/CacheContext';
 import { LanguageProvider, useLanguage } from './src/context/LanguageContext';
+import { t } from './src/services/i18n';
 import { getCachedCommitSha } from './src/services/booksCache';
 import { getLatestCommitSha } from './src/services/github';
 import { applyIncrementalUpdate } from './src/services/booksService';
@@ -22,7 +23,7 @@ import OnboardingSetupScreen from './src/screens/OnboardingSetupScreen';
 const Tab = createBottomTabNavigator();
 
 function AppContent() {
-  const { isLoading: languageLoading } = useLanguage();
+  const { language, isLoading: languageLoading } = useLanguage();
   const cache = useCacheProvider();
   const [settings, setSettings] = useState<Settings | null>(null);
   const [hasSeenLanguageScreen, setHasSeenLanguageScreen] = useState(false);
@@ -140,7 +141,7 @@ function AppContent() {
             name="Timeline"
             component={TimelineScreen}
             options={{
-              title: 'Timeline',
+              title: t(language, 'tabs.timeline'),
               tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>📅</Text>,
             }}
           />
@@ -148,7 +149,7 @@ function AppContent() {
             name="AddBook"
             component={AddBookScreen}
             options={{
-              title: 'Add',
+              title: t(language, 'tabs.add'),
               tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>＋</Text>,
             }}
           />
@@ -156,7 +157,7 @@ function AppContent() {
             name="Search"
             component={SearchScreen}
             options={{
-              title: 'Search',
+              title: t(language, 'tabs.search'),
               tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>🔍</Text>,
             }}
           />
@@ -164,7 +165,7 @@ function AppContent() {
             name="Settings"
             component={SettingsScreen}
             options={{
-              title: 'More',
+              title: t(language, 'tabs.more'),
               tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>⚙️</Text>,
             }}
           />

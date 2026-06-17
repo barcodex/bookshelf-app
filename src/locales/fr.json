@@ -57,7 +57,8 @@
   },
   "timeline": {
     "title": "Chronologie",
-    "empty": "Aucun livre pour le moment. Ajoutez-en un pour commencer!"
+    "empty": "Aucun livre pour le moment. Ajoutez-en un pour commencer!",
+    "booksCount": "{count} livres"
   },
   "search": {
     "title": "Rechercher",
@@ -115,5 +116,11 @@
     "ok": "OK",
     "error": "Erreur",
     "loading": "Chargement..."
+  },
+  "tabs": {
+    "timeline": "Chronologie",
+    "add": "Ajouter",
+    "search": "Rechercher",
+    "more": "Plus"
   }
 }

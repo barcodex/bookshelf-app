@@ -57,7 +57,8 @@
   },
   "timeline": {
     "title": "Zeitstrahl",
-    "empty": "Noch keine Bücher. Fügen Sie eines hinzu!"
+    "empty": "Noch keine Bücher. Fügen Sie eines hinzu!",
+    "booksCount": "{count} Bücher"
   },
   "search": {
     "title": "Suche",
@@ -115,5 +116,11 @@
     "ok": "OK",
     "error": "Fehler",
     "loading": "Wird geladen..."
+  },
+  "tabs": {
+    "timeline": "Zeitstrahl",
+    "add": "Hinzufügen",
+    "search": "Suche",
+    "more": "Mehr"
   }
 }

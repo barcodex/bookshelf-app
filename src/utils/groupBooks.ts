@@ -1,3 +1,4 @@
+import { Language, toIntlLocale } from '../services/i18n';
 import { BookFormData } from '../types/book';
 
 export type YearSection = {
@@ -33,10 +34,10 @@ export function isYearOnly(dateFinished: string): boolean {
   return /^\d{4}$/.test(dateFinished);
 }
 
-export function formatDisplayDate(dateFinished: string): string {
+export function formatDisplayDate(dateFinished: string, language: Language): string {
   if (isYearOnly(dateFinished)) return '';
   try {
-    return new Intl.DateTimeFormat(undefined, { day: 'numeric', month: 'long' }).format(
+    return new Intl.DateTimeFormat(toIntlLocale(language), { day: 'numeric', month: 'long' }).format(
       new Date(dateFinished + 'T00:00:00')
     );
   } catch {

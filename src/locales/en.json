@@ -72,7 +72,8 @@
   },
   "timeline": {
     "title": "Timeline",
-    "empty": "No books yet. Add one to get started!"
+    "empty": "No books yet. Add one to get started!",
+    "booksCount": "{count} books"
   },
   "search": {
     "title": "Search",
@@ -115,5 +116,11 @@
     "ok": "OK",
     "error": "Error",
     "loading": "Loading..."
+  },
+  "tabs": {
+    "timeline": "Timeline",
+    "add": "Add",
+    "search": "Search",
+    "more": "More"
   }
 }
