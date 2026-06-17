@@ -118,7 +118,7 @@ export default function BookDetailModal({ book, onClose, onEdit }: Props) {
             </View>
           ) : null}
         </ScrollView>
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 }

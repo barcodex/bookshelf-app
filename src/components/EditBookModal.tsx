@@ -7,7 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../services/i18n';
 import BookForm from './BookForm';
@@ -27,6 +27,7 @@ export default function EditBookModal({ book, onClose, onSaved }: Props) {
   const [data, setData] = useState<BookFormData>(book);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const insets = useSafeAreaInsets();
 
   const handleSave = async () => {
     const settings = await getSettings();
@@ -57,7 +58,7 @@ export default function EditBookModal({ book, onClose, onSaved }: Props) {
       onRequestClose={onClose}
       statusBarTranslucent
     >
-      <SafeAreaView style={styles.container}>
+      <View style={[styles.container, { paddingTop: insets.top }]}>
         <View style={styles.header}>
           <Text style={styles.title}>Редактирование</Text>
           <Pressable onPress={onClose} disabled={saving}>
@@ -80,7 +81,7 @@ export default function EditBookModal({ book, onClose, onSaved }: Props) {
             <Text style={styles.saveLabel}>Сохранить</Text>
           )}
         </Pressable>
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 }
