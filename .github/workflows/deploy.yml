@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
 
+env:
+  VERCEL_ORG_ID: team_KHR3eKKwaDpydBeboFJq1Hl1
+  VERCEL_PROJECT_ID: prj_MsyUwggylKwZn2KAYFM5wHBb8nXo
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -12,7 +16,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - run: npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: team_KHR3eKKwaDpydBeboFJq1Hl1
-          VERCEL_PROJECT_ID: prj_MsyUwggylKwZn2KAYFM5wHBb8nXo
+      - run: npm ci
+      - run: npx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      - run: npx vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - run: npx vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
