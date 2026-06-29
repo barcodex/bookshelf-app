@@ -23,6 +23,7 @@ import { LoadProgress, loadAllBooks } from '../services/booksService';
 import { getSettings } from '../services/storage';
 import { BookFormData, BookMedia } from '../types/book';
 import { YearSection, formatDisplayDate, groupByYear } from '../utils/groupBooks';
+import { colors } from '../utils/theme';
 
 function sorted(books: BookFormData[]) {
   const withDate = books.filter(b => b.date_finished);
@@ -218,30 +219,30 @@ export default function TimelineScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16 },
-  progressText: { fontSize: 14, color: '#888' },
+  container: { flex: 1, backgroundColor: colors.bg },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16, backgroundColor: colors.bg },
+  progressText: { fontSize: 14, color: colors.textFaint },
   listContent: { paddingBottom: 32 },
   yearHeader: {
     flexDirection: 'row', alignItems: 'flex-start',
     paddingHorizontal: 16, paddingTop: 14, paddingBottom: 6,
   },
   yearLeft: { flexDirection: 'column', gap: 6 },
-  yearText: { fontSize: 22, fontWeight: '700', color: '#111' },
+  yearText: { fontSize: 22, fontWeight: '700', color: colors.text, fontFamily: colors.fontTitle },
   yearStats: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  yearCount: { fontSize: 13, color: '#666', fontWeight: '500' },
+  yearCount: { fontSize: 13, color: colors.textMuted, fontWeight: '500' },
   mediaCounts: { flexDirection: 'row', gap: 12, alignItems: 'center' },
   mediaCount: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  mediaCountText: { fontSize: 13, color: '#666', fontWeight: '500' },
-  sectionGap: { height: 20, backgroundColor: '#fff' },
+  mediaCountText: { fontSize: 13, color: colors.textMuted, fontWeight: '500' },
+  sectionGap: { height: 20, backgroundColor: colors.bg },
   item: {
     flexDirection: 'row', alignItems: 'center',
     paddingHorizontal: 16, paddingVertical: 13,
-    borderBottomWidth: 1, borderBottomColor: 'rgba(0,0,0,0.05)', gap: 14,
+    borderBottomWidth: 1, borderBottomColor: colors.borderFaint, gap: 14,
   },
-  itemDate: { fontSize: 13, color: '#888', width: 72 },
-  itemDateEmpty: { color: '#ccc' },
+  itemDate: { fontSize: 13, color: colors.textFaint, width: 72 },
+  itemDateEmpty: { color: colors.textEmpty },
   itemMeta: { flex: 1 },
-  itemTitle: { fontSize: 15, fontWeight: '600', color: '#111', marginBottom: 2 },
-  itemAuthor: { fontSize: 13, color: '#666' },
+  itemTitle: { fontSize: 15, fontWeight: '600', color: colors.text, marginBottom: 2 },
+  itemAuthor: { fontSize: 13, color: colors.textMuted },
 });

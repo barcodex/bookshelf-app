@@ -25,6 +25,7 @@ import { getSettings } from '../services/storage';
 import { GitHubErrorScreen, GitHubOfflineBanner } from '../components/GitHubErrorView';
 import { BookFormData, BookMedia } from '../types/book';
 import { YearSection, formatDisplayDate, groupByYear } from '../utils/groupBooks';
+import { colors } from '../utils/theme';
 
 function getMediaCounts(books: BookFormData[]): { paper: number; digital: number; audio: number } {
   const counts = { paper: 0, digital: 0, audio: 0 };
@@ -392,53 +393,53 @@ export default function SearchScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16 },
-  filters: { padding: 16, gap: 12, borderBottomWidth: 1, borderBottomColor: '#eee' },
+  container: { flex: 1, backgroundColor: colors.bg },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16, backgroundColor: colors.bg },
+  filters: { padding: 16, gap: 12, borderBottomWidth: 1, borderBottomColor: colors.border },
   searchInput: {
-    borderWidth: 1, borderColor: '#ddd', borderRadius: 10,
+    borderWidth: 1, borderColor: colors.border, borderRadius: 10,
     paddingHorizontal: 12, paddingVertical: 10,
-    fontSize: 15, color: '#111', backgroundColor: '#fafafa',
+    fontSize: 15, color: colors.text, backgroundColor: colors.bgInput,
   },
-  searchHint: { fontSize: 11, color: '#aaa', marginTop: -6 },
+  searchHint: { fontSize: 11, color: colors.textFaint, marginTop: -6 },
   mediaRow: { flexDirection: 'row', gap: 8 },
   ratingRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  ratingLabel: { fontSize: 14, color: '#555' },
+  ratingLabel: { fontSize: 14, color: colors.textMuted },
   tagCloud: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   tagChip: {
-    borderWidth: 1, borderColor: '#ddd', borderRadius: 20,
-    paddingHorizontal: 10, paddingVertical: 4, backgroundColor: '#fafafa',
+    borderWidth: 1, borderColor: colors.border, borderRadius: 20,
+    paddingHorizontal: 10, paddingVertical: 4, backgroundColor: colors.bgInput,
   },
-  tagChipActive: { backgroundColor: '#111', borderColor: '#111' },
-  tagChipText: { fontSize: 13, color: '#555' },
+  tagChipActive: { backgroundColor: colors.tagActive, borderColor: colors.tagActiveBorder },
+  tagChipText: { fontSize: 13, color: colors.textMuted },
   tagChipTextActive: { color: '#fff', fontWeight: '600' },
   resultsRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  resultsCount: { fontSize: 13, color: '#888' },
-  reset: { fontSize: 13, color: '#007AFF' },
+  resultsCount: { fontSize: 13, color: colors.textFaint },
+  reset: { fontSize: 13, color: colors.reset },
   yearHeader: {
     flexDirection: 'row', alignItems: 'flex-start',
     paddingHorizontal: 16, paddingTop: 14, paddingBottom: 6,
   },
   yearLeft: { flexDirection: 'column', gap: 6 },
-  yearText: { fontSize: 22, fontWeight: '700', color: '#111' },
+  yearText: { fontSize: 22, fontWeight: '700', color: colors.text, fontFamily: colors.fontTitle },
   yearStats: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  yearCount: { fontSize: 13, color: '#666', fontWeight: '500' },
+  yearCount: { fontSize: 13, color: colors.textMuted, fontWeight: '500' },
   mediaCounts: { flexDirection: 'row', gap: 12, alignItems: 'center' },
   mediaCount: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  mediaCountText: { fontSize: 13, color: '#666', fontWeight: '500' },
-  sectionGap: { height: 20, backgroundColor: '#fff' },
+  mediaCountText: { fontSize: 13, color: colors.textMuted, fontWeight: '500' },
+  sectionGap: { height: 20, backgroundColor: colors.bg },
   item: {
     flexDirection: 'row', alignItems: 'center',
     paddingHorizontal: 16, paddingVertical: 13,
-    borderBottomWidth: 1, borderBottomColor: 'rgba(0,0,0,0.05)', gap: 14,
+    borderBottomWidth: 1, borderBottomColor: colors.borderFaint, gap: 14,
   },
-  itemDate: { fontSize: 13, color: '#888', width: 72 },
-  itemDateEmpty: { color: '#ccc' },
+  itemDate: { fontSize: 13, color: colors.textFaint, width: 72 },
+  itemDateEmpty: { color: colors.textEmpty },
   itemMeta: { flex: 1 },
-  itemTitle: { fontSize: 15, fontWeight: '600', color: '#111', marginBottom: 2 },
-  itemAuthor: { fontSize: 13, color: '#666' },
-  itemRating: { fontSize: 13, color: '#f5a623', fontWeight: '600' },
-  empty: { textAlign: 'center', marginTop: 40, color: '#aaa', fontSize: 15 },
+  itemTitle: { fontSize: 15, fontWeight: '600', color: colors.text, marginBottom: 2 },
+  itemAuthor: { fontSize: 13, color: colors.textMuted },
+  itemRating: { fontSize: 13, color: colors.stars, fontWeight: '600' },
+  empty: { textAlign: 'center', marginTop: 40, color: colors.textFaint, fontSize: 15 },
   listContent: { paddingBottom: 32 },
-  progressText: { fontSize: 14, color: '#888', textAlign: 'center', marginTop: 8 },
+  progressText: { fontSize: 14, color: colors.textFaint, textAlign: 'center', marginTop: 8 },
 });

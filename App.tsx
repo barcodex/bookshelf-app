@@ -19,6 +19,7 @@ import SettingsScreen from './src/screens/SettingsScreen';
 import LanguageSelectScreen from './src/screens/LanguageSelectScreen';
 import OnboardingRepositoryScreen from './src/screens/OnboardingRepositoryScreen';
 import OnboardingSetupScreen from './src/screens/OnboardingSetupScreen';
+import { colors } from './src/utils/theme';
 
 const Tab = createBottomTabNavigator();
 
@@ -133,8 +134,9 @@ function AppContent() {
         <Tab.Navigator
           screenOptions={{
             headerShown: false,
-            tabBarActiveTintColor: '#000',
-            tabBarInactiveTintColor: '#999',
+            tabBarActiveTintColor: colors.accent,
+            tabBarInactiveTintColor: colors.textFaint,
+            tabBarStyle: { backgroundColor: colors.bg, borderTopColor: colors.border },
           }}
         >
           <Tab.Screen

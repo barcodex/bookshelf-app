@@ -1,5 +1,6 @@
 import { Language, toIntlLocale } from '../services/i18n';
 import { BookFormData } from '../types/book';
+import { yearBg } from './theme';
 
 export type YearSection = {
   year: string;
@@ -21,13 +22,8 @@ export function groupByYear(books: BookFormData[]): YearSection[] {
   return Array.from(map.entries()).map(([year, data], i) => ({
     year,
     data,
-    backgroundColor: yearColor(i),
+    backgroundColor: yearBg(i),
   }));
-}
-
-function yearColor(index: number): string {
-  const v = Math.max(228, 252 - index * 6);
-  return `rgb(${v},${v},${v})`;
 }
 
 export function isYearOnly(dateFinished: string): boolean {
