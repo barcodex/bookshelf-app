@@ -12,7 +12,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../services/i18n';
-import { validateAccess } from '../services/github';
+import { ensureBooksFolder, validateAccess } from '../services/github';
 import { Settings } from '../services/storage';
 
 interface Props {
@@ -44,6 +44,7 @@ export default function SetupScreen({ onComplete }: Props) {
     try {
       const settings: Settings = { repo: normalized, token: token.trim() };
       await validateAccess(settings);
+      await ensureBooksFolder(settings);
       await onComplete(settings);
     } catch (e) {
       console.log('[SetupScreen] Connection error:', e);

@@ -46,3 +46,11 @@ export function yearBg(index: number): string {
   const v = Math.max(228, 252 - index * 6)
   return `rgb(${v},${v},${v})`
 }
+
+export function readingBg(): string {
+  return Platform.OS === 'web' ? 'rgb(255,253,235)' : 'rgb(255,253,235)'
+}
+
+export function undatedBg(): string {
+  return Platform.OS === 'web' ? 'rgb(234,231,225)' : 'rgb(244,244,244)'
+}

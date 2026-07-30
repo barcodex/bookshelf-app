@@ -35,7 +35,7 @@
       "initBooks": "Créez le dossier books",
       "initBooksDesc": "Ajoutez un dossier \"books\" à votre référentiel. Vous pouvez le faire en créant un fichier vide comme \"books/.gitkeep\" via l'interface Web de GitHub.",
       "token": "Générez un jeton d'accès personnel",
-      "tokenDesc": "Allez à github.com/settings/tokens et créez un nouveau jeton avec la portée \"repo\". Cela permettra à Bookshelf de lire et d'écrire dans votre référentiel."
+      "tokenDesc": "Allez à github.com/settings/tokens et créez un nouveau jeton avec la portée \"repo\". Cela permettra à Bookshelf de lire et d'écrire dans votre référentiel.\n\n⚠️ Le jeton n'est affiché qu'une seule fois. Copiez-le immédiatement après sa création et conservez-le dans un endroit sûr — par exemple, dans un gestionnaire de mots de passe."
     }
   },
   "setup": {
@@ -58,7 +58,9 @@
   "timeline": {
     "title": "Chronologie",
     "empty": "Aucun livre pour le moment. Ajoutez-en un pour commencer!",
-    "booksCount": "{count} livres"
+    "booksCount": "{count} livres",
+    "reading": "En cours de lecture",
+    "undated": "Lu avant"
   },
   "search": {
     "title": "Rechercher",

@@ -48,14 +48,7 @@ export default function OnboardingSetupScreen({ onComplete }: Props) {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.stepNumber}>3. {t(language, 'onboarding.step.initBooks')}</Text>
-          <Text style={styles.sectionText}>
-            {t(language, 'onboarding.step.initBooksDesc')}
-          </Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.stepNumber}>4. {t(language, 'onboarding.step.token')}</Text>
+          <Text style={styles.stepNumber}>3. {t(language, 'onboarding.step.token')}</Text>
           <Text style={styles.sectionText}>
             {t(language, 'onboarding.step.tokenDesc')}
           </Text>

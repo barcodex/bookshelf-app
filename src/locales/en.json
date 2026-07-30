@@ -35,7 +35,7 @@
       "initBooks": "Create the books folder",
       "initBooksDesc": "Add a \"books\" folder to your repository. You can do this by creating an empty file like \"books/.gitkeep\" through GitHub's web interface.",
       "token": "Generate a Personal Access Token",
-      "tokenDesc": "Go to github.com/settings/tokens and create a new token with \"repo\" scope. This allows Bookshelf to read and write to your repository."
+      "tokenDesc": "Go to github.com/settings/tokens and create a new token with \"repo\" scope. This allows Bookshelf to read and write to your repository.\n\n⚠️ The token is shown only once. Copy it immediately after creation and store it somewhere safe — for example, in a password manager."
     }
   },
   "setup": {
@@ -73,7 +73,9 @@
   "timeline": {
     "title": "Timeline",
     "empty": "No books yet. Add one to get started!",
-    "booksCount": "{count} books"
+    "booksCount": "{count} books",
+    "reading": "Currently Reading",
+    "undated": "Read Earlier"
   },
   "search": {
     "title": "Search",

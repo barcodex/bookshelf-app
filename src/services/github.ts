@@ -137,3 +137,15 @@ export async function getChangedFiles(
 export async function validateAccess(settings: Settings): Promise<void> {
   await request(settings, 'GET', `/repos/${settings.repo}`);
 }
+
+export async function ensureBooksFolder(settings: Settings): Promise<void> {
+  try {
+    await listDirectory(settings, 'books');
+  } catch (e) {
+    if (e instanceof GitHubError && e.type === 'not_found') {
+      await saveFile(settings, 'books/.gitkeep', '', undefined, 'Initialize books folder');
+    } else {
+      throw e;
+    }
+  }
+}

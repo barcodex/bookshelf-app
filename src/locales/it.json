@@ -35,7 +35,7 @@
       "initBooks": "Crea la cartella books",
       "initBooksDesc": "Aggiungi una cartella \"books\" al tuo repository. Puoi farlo creando un file vuoto come \"books/.gitkeep\" tramite l'interfaccia web di GitHub.",
       "token": "Genera un Token di Accesso Personale",
-      "tokenDesc": "Vai a github.com/settings/tokens e crea un nuovo token con scope \"repo\". Questo permetterà a Bookshelf di leggere e scrivere nel tuo repository."
+      "tokenDesc": "Vai a github.com/settings/tokens e crea un nuovo token con scope \"repo\". Questo permetterà a Bookshelf di leggere e scrivere nel tuo repository.\n\n⚠️ Il token viene mostrato una sola volta. Copialo subito dopo la creazione e conservalo in un posto sicuro — ad esempio, in un gestore di password."
     }
   },
   "setup": {
@@ -58,7 +58,9 @@
   "timeline": {
     "title": "Timeline",
     "empty": "Nessun libro ancora. Aggiungine uno per iniziare!",
-    "booksCount": "{count} libri"
+    "booksCount": "{count} libri",
+    "reading": "Sto leggendo",
+    "undated": "Letto prima"
   },
   "search": {
     "title": "Ricerca",

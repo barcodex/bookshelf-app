@@ -35,7 +35,7 @@
       "initBooks": "Erstellen Sie den Ordner books",
       "initBooksDesc": "Fügen Sie einen Ordner \"books\" zu Ihrem Repository hinzu. Sie können dies durch Erstellen einer leeren Datei wie \"books/.gitkeep\" über die GitHub-Weboberfläche tun.",
       "token": "Generieren Sie ein Personal Access Token",
-      "tokenDesc": "Gehen Sie zu github.com/settings/tokens und erstellen Sie ein neues Token mit dem Bereich \"repo\". Dies ermöglicht Bookshelf, in Ihr Repository zu lesen und zu schreiben."
+      "tokenDesc": "Gehen Sie zu github.com/settings/tokens und erstellen Sie ein neues Token mit dem Bereich \"repo\". Dies ermöglicht Bookshelf, in Ihr Repository zu lesen und zu schreiben.\n\n⚠️ Das Token wird nur einmal angezeigt. Kopieren Sie es sofort nach der Erstellung und bewahren Sie es an einem sicheren Ort auf — zum Beispiel in einem Passwort-Manager."
     }
   },
   "setup": {
@@ -58,7 +58,9 @@
   "timeline": {
     "title": "Zeitstrahl",
     "empty": "Noch keine Bücher. Fügen Sie eines hinzu!",
-    "booksCount": "{count} Bücher"
+    "booksCount": "{count} Bücher",
+    "reading": "Gerade lese ich",
+    "undated": "Früher gelesen"
   },
   "search": {
     "title": "Suche",

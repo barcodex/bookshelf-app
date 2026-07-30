@@ -21,19 +21,9 @@ import { getCachedBooks, upsertCachedBook, updateCachedCommitSha } from '../serv
 import { GitHubError } from '../services/github';
 import { LoadProgress, loadAllBooks } from '../services/booksService';
 import { getSettings } from '../services/storage';
-import { BookFormData, BookMedia } from '../types/book';
-import { YearSection, formatDisplayDate, groupByYear } from '../utils/groupBooks';
+import { BookFormData } from '../types/book';
+import { YearSection, formatDisplayDate, buildSections } from '../utils/groupBooks';
 import { colors } from '../utils/theme';
-
-function sorted(books: BookFormData[]) {
-  const withDate = books.filter(b => b.date_finished);
-  const result = withDate.sort((a, b) => b.date_finished.localeCompare(a.date_finished));
-  console.log(`[Timeline] Sorting ${books.length} books. ${withDate.length} have date_finished.`);
-  if (result.length > 0) {
-    console.log(`[Timeline] Top book: ${result[0].title} (${result[0].date_finished})`);
-  }
-  return result;
-}
 
 function getMediaCounts(books: BookFormData[]): { paper: number; digital: number; audio: number } {
   const counts = { paper: 0, digital: 0, audio: 0 };
@@ -63,7 +53,7 @@ export default function TimelineScreen() {
 
     const cached = await getCachedBooks();
     if (cached) {
-      setBooks(sorted(cached));
+      setBooks(cached);
       setLoading(false);
       return;
     }
@@ -72,8 +62,8 @@ export default function TimelineScreen() {
     setProgress(null);
     setGithubError(null);
     try {
-      const books = await loadAllBooks(settings, p => setProgress(p));
-      setBooks(sorted(books));
+      const loaded = await loadAllBooks(settings, p => setProgress(p));
+      setBooks(loaded);
       setGithubError(null);
     } catch (e) {
       if (e instanceof GitHubError) {
@@ -91,8 +81,8 @@ export default function TimelineScreen() {
     setRefreshing(true);
     setGithubError(null);
     try {
-      const books = await loadAllBooks(settings);
-      setBooks(sorted(books));
+      const loaded = await loadAllBooks(settings);
+      setBooks(loaded);
     } catch (e) {
       if (e instanceof GitHubError) setGithubError(e);
     } finally {
@@ -133,7 +123,7 @@ export default function TimelineScreen() {
         <GitHubOfflineBanner error={githubError} onRetry={forceReload} />
       )}
       <SectionList<BookFormData, YearSection>
-        sections={groupByYear(books)}
+        sections={buildSections(books)}
         keyExtractor={item => item.slug}
         stickySectionHeadersEnabled
         refreshControl={
@@ -141,33 +131,55 @@ export default function TimelineScreen() {
         }
         renderSectionHeader={({ section }) => {
           const counts = getMediaCounts(section.data);
+          const countLabel = t(language, 'timeline.booksCount').replace('{count}', section.data.length.toString());
+
+          if (section.kind === 'reading') {
+            return (
+              <View style={[styles.yearHeader, { backgroundColor: section.backgroundColor }]}>
+                <View style={styles.yearLeft}>
+                  <Text style={[styles.yearText, styles.readingText]}>{t(language, 'timeline.reading')}</Text>
+                  <Text style={styles.yearCount}>{countLabel}</Text>
+                </View>
+              </View>
+            );
+          }
+
+          if (section.kind === 'undated') {
+            return (
+              <View style={[styles.yearHeader, { backgroundColor: section.backgroundColor }]}>
+                <View style={styles.yearLeft}>
+                  <Text style={[styles.yearText, styles.undatedText]}>{t(language, 'timeline.undated')}</Text>
+                  <Text style={styles.yearCount}>{countLabel}</Text>
+                </View>
+              </View>
+            );
+          }
+
           return (
             <View style={[styles.yearHeader, { backgroundColor: section.backgroundColor }]}>
               <View style={styles.yearLeft}>
                 <Text style={styles.yearText}>{section.year}</Text>
                 <View style={styles.yearStats}>
-                  <Text style={styles.yearCount}>
-                    {t(language, 'timeline.booksCount').replace('{count}', section.data.length.toString())}
-                  </Text>
+                  <Text style={styles.yearCount}>{countLabel}</Text>
                   <View style={styles.mediaCounts}>
-                  {counts.audio > 0 && (
-                    <View style={styles.mediaCount}>
-                      <MediaIcon media="аудио" size="sm" color="#555" />
-                      <Text style={styles.mediaCountText}>{counts.audio}</Text>
-                    </View>
-                  )}
-                  {counts.paper > 0 && (
-                    <View style={styles.mediaCount}>
-                      <MediaIcon media="бумажная" size="sm" color="#555" />
-                      <Text style={styles.mediaCountText}>{counts.paper}</Text>
-                    </View>
-                  )}
-                  {counts.digital > 0 && (
-                    <View style={styles.mediaCount}>
-                      <MediaIcon media="электронная" size="sm" color="#555" />
-                      <Text style={styles.mediaCountText}>{counts.digital}</Text>
-                    </View>
-                  )}
+                    {counts.audio > 0 && (
+                      <View style={styles.mediaCount}>
+                        <MediaIcon media="аудио" size="sm" color="#555" />
+                        <Text style={styles.mediaCountText}>{counts.audio}</Text>
+                      </View>
+                    )}
+                    {counts.paper > 0 && (
+                      <View style={styles.mediaCount}>
+                        <MediaIcon media="бумажная" size="sm" color="#555" />
+                        <Text style={styles.mediaCountText}>{counts.paper}</Text>
+                      </View>
+                    )}
+                    {counts.digital > 0 && (
+                      <View style={styles.mediaCount}>
+                        <MediaIcon media="электронная" size="sm" color="#555" />
+                        <Text style={styles.mediaCountText}>{counts.digital}</Text>
+                      </View>
+                    )}
                   </View>
                 </View>
               </View>
@@ -176,7 +188,12 @@ export default function TimelineScreen() {
         }}
         renderSectionFooter={() => <View style={styles.sectionGap} />}
         renderItem={({ item, section }) => {
-          const dateStr = formatDisplayDate(item.date_finished, language);
+          let dateStr = '';
+          if (section.kind === 'year') {
+            dateStr = formatDisplayDate(item.date_finished, language);
+          } else if (section.kind === 'reading' && item.date_started) {
+            dateStr = formatDisplayDate(item.date_started, language);
+          }
           return (
             <Pressable
               style={[styles.item, { backgroundColor: section.backgroundColor }]}
@@ -229,6 +246,8 @@ const styles = StyleSheet.create({
   },
   yearLeft: { flexDirection: 'column', gap: 6 },
   yearText: { fontSize: 22, fontWeight: '700', color: colors.text, fontFamily: colors.fontTitle },
+  readingText: { color: colors.accent },
+  undatedText: { color: colors.textMuted },
   yearStats: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   yearCount: { fontSize: 13, color: colors.textMuted, fontWeight: '500' },
   mediaCounts: { flexDirection: 'row', gap: 12, alignItems: 'center' },
