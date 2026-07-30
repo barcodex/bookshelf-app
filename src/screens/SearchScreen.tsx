@@ -18,9 +18,9 @@ import EditBookModal from '../components/EditBookModal';
 import MediaIcon from '../components/MediaIcon';
 import StarRating from '../components/StarRating';
 import { useCacheContext } from '../context/CacheContext';
-import { getCachedBooks, upsertCachedBook, updateCachedCommitSha } from '../services/booksCache';
-import { GitHubError } from '../services/github';
-import { LoadProgress, loadAllBooks } from '../services/booksService';
+import { getCachedBooks, getCachedCommitSha, upsertCachedBook, updateCachedCommitSha } from '../services/booksCache';
+import { GitHubError, getLatestCommitSha } from '../services/github';
+import { LoadProgress, loadAllBooks, applyIncrementalUpdate } from '../services/booksService';
 import { getSettings } from '../services/storage';
 import { GitHubErrorScreen, GitHubOfflineBanner } from '../components/GitHubErrorView';
 import { BookFormData, BookMedia } from '../types/book';
@@ -67,7 +67,10 @@ export default function SearchScreen() {
     const settings = await getSettings();
     if (!settings) return;
 
-    const cached = await getCachedBooks();
+    const [cached, cachedSha] = await Promise.all([
+      getCachedBooks(),
+      getCachedCommitSha(),
+    ]);
     if (cached) {
       setAllBooks(
         cached
@@ -75,6 +78,21 @@ export default function SearchScreen() {
           .sort((a, b) => b.date_finished.localeCompare(a.date_finished))
       );
       setLoading(false);
+      // Background: check if repo has new commits and apply incremental update
+      try {
+        const latestSha = await getLatestCommitSha(settings);
+        if (latestSha && latestSha !== cachedSha) {
+          await applyIncrementalUpdate(settings, cachedSha ?? '', latestSha);
+          const updated = await getCachedBooks();
+          if (updated && isFocused.current) {
+            setAllBooks(
+              updated
+                .filter(b => b.date_finished)
+                .sort((a, b) => b.date_finished.localeCompare(a.date_finished))
+            );
+          }
+        }
+      } catch {}
       return;
     }
 
