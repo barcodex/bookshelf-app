@@ -17,9 +17,9 @@ import EditBookModal from '../components/EditBookModal';
 import MediaIcon from '../components/MediaIcon';
 import { GitHubErrorScreen, GitHubOfflineBanner } from '../components/GitHubErrorView';
 import { useCacheContext } from '../context/CacheContext';
-import { getCachedBooks, upsertCachedBook, updateCachedCommitSha } from '../services/booksCache';
-import { GitHubError } from '../services/github';
-import { LoadProgress, loadAllBooks } from '../services/booksService';
+import { getCachedBooks, getCachedCommitSha, upsertCachedBook, updateCachedCommitSha } from '../services/booksCache';
+import { GitHubError, getLatestCommitSha } from '../services/github';
+import { LoadProgress, loadAllBooks, applyIncrementalUpdate } from '../services/booksService';
 import { getSettings } from '../services/storage';
 import { BookFormData } from '../types/book';
 import { YearSection, formatDisplayDate, buildSections } from '../utils/groupBooks';
@@ -51,10 +51,23 @@ export default function TimelineScreen() {
     const settings = await getSettings();
     if (!settings) return;
 
-    const cached = await getCachedBooks();
+    const [cached, cachedSha] = await Promise.all([
+      getCachedBooks(),
+      getCachedCommitSha(),
+    ]);
+
     if (cached) {
       setBooks(cached);
       setLoading(false);
+      // Background: check if repo has new commits and update incrementally
+      try {
+        const latestSha = await getLatestCommitSha(settings);
+        if (latestSha && latestSha !== cachedSha) {
+          await applyIncrementalUpdate(settings, cachedSha ?? '', latestSha);
+          const updated = await getCachedBooks();
+          if (updated && isFocused.current) setBooks(updated);
+        }
+      } catch {}
       return;
     }
 
