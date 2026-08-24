@@ -216,7 +216,10 @@ export default function TimelineScreen() {
                 {dateStr || '—'}
               </Text>
               <View style={styles.itemMeta}>
-                <Text style={styles.itemTitle} numberOfLines={1}>{item.title}</Text>
+                <View style={styles.itemTitleRow}>
+                  {item.media && <MediaIcon media={item.media} size="xs" color={colors.textFaint} />}
+                  <Text style={styles.itemTitle} numberOfLines={1}>{item.title}</Text>
+                </View>
                 <Text style={styles.itemAuthor} numberOfLines={1}>{item.author}</Text>
               </View>
             </Pressable>
@@ -275,6 +278,7 @@ const styles = StyleSheet.create({
   itemDate: { fontSize: 13, color: colors.textFaint, width: 72 },
   itemDateEmpty: { color: colors.textEmpty },
   itemMeta: { flex: 1 },
-  itemTitle: { fontSize: 15, fontWeight: '600', color: colors.text, marginBottom: 2 },
+  itemTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 2 },
+  itemTitle: { fontSize: 15, fontWeight: '600', color: colors.text, flexShrink: 1 },
   itemAuthor: { fontSize: 13, color: colors.textMuted },
 });
