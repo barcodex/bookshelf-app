@@ -92,7 +92,7 @@
     "title": "Ajouter un livre",
     "save": "Enregistrer",
     "saving": "Enregistrement...",
-    "validationError": "Veuillez remplir le titre, l'auteur et la date de fin de lecture",
+    "validationError": "Veuillez remplir le titre et l'auteur",
     "success": "Enregistré!"
   },
   "media": {

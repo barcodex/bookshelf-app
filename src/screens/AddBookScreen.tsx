@@ -27,7 +27,7 @@ export default function AddBookScreen() {
     setSuccess('');
     setGithubError(null);
 
-    if (!data.title.trim() || !data.author.trim() || !data.date_finished.trim()) {
+    if (!data.title.trim() || !data.author.trim()) {
       setError(t(language, 'addBook.validationError'));
       return;
     }

@@ -92,7 +92,7 @@
     "title": "Añadir libro",
     "save": "Guardar",
     "saving": "Guardando...",
-    "validationError": "Por favor completa título, autor y fecha de término",
+    "validationError": "Por favor completa título y autor",
     "success": "¡Guardado!"
   },
   "media": {

@@ -92,7 +92,7 @@
     "title": "Add Book",
     "save": "Save",
     "saving": "Saving...",
-    "validationError": "Please fill in title, author, and finish date",
+    "validationError": "Please fill in title and author",
     "success": "Saved!"
   },
   "media": {

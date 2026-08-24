@@ -32,8 +32,8 @@ export default function EditBookModal({ book, onClose, onSaved }: Props) {
   const handleSave = async () => {
     const settings = await getSettings();
     if (!settings) return;
-    if (!data.title.trim() || !data.author.trim() || !data.date_finished.trim()) {
-      setError('Укажите автора, название и дату конца чтения');
+    if (!data.title.trim() || !data.author.trim()) {
+      setError('Укажите автора и название');
       return;
     }
     setSaving(true);

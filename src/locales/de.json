@@ -92,7 +92,7 @@
     "title": "Buch hinzufügen",
     "save": "Speichern",
     "saving": "Speichere...",
-    "validationError": "Bitte füllen Sie Titel, Autor und Leseende aus",
+    "validationError": "Bitte füllen Sie Titel und Autor aus",
     "success": "Gespeichert!"
   },
   "media": {

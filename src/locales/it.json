@@ -92,7 +92,7 @@
     "title": "Aggiungi libro",
     "save": "Salva",
     "saving": "Salvataggio...",
-    "validationError": "Compila titolo, autore e data di fine lettura",
+    "validationError": "Compila titolo e autore",
     "success": "Salvato!"
   },
   "media": {
