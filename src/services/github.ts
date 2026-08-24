@@ -121,6 +121,7 @@ export async function getLatestCommitSha(settings: Settings): Promise<string> {
 interface ChangedFile {
   filename: string;
   status: 'added' | 'modified' | 'removed' | 'renamed';
+  previous_filename?: string;
 }
 
 export async function getChangedFiles(

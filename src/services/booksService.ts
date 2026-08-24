@@ -63,10 +63,16 @@ export async function applyIncrementalUpdate(
       const slug = slugFromPath(change.filename);
       if (change.status === 'removed') {
         await deleteCachedBook(slug);
-      } else {
-        const { content } = await getFile(settings, change.filename);
-        await upsertCachedBook(parse(content, slug));
+        return;
       }
+      if (change.status === 'renamed' && change.previous_filename) {
+        const oldSlug = slugFromPath(change.previous_filename);
+        if (oldSlug !== slug) {
+          await deleteCachedBook(oldSlug);
+        }
+      }
+      const { content } = await getFile(settings, change.filename);
+      await upsertCachedBook(parse(content, slug));
     })
   );
 
