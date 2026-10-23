@@ -8,7 +8,7 @@ const TRANSLIT: Record<string, string> = {
   щ:'shch', ъ:'', ы:'y', ь:'', э:'e', ю:'yu', я:'ya',
 };
 
-function toSlug(text: string): string {
+export function toSlug(text: string): string {
   return text
     .toLowerCase()
     .split('')
@@ -46,10 +46,21 @@ export function serialize(data: BookFormData): string {
     '---',
   ].filter(Boolean).join('\n');
 
-  return `${fm}\n\n## Резюме\n\n${data.summary}\n\n## Отзыв\n\n${data.review}\n`;
+  return `${fm}\n\n${cardBody(data.summary, data.review)}`;
 }
 
-export function parse(raw: string, slug: string): BookFormData {
+// Тело карточки любого раздела: ровно два раздела, «Резюме» и «Отзыв»
+export function cardBody(summary: string, review: string): string {
+  return `## Резюме\n\n${summary}\n\n## Отзыв\n\n${review}\n`;
+}
+
+export interface ParsedCard {
+  fm: Record<string, string>;
+  summary: string;
+  review: string;
+}
+
+export function parseCard(raw: string): ParsedCard {
   const parts = raw.split(/^---$/m);
   if (parts.length < 3) throw new Error('Некорректный формат файла');
 
@@ -66,6 +77,19 @@ export function parse(raw: string, slug: string): BookFormData {
   const reviewMatch = body.match(/##[ \t]+Отзыв[ \t]*\n([\s\S]*?)(?=\n##(?!#)|$)/);
 
   return {
+    fm,
+    summary: summaryMatch ? summaryMatch[1].trim() : '',
+    review: reviewMatch ? reviewMatch[1].trim() : '',
+  };
+}
+
+export function parseTags(value: string | undefined): string[] {
+  return value ? value.split(',').map(t => t.trim()).filter(Boolean) : [];
+}
+
+export function parse(raw: string, slug: string): BookFormData {
+  const { fm, summary, review } = parseCard(raw);
+  return {
     slug,
     title: fm.title ?? '',
     original_title: fm.original_title ?? '',
@@ -74,13 +98,13 @@ export function parse(raw: string, slug: string): BookFormData {
     original_language: fm.original_language ?? 'ru',
     media: (fm.media ?? '') as BookMedia,
     source: fm.source ?? '',
-    tags: fm.tags ? fm.tags.split(',').map(t => t.trim()).filter(Boolean) : [],
+    tags: parseTags(fm.tags),
     rating: fm.rating ? parseInt(fm.rating, 10) : 0,
     date_started: fm.date_started ?? '',
     date_finished: fm.date_finished ?? '',
     date_abandoned: fm.date_abandoned ?? '',
     abandoned_at: fm.abandoned_at ?? '',
-    summary: summaryMatch ? summaryMatch[1].trim() : '',
-    review: reviewMatch ? reviewMatch[1].trim() : '',
+    summary,
+    review,
   };
 }
