@@ -42,7 +42,7 @@ date_finished: 2026-11-05
 |---|---|
 | `date_started` | When reading started (`YYYY-MM-DD` or `YYYY`) |
 | `date_finished` | When reading finished; empty while reading |
-| `date_abandoned` | Set instead of `date_finished` when the book was dropped. Such books leave the timeline and appear in the collapsed “Abandoned” section at the bottom |
+| `date_abandoned` | Set instead of `date_finished` when the book was dropped (the “Abandon book” button on a book you are reading). Such books leave the timeline and appear in the collapsed “Abandoned” section at the bottom |
 | `abandoned_at` | Optional, only with `date_abandoned`: where you stopped, free text such as `30%` or `chapter 5` |
 
 ## Getting Started

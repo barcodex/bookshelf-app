@@ -70,7 +70,14 @@
     "abandonedAt": "Stopped at",
     "summary": "Summary",
     "review": "Review",
-    "tags": "Tags"
+    "tags": "Tags",
+    "abandon": "Abandon book",
+    "abandonTitle": "Abandon this book?",
+    "abandonText": "The book will move to the “Abandoned” section. You can start reading it again later.",
+    "abandonReview": "Why you stopped (optional)",
+    "abandonedAtPlaceholder": "Stopped at: 30%, chapter 5…",
+    "abandonConfirm": "Abandon",
+    "restart": "Start reading again"
   },
   "timeline": {
     "title": "Timeline",

@@ -266,6 +266,10 @@ export default function TimelineScreen() {
           book={selected}
           onClose={() => setSelected(null)}
           onEdit={() => { setEditing(selected); setSelected(null); }}
+          onBookUpdated={updated => {
+            setSelected(updated);
+            setBooks(prev => prev.map(b => b.slug === updated.slug ? updated : b));
+          }}
         />
       )}
       {editing && (

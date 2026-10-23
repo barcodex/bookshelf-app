@@ -89,7 +89,14 @@
     "abandonedAt": "Arrêté à",
     "summary": "Résumé",
     "review": "Avis",
-    "tags": "Tags"
+    "tags": "Tags",
+    "abandon": "Abandonner la lecture",
+    "abandonTitle": "Abandonner ce livre ?",
+    "abandonText": "Le livre ira dans la section « Abandonnés ». Vous pourrez le reprendre plus tard.",
+    "abandonReview": "Pourquoi (facultatif)",
+    "abandonedAtPlaceholder": "Arrêté à : 30 %, chapitre 5…",
+    "abandonConfirm": "Abandonner",
+    "restart": "Reprendre la lecture"
   },
   "addBook": {
     "title": "Ajouter un livre",

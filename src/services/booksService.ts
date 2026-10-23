@@ -5,8 +5,8 @@ import {
   updateCachedCommitSha,
   upsertCachedBook,
 } from './booksCache';
-import { getChangedFiles, getFile, getLatestCommitSha, listDirectory } from './github';
-import { parse } from './markdown';
+import { getChangedFiles, getFile, getLatestCommitSha, listDirectory, saveFile } from './github';
+import { parse, serialize } from './markdown';
 import { Settings } from './storage';
 
 const BATCH_SIZE = 20;
@@ -77,4 +77,20 @@ export async function applyIncrementalUpdate(
   );
 
   await updateCachedCommitSha(newSha);
+}
+
+// Сохраняет существующую карточку и обновляет кэш; возвращает SHA коммита
+export async function saveBook(settings: Settings, book: BookFormData): Promise<string> {
+  const path = `books/${book.slug}.md`;
+  const { sha } = await getFile(settings, path);
+  const commitSha = await saveFile(settings, path, serialize(book), sha);
+  await upsertCachedBook(book);
+  await updateCachedCommitSha(commitSha);
+  return commitSha;
+}
+
+export function todayIso(): string {
+  const d = new Date();
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
