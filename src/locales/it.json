@@ -60,7 +60,8 @@
     "empty": "Nessun libro ancora. Aggiungine uno per iniziare!",
     "booksCount": "{count} libri",
     "reading": "Sto leggendo",
-    "undated": "Letto prima"
+    "undated": "Letto prima",
+    "abandoned": "Abbandonati"
   },
   "search": {
     "title": "Ricerca",
@@ -84,9 +85,18 @@
     "source": "Fonte",
     "dateStarted": "Inizio lettura",
     "dateFinished": "Fine lettura",
+    "dateAbandoned": "Abbandonato il",
+    "abandonedAt": "Interrotto a",
     "summary": "Riassunto",
     "review": "Recensione",
-    "tags": "Tag"
+    "tags": "Tag",
+    "abandon": "Abbandona lettura",
+    "abandonTitle": "Abbandonare questo libro?",
+    "abandonText": "Il libro passerà nella sezione «Abbandonati». Potrai ricominciarlo più tardi.",
+    "abandonReview": "Perché l’hai lasciato (facoltativo)",
+    "abandonedAtPlaceholder": "Interrotto a: 30%, capitolo 5…",
+    "abandonConfirm": "Abbandona",
+    "restart": "Ricomincia a leggere"
   },
   "addBook": {
     "title": "Aggiungi libro",

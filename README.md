@@ -19,6 +19,32 @@ A simple, privacy-first book tracking application for iOS and Android. Your data
 4. Sync changes across your devices via GitHub
 5. Your data is always yours — export anytime
 
+## Book File Format
+
+Each book is a Markdown file `books/<slug>.md` with YAML frontmatter and two sections, `## Резюме` (summary) and `## Отзыв` (review):
+
+```markdown
+---
+title: Оппенгеймер. Альтернатива
+original_title: The Oppenheimer Alternative
+author: Роберт Сойер
+year: 2020
+original_language: en
+media: аудио
+tags: альтернативная история
+rating: 8
+date_started: 2026-10-22
+date_finished: 2026-11-05
+---
+```
+
+| Field | Meaning |
+|---|---|
+| `date_started` | When reading started (`YYYY-MM-DD` or `YYYY`) |
+| `date_finished` | When reading finished; empty while reading |
+| `date_abandoned` | Set instead of `date_finished` when the book was dropped (the “Abandon book” button on a book you are reading). Such books leave the timeline and appear in the collapsed “Abandoned” section at the bottom |
+| `abandoned_at` | Optional, only with `date_abandoned`: where you stopped, free text such as `30%` or `chapter 5` |
+
 ## Getting Started
 
 ### Prerequisites

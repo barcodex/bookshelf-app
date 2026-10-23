@@ -1,8 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
-import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { ActivityIndicator, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLanguage } from '../context/LanguageContext';
+import { saveBook, todayIso } from '../services/booksService';
 import { Language, t, toIntlLocale } from '../services/i18n';
+import { getSettings } from '../services/storage';
 import MarkdownText from './MarkdownText';
 import MediaIcon from './MediaIcon';
 import StarRating from './StarRating';
@@ -12,6 +15,7 @@ interface Props {
   book: BookFormData;
   onClose: () => void;
   onEdit?: () => void;
+  onBookUpdated?: (book: BookFormData) => void; // включает кнопки «Бросить чтение» / «Снова начать читать»
 }
 
 const formatDate = (iso: string, language: Language) =>
@@ -31,10 +35,45 @@ function Row({ label, value }: { label: string; value: string }) {
   );
 }
 
-export default function BookDetailModal({ book, onClose, onEdit }: Props) {
+export default function BookDetailModal({ book, onClose, onEdit, onBookUpdated }: Props) {
   const navigation = useNavigation<any>();
   const { language } = useLanguage();
   const insets = useSafeAreaInsets();
+  const [abandonOpen, setAbandonOpen] = useState(false);
+  const [review, setReview] = useState(book.review);
+  const [abandonedAt, setAbandonedAt] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+
+  const isReading = !!book.date_started && !book.date_finished && !book.date_abandoned;
+  const isAbandoned = !!book.date_abandoned;
+
+  const save = async (updated: BookFormData) => {
+    const settings = await getSettings();
+    if (!settings || !onBookUpdated) return;
+    setBusy(true);
+    setError('');
+    try {
+      await saveBook(settings, updated);
+      setAbandonOpen(false);
+      onBookUpdated(updated);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t(language, 'common.error'));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleAbandon = () =>
+    save({ ...book, date_abandoned: todayIso(), abandoned_at: abandonedAt.trim(), review: review.trim() });
+
+  const handleRestart = () =>
+    save({
+      ...book,
+      date_abandoned: '',
+      abandoned_at: '',
+      date_started: book.date_started || todayIso(),
+    });
 
   return (
     <Modal
@@ -104,6 +143,25 @@ export default function BookDetailModal({ book, onClose, onEdit }: Props) {
           {!!book.source && <Row label={t(language, 'book.source')} value={book.source} />}
           {!!book.date_started && <Row label={t(language, 'book.dateStarted')} value={formatDate(book.date_started, language)} />}
           {!!book.date_finished && <Row label={t(language, 'book.dateFinished')} value={formatDate(book.date_finished, language)} />}
+          {!!book.date_abandoned && <Row label={t(language, 'book.dateAbandoned')} value={formatDate(book.date_abandoned, language)} />}
+          {!!book.date_abandoned && !!book.abandoned_at && <Row label={t(language, 'book.abandonedAt')} value={book.abandoned_at} />}
+
+          {onBookUpdated && (isReading || isAbandoned) && (
+            <View style={styles.statusAction}>
+              <Pressable
+                style={[styles.statusBtn, busy && styles.disabled]}
+                disabled={busy}
+                onPress={isReading ? () => { setReview(book.review); setAbandonedAt(''); setError(''); setAbandonOpen(true); } : handleRestart}
+              >
+                {busy && !abandonOpen ? (
+                  <ActivityIndicator color="#111" />
+                ) : (
+                  <Text style={styles.statusBtnText}>{t(language, isReading ? 'book.abandon' : 'book.restart')}</Text>
+                )}
+              </Pressable>
+              {!!error && !abandonOpen && <Text style={styles.error}>{error}</Text>}
+            </View>
+          )}
 
           {book.summary ? (
             <View style={styles.section}>
@@ -120,6 +178,44 @@ export default function BookDetailModal({ book, onClose, onEdit }: Props) {
           ) : null}
         </ScrollView>
       </View>
+
+      <Modal visible={abandonOpen} transparent animationType="fade" onRequestClose={() => !busy && setAbandonOpen(false)}>
+        <View style={styles.backdrop}>
+          <View style={styles.dialog}>
+            <Text style={styles.dialogTitle}>{t(language, 'book.abandonTitle')}</Text>
+            <Text style={styles.dialogText}>{t(language, 'book.abandonText')}</Text>
+            <TextInput
+              style={styles.input}
+              value={abandonedAt}
+              onChangeText={setAbandonedAt}
+              placeholder={t(language, 'book.abandonedAtPlaceholder')}
+              placeholderTextColor="#aaa"
+            />
+            <TextInput
+              style={[styles.input, styles.multiline]}
+              value={review}
+              onChangeText={setReview}
+              placeholder={t(language, 'book.abandonReview')}
+              placeholderTextColor="#aaa"
+              multiline
+              textAlignVertical="top"
+            />
+            {!!error && <Text style={styles.error}>{error}</Text>}
+            <View style={styles.dialogButtons}>
+              <Pressable style={styles.dialogCancel} onPress={() => setAbandonOpen(false)} disabled={busy}>
+                <Text style={styles.dialogCancelText}>{t(language, 'common.cancel')}</Text>
+              </Pressable>
+              <Pressable style={[styles.dialogConfirm, busy && styles.disabled]} onPress={handleAbandon} disabled={busy}>
+                {busy ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={styles.dialogConfirmText}>{t(language, 'book.abandonConfirm')}</Text>
+                )}
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </Modal>
   );
 }
@@ -178,4 +274,64 @@ const styles = StyleSheet.create({
     borderColor: '#e0e0e0',
   },
   tagText: { fontSize: 13, color: '#444', fontWeight: '500' },
+  statusAction: { paddingTop: 4, gap: 6 },
+  statusBtn: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    minWidth: 120,
+    alignItems: 'center',
+  },
+  statusBtnText: { fontSize: 14, color: '#111', fontWeight: '600' },
+  disabled: { opacity: 0.5 },
+  error: { fontSize: 14, color: '#c00' },
+  backdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 16,
+  },
+  dialog: {
+    width: '100%',
+    maxWidth: 420,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 20,
+    gap: 12,
+  },
+  dialogTitle: { fontSize: 17, fontWeight: '700', color: '#111' },
+  dialogText: { fontSize: 14, color: '#555' },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 15,
+    color: '#111',
+    backgroundColor: '#fafafa',
+  },
+  multiline: { minHeight: 100 },
+  dialogButtons: { flexDirection: 'row', gap: 12, marginTop: 4 },
+  dialogCancel: {
+    flex: 1,
+    borderRadius: 10,
+    paddingVertical: 12,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  dialogCancelText: { color: '#111', fontSize: 15, fontWeight: '600' },
+  dialogConfirm: {
+    flex: 1,
+    backgroundColor: '#111',
+    borderRadius: 10,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  dialogConfirmText: { color: '#fff', fontSize: 15, fontWeight: '600' },
 });

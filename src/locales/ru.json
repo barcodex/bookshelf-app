@@ -60,7 +60,8 @@
     "empty": "Книг ещё нет. Добавьте первую!",
     "booksCount": "{count} книг",
     "reading": "Сейчас читаю",
-    "undated": "Читал раньше"
+    "undated": "Читал раньше",
+    "abandoned": "Брошенные"
   },
   "search": {
     "title": "Поиск",
@@ -84,9 +85,18 @@
     "source": "Источник",
     "dateStarted": "Начало чтения",
     "dateFinished": "Конец чтения",
+    "dateAbandoned": "Бросил",
+    "abandonedAt": "Где бросил",
     "summary": "Резюме",
     "review": "Отзыв",
-    "tags": "Теги"
+    "tags": "Теги",
+    "abandon": "Бросить чтение",
+    "abandonTitle": "Бросить чтение?",
+    "abandonText": "Книга переместится в секцию «Брошенные». Её можно будет снова начать читать.",
+    "abandonReview": "Почему бросил (необязательно)",
+    "abandonedAtPlaceholder": "Где бросил: 30%, глава 5…",
+    "abandonConfirm": "Бросить",
+    "restart": "Снова начать читать"
   },
   "addBook": {
     "title": "Добавить книгу",

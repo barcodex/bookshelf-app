@@ -60,7 +60,8 @@
     "empty": "Noch keine Bücher. Fügen Sie eines hinzu!",
     "booksCount": "{count} Bücher",
     "reading": "Gerade lese ich",
-    "undated": "Früher gelesen"
+    "undated": "Früher gelesen",
+    "abandoned": "Abgebrochen"
   },
   "search": {
     "title": "Suche",
@@ -84,9 +85,18 @@
     "source": "Quelle",
     "dateStarted": "Lesebeginn",
     "dateFinished": "Leseende",
+    "dateAbandoned": "Abgebrochen am",
+    "abandonedAt": "Abgebrochen bei",
     "summary": "Zusammenfassung",
     "review": "Rezension",
-    "tags": "Tags"
+    "tags": "Tags",
+    "abandon": "Lesen abbrechen",
+    "abandonTitle": "Lesen abbrechen?",
+    "abandonText": "Das Buch wird in den Bereich „Abgebrochen“ verschoben. Du kannst es später erneut beginnen.",
+    "abandonReview": "Warum abgebrochen (optional)",
+    "abandonedAtPlaceholder": "Abgebrochen bei: 30 %, Kapitel 5…",
+    "abandonConfirm": "Abbrechen",
+    "restart": "Wieder anfangen"
   },
   "addBook": {
     "title": "Buch hinzufügen",
