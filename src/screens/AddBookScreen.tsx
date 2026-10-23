@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { TAB_EDGES } from '../components/SectionHeader';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../services/i18n';
 import BookForm from '../components/BookForm';
@@ -72,7 +73,7 @@ export default function AddBookScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={TAB_EDGES}>
       <BookForm value={data} onChange={setData} showSlug />
       {error ? <Text style={styles.error}>{error}</Text> : null}
       {success ? <Text style={styles.success}>{success}</Text> : null}

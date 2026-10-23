@@ -1,5 +1,6 @@
 import { ScrollView, StyleSheet, Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { TAB_EDGES } from '../components/SectionHeader';
 import { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { t, getLanguageName } from '../services/i18n';
@@ -40,7 +41,7 @@ export default function SettingsScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={TAB_EDGES}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t(language, 'settings.legal')}</Text>

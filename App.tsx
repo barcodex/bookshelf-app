@@ -20,6 +20,8 @@ import LanguageSelectScreen from './src/screens/LanguageSelectScreen';
 import OnboardingRepositoryScreen from './src/screens/OnboardingRepositoryScreen';
 import OnboardingSetupScreen from './src/screens/OnboardingSetupScreen';
 import { colors } from './src/utils/theme';
+import SectionHeader from './src/components/SectionHeader';
+import { SectionId } from './src/utils/sections';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,6 +32,7 @@ function AppContent() {
   const [hasSeenLanguageScreen, setHasSeenLanguageScreen] = useState(false);
   const [onboardingStep, setOnboardingStep] = useState<'repository' | 'setup' | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [section, setSection] = useState<SectionId>('books');
 
   useEffect(() => {
     initializeApp();
@@ -130,49 +133,52 @@ function AppContent() {
 
   return (
     <CacheContext.Provider value={cache}>
-      <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={{
-            headerShown: false,
-            tabBarActiveTintColor: colors.accent,
-            tabBarInactiveTintColor: colors.textFaint,
-            tabBarStyle: { backgroundColor: colors.bg, borderTopColor: colors.border },
-          }}
-        >
-          <Tab.Screen
-            name="Timeline"
-            component={TimelineScreen}
-            options={{
-              title: t(language, 'tabs.timeline'),
-              tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>📅</Text>,
+      <View style={{ flex: 1, backgroundColor: colors.bg }}>
+        <SectionHeader current={section} onSelect={setSection} />
+        <NavigationContainer>
+          <Tab.Navigator
+            screenOptions={{
+              headerShown: false,
+              tabBarActiveTintColor: colors.accent,
+              tabBarInactiveTintColor: colors.textFaint,
+              tabBarStyle: { backgroundColor: colors.bg, borderTopColor: colors.border },
             }}
-          />
-          <Tab.Screen
-            name="AddBook"
-            component={AddBookScreen}
-            options={{
-              title: t(language, 'tabs.add'),
-              tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>＋</Text>,
-            }}
-          />
-          <Tab.Screen
-            name="Search"
-            component={SearchScreen}
-            options={{
-              title: t(language, 'tabs.search'),
-              tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>🔍</Text>,
-            }}
-          />
-          <Tab.Screen
-            name="Settings"
-            component={SettingsScreen}
-            options={{
-              title: t(language, 'tabs.more'),
-              tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>⚙️</Text>,
-            }}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
+          >
+            <Tab.Screen
+              name="Timeline"
+              component={TimelineScreen}
+              options={{
+                title: t(language, 'tabs.timeline'),
+                tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>📅</Text>,
+              }}
+            />
+            <Tab.Screen
+              name="AddBook"
+              component={AddBookScreen}
+              options={{
+                title: t(language, 'tabs.add'),
+                tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>＋</Text>,
+              }}
+            />
+            <Tab.Screen
+              name="Search"
+              component={SearchScreen}
+              options={{
+                title: t(language, 'tabs.search'),
+                tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>🔍</Text>,
+              }}
+            />
+            <Tab.Screen
+              name="Settings"
+              component={SettingsScreen}
+              options={{
+                title: t(language, 'tabs.more'),
+                tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>⚙️</Text>,
+              }}
+            />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </View>
     </CacheContext.Provider>
   );
 }

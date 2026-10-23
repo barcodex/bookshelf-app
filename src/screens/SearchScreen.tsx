@@ -11,6 +11,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { TAB_EDGES } from '../components/SectionHeader';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../services/i18n';
 import BookDetailModal from '../components/BookDetailModal';
@@ -303,7 +304,7 @@ export default function SearchScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={TAB_EDGES}>
       {githubError && <GitHubOfflineBanner error={githubError} onRetry={forceReload} />}
       {loading ? (
         <>
