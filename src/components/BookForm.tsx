@@ -137,6 +137,22 @@ export default function BookForm({ value, onChange, showSlug = false }: Props) {
         <DateInput value={value.date_finished} onChange={set('date_finished')} placeholder="Не указано" />
       </Field>
 
+      <Field label="Бросил">
+        <DateInput value={value.date_abandoned} onChange={set('date_abandoned')} placeholder="Не брошена" />
+      </Field>
+
+      {!!value.date_abandoned && (
+        <Field label="Где бросил">
+          <TextInput
+            style={styles.input}
+            value={value.abandoned_at}
+            onChangeText={set('abandoned_at')}
+            placeholder="30%, глава 5, стр. 120…"
+            placeholderTextColor="#aaa"
+          />
+        </Field>
+      )}
+
       <Field label="Теги">
         <TagInput value={value.tags} onChange={(tags) => onChange({ ...value, tags })} />
       </Field>

@@ -60,7 +60,8 @@
     "empty": "Книг ещё нет. Добавьте первую!",
     "booksCount": "{count} книг",
     "reading": "Сейчас читаю",
-    "undated": "Читал раньше"
+    "undated": "Читал раньше",
+    "abandoned": "Брошенные"
   },
   "search": {
     "title": "Поиск",
@@ -84,6 +85,8 @@
     "source": "Источник",
     "dateStarted": "Начало чтения",
     "dateFinished": "Конец чтения",
+    "dateAbandoned": "Бросил",
+    "abandonedAt": "Где бросил",
     "summary": "Резюме",
     "review": "Отзыв",
     "tags": "Теги"

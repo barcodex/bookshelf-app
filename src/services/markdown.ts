@@ -39,7 +39,10 @@ export function serialize(data: BookFormData): string {
     data.tags.length      ? `tags: ${data.tags.join(', ')}`           : null,
     data.rating           ? `rating: ${data.rating}`                  : null,
     `date_started: ${data.date_started}`,
-    `date_finished: ${data.date_finished}`,
+    // Брошенная книга хранит date_abandoned вместо date_finished
+    data.date_abandoned && !data.date_finished ? null : `date_finished: ${data.date_finished}`,
+    data.date_abandoned   ? `date_abandoned: ${data.date_abandoned}`  : null,
+    data.date_abandoned && data.abandoned_at ? `abandoned_at: ${data.abandoned_at}` : null,
     '---',
   ].filter(Boolean).join('\n');
 
@@ -75,6 +78,8 @@ export function parse(raw: string, slug: string): BookFormData {
     rating: fm.rating ? parseInt(fm.rating, 10) : 0,
     date_started: fm.date_started ?? '',
     date_finished: fm.date_finished ?? '',
+    date_abandoned: fm.date_abandoned ?? '',
+    abandoned_at: fm.abandoned_at ?? '',
     summary: summaryMatch ? summaryMatch[1].trim() : '',
     review: reviewMatch ? reviewMatch[1].trim() : '',
   };

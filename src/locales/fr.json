@@ -60,7 +60,8 @@
     "empty": "Aucun livre pour le moment. Ajoutez-en un pour commencer!",
     "booksCount": "{count} livres",
     "reading": "En cours de lecture",
-    "undated": "Lu avant"
+    "undated": "Lu avant",
+    "abandoned": "Abandonnés"
   },
   "search": {
     "title": "Rechercher",
@@ -84,6 +85,8 @@
     "source": "Source",
     "dateStarted": "Début de lecture",
     "dateFinished": "Fin de lecture",
+    "dateAbandoned": "Abandonné le",
+    "abandonedAt": "Arrêté à",
     "summary": "Résumé",
     "review": "Avis",
     "tags": "Tags"

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BookFormData } from '../types/book';
+import { BookFormData, emptyBook } from '../types/book';
 
 const BOOKS_KEY = 'bookshelf_books_cache';
 const COMMIT_SHA_KEY = 'bookshelf_commit_sha';
@@ -8,7 +8,8 @@ export async function getCachedBooks(): Promise<BookFormData[] | null> {
   try {
     const raw = await AsyncStorage.getItem(BOOKS_KEY);
     if (!raw) return null;
-    const books = JSON.parse(raw) as BookFormData[];
+    // Дополняем поля, которых нет в кэше, сохранённом старой версией приложения
+    const books = (JSON.parse(raw) as BookFormData[]).map(b => ({ ...emptyBook, ...b }));
     return books.length > 0 ? books : null;
   } catch {
     return null;

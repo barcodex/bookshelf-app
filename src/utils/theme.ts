@@ -54,3 +54,7 @@ export function readingBg(): string {
 export function undatedBg(): string {
   return Platform.OS === 'web' ? 'rgb(234,231,225)' : 'rgb(244,244,244)'
 }
+
+export function abandonedBg(): string {
+  return Platform.OS === 'web' ? 'rgb(226,222,216)' : 'rgb(238,238,238)'
+}

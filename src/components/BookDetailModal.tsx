@@ -104,6 +104,8 @@ export default function BookDetailModal({ book, onClose, onEdit }: Props) {
           {!!book.source && <Row label={t(language, 'book.source')} value={book.source} />}
           {!!book.date_started && <Row label={t(language, 'book.dateStarted')} value={formatDate(book.date_started, language)} />}
           {!!book.date_finished && <Row label={t(language, 'book.dateFinished')} value={formatDate(book.date_finished, language)} />}
+          {!!book.date_abandoned && <Row label={t(language, 'book.dateAbandoned')} value={formatDate(book.date_abandoned, language)} />}
+          {!!book.date_abandoned && !!book.abandoned_at && <Row label={t(language, 'book.abandonedAt')} value={book.abandoned_at} />}
 
           {book.summary ? (
             <View style={styles.section}>

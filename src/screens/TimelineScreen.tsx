@@ -1,5 +1,5 @@
 import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -22,7 +22,7 @@ import { GitHubError, getLatestCommitSha } from '../services/github';
 import { LoadProgress, loadAllBooks, applyIncrementalUpdate } from '../services/booksService';
 import { getSettings } from '../services/storage';
 import { BookFormData } from '../types/book';
-import { YearSection, formatDisplayDate, buildSections } from '../utils/groupBooks';
+import { YearSection, formatDisplayDate, formatFullDate, buildSections } from '../utils/groupBooks';
 import { colors } from '../utils/theme';
 
 function getMediaCounts(books: BookFormData[]): { paper: number; digital: number; audio: number } {
@@ -44,6 +44,7 @@ export default function TimelineScreen() {
   const [githubError, setGithubError] = useState<GitHubError | null>(null);
   const [selected, setSelected] = useState<BookFormData | null>(null);
   const [editing, setEditing] = useState<BookFormData | null>(null);
+  const [abandonedOpen, setAbandonedOpen] = useState(false);
   const { cacheVersion, forceReload } = useCacheContext();
   const isFocused = useRef(false);
 
@@ -113,6 +114,14 @@ export default function TimelineScreen() {
     if (isFocused.current) loadBooks();
   }, [cacheVersion]);
 
+  const allSections = useMemo(() => buildSections(books), [books]);
+  const abandonedCount = allSections.find(s => s.kind === 'abandoned')?.data.length ?? 0;
+  // Секция «Брошенные» свёрнута по умолчанию: заголовок виден, книги — нет
+  const sections = useMemo(
+    () => allSections.map(s => (s.kind === 'abandoned' && !abandonedOpen ? { ...s, data: [] } : s)),
+    [allSections, abandonedOpen],
+  );
+
   if (loading) {
     return (
       <SafeAreaView style={styles.center}>
@@ -136,7 +145,7 @@ export default function TimelineScreen() {
         <GitHubOfflineBanner error={githubError} onRetry={forceReload} />
       )}
       <SectionList<BookFormData, YearSection>
-        sections={buildSections(books)}
+        sections={sections}
         keyExtractor={item => item.slug}
         stickySectionHeadersEnabled
         refreshControl={
@@ -154,6 +163,25 @@ export default function TimelineScreen() {
                   <Text style={styles.yearCount}>{countLabel}</Text>
                 </View>
               </View>
+            );
+          }
+
+          if (section.kind === 'abandoned') {
+            const abandonedLabel = t(language, 'timeline.booksCount').replace('{count}', abandonedCount.toString());
+            return (
+              <Pressable
+                style={[styles.yearHeader, { backgroundColor: section.backgroundColor }]}
+                onPress={() => setAbandonedOpen(open => !open)}
+                accessibilityRole="button"
+                accessibilityState={{ expanded: abandonedOpen }}
+              >
+                <View style={styles.yearLeft}>
+                  <Text style={[styles.yearText, styles.undatedText]}>
+                    {abandonedOpen ? '▾' : '▸'} {t(language, 'timeline.abandoned')}
+                  </Text>
+                  <Text style={styles.yearCount}>{abandonedLabel}</Text>
+                </View>
+              </Pressable>
             );
           }
 
@@ -206,10 +234,15 @@ export default function TimelineScreen() {
             dateStr = formatDisplayDate(item.date_finished, language);
           } else if (section.kind === 'reading' && item.date_started) {
             dateStr = formatDisplayDate(item.date_started, language);
+          } else if (section.kind === 'abandoned') {
+            dateStr = formatFullDate(item.date_abandoned, language);
           }
+          const authorLine = section.kind === 'abandoned' && item.abandoned_at
+            ? `${item.author} · ${item.abandoned_at}`
+            : item.author;
           return (
             <Pressable
-              style={[styles.item, { backgroundColor: section.backgroundColor }]}
+              style={[styles.item, section.kind === 'abandoned' && styles.itemCompact, { backgroundColor: section.backgroundColor }]}
               onPress={() => setSelected(item)}
             >
               <Text style={[styles.itemDate, !dateStr && styles.itemDateEmpty]}>
@@ -220,7 +253,7 @@ export default function TimelineScreen() {
                   {item.media && <MediaIcon media={item.media} size="xs" color={colors.textFaint} />}
                   <Text style={styles.itemTitle} numberOfLines={1}>{item.title}</Text>
                 </View>
-                <Text style={styles.itemAuthor} numberOfLines={1}>{item.author}</Text>
+                <Text style={styles.itemAuthor} numberOfLines={1}>{authorLine}</Text>
               </View>
             </Pressable>
           );
@@ -275,6 +308,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16, paddingVertical: 13,
     borderBottomWidth: 1, borderBottomColor: colors.borderFaint, gap: 14,
   },
+  itemCompact: { paddingVertical: 9 },
   itemDate: { fontSize: 13, color: colors.textFaint, width: 72 },
   itemDateEmpty: { color: colors.textEmpty },
   itemMeta: { flex: 1 },

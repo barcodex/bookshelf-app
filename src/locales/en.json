@@ -66,6 +66,8 @@
     "source": "Source",
     "dateStarted": "Started Reading",
     "dateFinished": "Finished Reading",
+    "dateAbandoned": "Abandoned",
+    "abandonedAt": "Stopped at",
     "summary": "Summary",
     "review": "Review",
     "tags": "Tags"
@@ -75,7 +77,8 @@
     "empty": "No books yet. Add one to get started!",
     "booksCount": "{count} books",
     "reading": "Currently Reading",
-    "undated": "Read Earlier"
+    "undated": "Read Earlier",
+    "abandoned": "Abandoned"
   },
   "search": {
     "title": "Search",

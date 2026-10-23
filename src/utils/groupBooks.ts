@@ -1,8 +1,8 @@
 import { Language, toIntlLocale } from '../services/i18n';
 import { BookFormData } from '../types/book';
-import { readingBg, undatedBg, yearBg } from './theme';
+import { abandonedBg, readingBg, undatedBg, yearBg } from './theme';
 
-export type SectionKind = 'reading' | 'year' | 'undated';
+export type SectionKind = 'reading' | 'year' | 'undated' | 'abandoned';
 
 export type YearSection = {
   kind: SectionKind;
@@ -28,6 +28,12 @@ export function groupByYear(books: BookFormData[]): YearSection[] {
 }
 
 export function buildSections(books: BookFormData[]): YearSection[] {
+  // Брошенные книги не попадают в таймлайн — только в отдельную секцию внизу
+  const abandoned = books
+    .filter(b => b.date_abandoned)
+    .sort((a, b) => b.date_abandoned.localeCompare(a.date_abandoned));
+  books = books.filter(b => !b.date_abandoned);
+
   const reading = books.filter(b => b.date_started && !b.date_finished);
 
   const finished = books
@@ -58,7 +64,23 @@ export function buildSections(books: BookFormData[]): YearSection[] {
     sections.push({ kind: 'undated', year: 'undated', data: undated, backgroundColor: undatedBg() });
   }
 
+  if (abandoned.length > 0) {
+    sections.push({ kind: 'abandoned', year: 'abandoned', data: abandoned, backgroundColor: abandonedBg() });
+  }
+
   return sections;
+}
+
+export function formatFullDate(date: string, language: Language): string {
+  if (!date) return '';
+  if (isYearOnly(date)) return date;
+  try {
+    return new Intl.DateTimeFormat(toIntlLocale(language), { day: '2-digit', month: '2-digit', year: 'numeric' }).format(
+      new Date(date + 'T00:00:00')
+    );
+  } catch {
+    return '';
+  }
 }
 
 export function isYearOnly(date: string): boolean {

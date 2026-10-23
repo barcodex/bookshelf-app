@@ -15,6 +15,8 @@ export interface BookFormData {
   review: string;
   date_started: string;  // ISO YYYY-MM-DD или ''
   date_finished: string; // ISO YYYY-MM-DD или ''
+  date_abandoned: string; // ISO YYYY-MM-DD или '' — книга брошена
+  abandoned_at: string;   // где бросил, свободный текст (например, «30%») или ''
 }
 
 export const emptyBook: BookFormData = {
@@ -32,4 +34,6 @@ export const emptyBook: BookFormData = {
   review: '',
   date_started: '',
   date_finished: '',
+  date_abandoned: '',
+  abandoned_at: '',
 };
