@@ -1,72 +1,21 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BookFormData, emptyBook } from '../types/book';
+import { createCardCache } from './cardCache';
 
-const BOOKS_KEY = 'bookshelf_books_cache';
-const COMMIT_SHA_KEY = 'bookshelf_commit_sha';
+export const booksCache = createCardCache<BookFormData>(
+  'bookshelf_books_cache',
+  'bookshelf_commit_sha',
+  emptyBook,
+);
 
 export async function getCachedBooks(): Promise<BookFormData[] | null> {
-  try {
-    const raw = await AsyncStorage.getItem(BOOKS_KEY);
-    if (!raw) return null;
-    // Дополняем поля, которых нет в кэше, сохранённом старой версией приложения
-    const books = (JSON.parse(raw) as BookFormData[]).map(b => ({ ...emptyBook, ...b }));
-    return books.length > 0 ? books : null;
-  } catch {
-    return null;
-  }
+  const books = await booksCache.get();
+  // Пустой кэш книг считаем отсутствующим — экраны перечитают репозиторий
+  return books && books.length > 0 ? books : null;
 }
 
-export async function getCachedCommitSha(): Promise<string | null> {
-  try {
-    return await AsyncStorage.getItem(COMMIT_SHA_KEY);
-  } catch {
-    return null;
-  }
-}
-
-export async function setCachedBooks(books: BookFormData[], commitSha: string): Promise<void> {
-  try {
-    await Promise.all([
-      AsyncStorage.setItem(BOOKS_KEY, JSON.stringify(books)),
-      AsyncStorage.setItem(COMMIT_SHA_KEY, commitSha),
-    ]);
-  } catch {}
-}
-
-export async function deleteCachedBook(slug: string): Promise<void> {
-  try {
-    const books = await getCachedBooks();
-    if (books) {
-      const filtered = books.filter(b => b.slug !== slug);
-      await AsyncStorage.setItem(BOOKS_KEY, JSON.stringify(filtered));
-    }
-  } catch {}
-}
-
-export async function upsertCachedBook(book: BookFormData): Promise<void> {
-  try {
-    const books = await getCachedBooks() || [];
-    const index = books.findIndex(b => b.slug === book.slug);
-    if (index >= 0) {
-      books[index] = book;
-    } else {
-      books.push(book);
-    }
-    await AsyncStorage.setItem(BOOKS_KEY, JSON.stringify(books));
-  } catch {}
-}
-
-export async function updateCachedCommitSha(sha: string): Promise<void> {
-  try {
-    await AsyncStorage.setItem(COMMIT_SHA_KEY, sha);
-  } catch {}
-}
-
-export async function clearBooksCache(): Promise<void> {
-  try {
-    await Promise.all([
-      AsyncStorage.removeItem(BOOKS_KEY),
-      AsyncStorage.removeItem(COMMIT_SHA_KEY),
-    ]);
-  } catch {}
-}
+export const getCachedCommitSha = booksCache.getCommitSha;
+export const setCachedBooks = booksCache.set;
+export const deleteCachedBook = booksCache.remove;
+export const upsertCachedBook = booksCache.upsert;
+export const updateCachedCommitSha = booksCache.updateCommitSha;
+export const clearBooksCache = booksCache.clear;

@@ -45,6 +45,30 @@ date_finished: 2026-11-05
 | `date_abandoned` | Set instead of `date_finished` when the book was dropped (the “Abandon book” button on a book you are reading). Such books leave the timeline and appear in the collapsed “Abandoned” section at the bottom |
 | `abandoned_at` | Optional, only with `date_abandoned`: where you stopped, free text such as `30%` or `chapter 5` |
 
+## Film File Format
+
+Films live next to books in `movies/<director-surname>-<title>.md`, with the same two sections:
+
+```markdown
+---
+title: Солярис
+director: Андрей Тарковский
+year: 1972
+imdb: https://www.imdb.com/title/tt0069293/
+tags: фантастика
+rating: 9
+date_watched: 2026-10-20
+---
+```
+
+| Field | Meaning |
+|---|---|
+| `original_title` | Only when it differs from `title` |
+| `imdb` | Link to the film on IMDb; the app also accepts a bare `tt…` id and stores the full link |
+| `rating` | 1–10 |
+| `abandoned` | `true` when you didn't finish the film (“Didn't finish” checkbox); omitted otherwise. The film stays in the timeline on its date |
+| `date_watched` | When you watched it (`YYYY-MM-DD` or `YYYY`) |
+
 ## Getting Started
 
 ### Prerequisites
