@@ -6,8 +6,8 @@ export interface MovieFormData {
   year: string;
   imdb: string;           // ссылка на страницу фильма в IMDb или ''
   tags: string[];
-  rating: number;         // 0 = не задан, 1–10
-  abandoned: boolean;     // «не осилил» — бросил смотреть
+  rating: number;         // 0 = не задан, 1–10; у недосмотренного всегда 0
+  abandoned: boolean;     // «не досмотрено» — исключает оценку
   date_watched: string;   // ISO YYYY-MM-DD, YYYY или ''
   summary: string;
   review: string;

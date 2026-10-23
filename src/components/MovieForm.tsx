@@ -105,10 +105,11 @@ export default function MovieForm({ value, onChange, showSlug = false }: Props) 
       </Field>
 
       <Field label={t(language, 'movie.rating')}>
-        <StarRating value={value.rating} onChange={(rating) => onChange({ ...value, rating })} />
+        {/* Оценка и «не досмотрено» взаимоисключающие: одно сбрасывает другое */}
+        <StarRating value={value.rating} onChange={(rating) => onChange({ ...value, rating, abandoned: false })} />
         <Checkbox
           value={value.abandoned}
-          onChange={(abandoned) => onChange({ ...value, abandoned })}
+          onChange={(abandoned) => onChange({ ...value, abandoned, rating: abandoned ? 0 : value.rating })}
           label={t(language, 'movie.abandoned')}
         />
       </Field>

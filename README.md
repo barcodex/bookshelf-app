@@ -65,8 +65,8 @@ date_watched: 2026-10-20
 |---|---|
 | `original_title` | Only when it differs from `title` |
 | `imdb` | Link to the film on IMDb; the app also accepts a bare `tt…` id and stores the full link |
-| `rating` | 1–10 |
-| `abandoned` | `true` when you didn't finish the film (“Didn't finish” checkbox); omitted otherwise. The film stays in the timeline on its date |
+| `rating` | 1–10; not set together with `abandoned` |
+| `abandoned` | `true` when the film was not watched to the end (“Not finished” checkbox, which clears the rating; picking a rating clears the checkbox); omitted otherwise. The film stays in the timeline on its date |
 | `date_watched` | When you watched it (`YYYY-MM-DD` or `YYYY`) |
 
 ## Getting Started

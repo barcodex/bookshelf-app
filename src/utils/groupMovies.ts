@@ -13,7 +13,7 @@ export type MovieSection = {
 const byTitle = (a: MovieFormData, b: MovieFormData) => a.title.localeCompare(b.title, 'ru');
 
 // Фильмы по годам просмотра, свежие сверху; без даты — отдельной секцией в конце.
-// Недосмотренные («не осилил») остаются на своей дате.
+// Недосмотренные («не досмотрено») остаются на своей дате.
 export function buildMovieSections(movies: MovieFormData[], includeUndated = true): MovieSection[] {
   const watched = movies
     .filter(m => m.date_watched)
