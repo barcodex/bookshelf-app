@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { TAB_EDGES } from './SectionHeader';
 import { GitHubError, GitHubErrorType } from '../services/github';
 import { clearSettings } from '../services/storage';
 import { clearBooksCache } from '../services/booksCache';
@@ -48,7 +49,7 @@ export function GitHubErrorScreen({
 }) {
   const { title, message, canReset } = ERROR_CONTENT[error.type];
   return (
-    <SafeAreaView style={styles.screen}>
+    <SafeAreaView style={styles.screen} edges={TAB_EDGES}>
       <Text style={styles.icon}>⚠</Text>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.message}>{message}</Text>

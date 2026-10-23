@@ -10,6 +10,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { TAB_EDGES } from '../components/SectionHeader';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../services/i18n';
 import BookDetailModal from '../components/BookDetailModal';
@@ -124,7 +125,7 @@ export default function TimelineScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.center}>
+      <SafeAreaView style={styles.center} edges={TAB_EDGES}>
         <ActivityIndicator size="large" />
         {progress && (
           <Text style={styles.progressText}>
@@ -140,7 +141,7 @@ export default function TimelineScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={TAB_EDGES}>
       {githubError && (
         <GitHubOfflineBanner error={githubError} onRetry={forceReload} />
       )}

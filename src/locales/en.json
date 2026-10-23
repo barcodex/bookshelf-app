@@ -134,5 +134,14 @@
     "add": "Add",
     "search": "Search",
     "more": "More"
+  },
+  "sections": {
+    "diary": "Cultural diary",
+    "books": "Books",
+    "films": "Films",
+    "series": "TV series",
+    "exhibitions": "Exhibitions",
+    "concerts": "Concerts",
+    "soon": "soon"
   }
 }
