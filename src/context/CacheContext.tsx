@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useState } from 'react';
 import { clearBooksCache } from '../services/booksCache';
+import { moviesCache } from '../services/moviesCache';
 
 interface CacheContextType {
   cacheVersion: number;
@@ -23,6 +24,7 @@ export function useCacheProvider(): CacheContextType {
   const bumpVersion = bump;
   const forceReload = useCallback(() => {
     clearBooksCache();
+    moviesCache.clear();
     setCacheVersion(v => v + 1);
   }, []);
   return { cacheVersion, bumpVersion, forceReload };

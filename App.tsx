@@ -7,14 +7,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CacheContext, useCacheProvider } from './src/context/CacheContext';
 import { LanguageProvider, useLanguage } from './src/context/LanguageContext';
 import { t } from './src/services/i18n';
-import { getCachedCommitSha } from './src/services/booksCache';
 import { getLatestCommitSha } from './src/services/github';
-import { applyIncrementalUpdate } from './src/services/booksService';
+import { booksCollection } from './src/services/booksService';
+import { syncCollection } from './src/services/cardsService';
+import { moviesCollection } from './src/services/moviesService';
 import { Settings, getSettings, saveSettings } from './src/services/storage';
 import SetupScreen from './src/screens/SetupScreen';
 import TimelineScreen from './src/screens/TimelineScreen';
 import AddBookScreen from './src/screens/AddBookScreen';
 import SearchScreen from './src/screens/SearchScreen';
+import MoviesTimelineScreen from './src/screens/MoviesTimelineScreen';
+import AddMovieScreen from './src/screens/AddMovieScreen';
+import MoviesSearchScreen from './src/screens/MoviesSearchScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import LanguageSelectScreen from './src/screens/LanguageSelectScreen';
 import OnboardingRepositoryScreen from './src/screens/OnboardingRepositoryScreen';
@@ -25,6 +29,13 @@ import { SectionId } from './src/utils/sections';
 
 const Tab = createBottomTabNavigator();
 
+// Экраны вкладок для каждого работающего раздела; имена маршрутов общие, чтобы теги вели в «Поиск» раздела
+const sectionScreens = {
+  books: { Timeline: TimelineScreen, Add: AddBookScreen, Search: SearchScreen },
+  films: { Timeline: MoviesTimelineScreen, Add: AddMovieScreen, Search: MoviesSearchScreen },
+};
+type ScreensSection = keyof typeof sectionScreens;
+
 function AppContent() {
   const { language, isLoading: languageLoading } = useLanguage();
   const cache = useCacheProvider();
@@ -33,6 +44,7 @@ function AppContent() {
   const [onboardingStep, setOnboardingStep] = useState<'repository' | 'setup' | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const [section, setSection] = useState<SectionId>('books');
+  const screens = sectionScreens[section as ScreensSection] ?? sectionScreens.books;
 
   useEffect(() => {
     initializeApp();
@@ -42,14 +54,14 @@ function AppContent() {
     if (!settings) return;
     const poll = async () => {
       try {
-        const [remoteSha, cachedSha] = await Promise.all([
-          getLatestCommitSha(settings),
-          getCachedCommitSha(),
+        const remoteSha = await getLatestCommitSha(settings);
+        console.log(`[Poller] Remote SHA: ${remoteSha}`);
+        const updated = await Promise.all([
+          syncCollection(booksCollection, settings, remoteSha),
+          syncCollection(moviesCollection, settings, remoteSha),
         ]);
-        console.log(`[Poller] Remote SHA: ${remoteSha} | Cached SHA: ${cachedSha}`);
-        if (cachedSha !== null && remoteSha !== cachedSha) {
-          console.log('[Poller] SHA mismatch detected, updating cache...');
-          await applyIncrementalUpdate(settings, cachedSha, remoteSha);
+        if (updated.some(Boolean)) {
+          console.log('[Poller] SHA mismatch detected, cache updated');
           cache.bumpVersion();
         }
       } catch {
@@ -137,6 +149,7 @@ function AppContent() {
         <SectionHeader current={section} onSelect={setSection} />
         <NavigationContainer>
           <Tab.Navigator
+            key={section}
             screenOptions={{
               headerShown: false,
               tabBarActiveTintColor: colors.accent,
@@ -146,15 +159,15 @@ function AppContent() {
           >
             <Tab.Screen
               name="Timeline"
-              component={TimelineScreen}
+              component={screens.Timeline}
               options={{
                 title: t(language, 'tabs.timeline'),
                 tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>📅</Text>,
               }}
             />
             <Tab.Screen
-              name="AddBook"
-              component={AddBookScreen}
+              name="Add"
+              component={screens.Add}
               options={{
                 title: t(language, 'tabs.add'),
                 tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>＋</Text>,
@@ -162,7 +175,7 @@ function AppContent() {
             />
             <Tab.Screen
               name="Search"
-              component={SearchScreen}
+              component={screens.Search}
               options={{
                 title: t(language, 'tabs.search'),
                 tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>🔍</Text>,
