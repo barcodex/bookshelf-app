@@ -24,6 +24,16 @@ const formatLocale = (iso: string): string => {
   }
 };
 
+// Поле прозрачное, поэтому клик по нему сам календарь не открывает: Chrome показывает его
+// только по иконке справа, Safari — по сегментам даты, которых не видно. Открываем явно.
+function openWebPicker(e: any) {
+  try {
+    e.currentTarget.showPicker?.();
+  } catch {
+    // старые браузеры: остаётся ввод с клавиатуры
+  }
+}
+
 function ModeToggle({ mode, onChange }: { mode: Mode; onChange: (m: Mode) => void }) {
   return (
     <View style={styles.modeRow}>
@@ -75,6 +85,7 @@ export default function DateInput({ value, onChange, placeholder = 'Не ука�
             type: 'date',
             value: value.length === 10 ? value : '',
             onChange: (e: any) => onChange(e.target.value),
+            onClick: openWebPicker,
             style: { position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', width: '100%', height: '100%' },
           })}
         </View>
