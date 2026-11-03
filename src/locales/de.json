@@ -122,6 +122,27 @@
     "empty": "Noch keine Filme. Füge den ersten hinzu!",
     "searchHint": "Titel, Regie, Jahr, Rezensionstext…"
   },
+  "concert": {
+    "artist": "Künstler",
+    "support": "Vorbands",
+    "supportPlaceholder": "Band, dann Enter oder Komma",
+    "venue": "Location",
+    "venuePlaceholder": "Location, Stadt",
+    "spotifyPlaceholder": "Künstler-Link bei Spotify",
+    "date": "Konzertdatum",
+    "rating": "Bewertung",
+    "tags": "Tags",
+    "summary": "Zusammenfassung",
+    "review": "Rezension",
+    "fileName": "Dateiname",
+    "openSpotify": "Bei Spotify öffnen",
+    "validationError": "Künstler und Location angeben",
+    "editTitle": "Bearbeiten",
+    "count": "{count} Konzerte",
+    "undated": "Ohne Datum",
+    "empty": "Noch keine Konzerte. Füge das erste hinzu!",
+    "searchHint": "Künstler, Vorband, Location, Rezension…"
+  },
   "addBook": {
     "title": "Buch hinzufügen",
     "save": "Speichern",

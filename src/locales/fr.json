@@ -122,6 +122,27 @@
     "empty": "Aucun film pour l'instant. Ajoutez le premier !",
     "searchHint": "Titre, réalisateur, année, texte de l'avis…"
   },
+  "concert": {
+    "artist": "Artiste",
+    "support": "Premières parties",
+    "supportPlaceholder": "Groupe, puis Entrée ou virgule",
+    "venue": "Salle",
+    "venuePlaceholder": "Salle, ville",
+    "spotifyPlaceholder": "Lien de l'artiste sur Spotify",
+    "date": "Date du concert",
+    "rating": "Note",
+    "tags": "Tags",
+    "summary": "Résumé",
+    "review": "Critique",
+    "fileName": "Nom du fichier",
+    "openSpotify": "Ouvrir dans Spotify",
+    "validationError": "Indiquez l'artiste et la salle",
+    "editTitle": "Modifier",
+    "count": "{count} concerts",
+    "undated": "Sans date",
+    "empty": "Aucun concert pour l'instant. Ajoutez le premier !",
+    "searchHint": "Artiste, première partie, salle, critique…"
+  },
   "addBook": {
     "title": "Ajouter un livre",
     "save": "Enregistrer",

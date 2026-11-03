@@ -103,6 +103,27 @@
     "empty": "No films yet. Add the first one!",
     "searchHint": "Title, director, year, review text…"
   },
+  "concert": {
+    "artist": "Artist",
+    "support": "Support acts",
+    "supportPlaceholder": "Band, then Enter or comma",
+    "venue": "Venue",
+    "venuePlaceholder": "Venue, city",
+    "spotifyPlaceholder": "Artist link on Spotify",
+    "date": "Concert date",
+    "rating": "Rating",
+    "tags": "Tags",
+    "summary": "Summary",
+    "review": "Review",
+    "fileName": "File name",
+    "openSpotify": "Open on Spotify",
+    "validationError": "Enter the artist and venue",
+    "editTitle": "Edit",
+    "count": "{count} concerts",
+    "undated": "Undated",
+    "empty": "No concerts yet. Add the first one!",
+    "searchHint": "Artist, support, venue, review text…"
+  },
   "timeline": {
     "title": "Timeline",
     "empty": "No books yet. Add one to get started!",

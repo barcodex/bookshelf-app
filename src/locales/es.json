@@ -122,6 +122,27 @@
     "empty": "Aún no hay películas. ¡Añade la primera!",
     "searchHint": "Título, director, año, texto de la reseña…"
   },
+  "concert": {
+    "artist": "Artista",
+    "support": "Teloneros",
+    "supportPlaceholder": "Banda, luego Enter o coma",
+    "venue": "Recinto",
+    "venuePlaceholder": "Recinto, ciudad",
+    "spotifyPlaceholder": "Enlace del artista en Spotify",
+    "date": "Fecha del concierto",
+    "rating": "Valoración",
+    "tags": "Etiquetas",
+    "summary": "Resumen",
+    "review": "Reseña",
+    "fileName": "Nombre de archivo",
+    "openSpotify": "Abrir en Spotify",
+    "validationError": "Indica el artista y el recinto",
+    "editTitle": "Editar",
+    "count": "{count} conciertos",
+    "undated": "Sin fecha",
+    "empty": "Aún no hay conciertos. ¡Añade el primero!",
+    "searchHint": "Artista, teloneros, recinto, reseña…"
+  },
   "addBook": {
     "title": "Añadir libro",
     "save": "Guardar",
