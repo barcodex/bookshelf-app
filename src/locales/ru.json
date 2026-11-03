@@ -122,6 +122,27 @@
     "empty": "Фильмов ещё нет. Добавьте первый!",
     "searchHint": "Название, режиссёр, год, текст отзыва…"
   },
+  "concert": {
+    "artist": "Артист",
+    "support": "Разогрев",
+    "supportPlaceholder": "Группа, Enter или запятая",
+    "venue": "Площадка",
+    "venuePlaceholder": "Площадка, город",
+    "spotifyPlaceholder": "Ссылка на артиста в Spotify",
+    "date": "Дата концерта",
+    "rating": "Рейтинг",
+    "tags": "Теги",
+    "summary": "Резюме",
+    "review": "Отзыв",
+    "fileName": "Имя файла",
+    "openSpotify": "Открыть в Spotify",
+    "validationError": "Заполните артиста и площадку",
+    "editTitle": "Редактирование",
+    "count": "Концертов: {count}",
+    "undated": "Без даты",
+    "empty": "Концертов ещё нет. Добавьте первый!",
+    "searchHint": "Артист, разогрев, площадка, текст отзыва…"
+  },
   "addBook": {
     "title": "Добавить книгу",
     "save": "Сохранить",

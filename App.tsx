@@ -11,6 +11,7 @@ import { getLatestCommitSha } from './src/services/github';
 import { booksCollection } from './src/services/booksService';
 import { syncCollection } from './src/services/cardsService';
 import { moviesCollection } from './src/services/moviesService';
+import { concertsCollection } from './src/services/concertsService';
 import { Settings, getSettings, saveSettings } from './src/services/storage';
 import SetupScreen from './src/screens/SetupScreen';
 import TimelineScreen from './src/screens/TimelineScreen';
@@ -19,6 +20,9 @@ import SearchScreen from './src/screens/SearchScreen';
 import MoviesTimelineScreen from './src/screens/MoviesTimelineScreen';
 import AddMovieScreen from './src/screens/AddMovieScreen';
 import MoviesSearchScreen from './src/screens/MoviesSearchScreen';
+import ConcertsTimelineScreen from './src/screens/ConcertsTimelineScreen';
+import AddConcertScreen from './src/screens/AddConcertScreen';
+import ConcertsSearchScreen from './src/screens/ConcertsSearchScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import LanguageSelectScreen from './src/screens/LanguageSelectScreen';
 import OnboardingRepositoryScreen from './src/screens/OnboardingRepositoryScreen';
@@ -33,6 +37,7 @@ const Tab = createBottomTabNavigator();
 const sectionScreens = {
   books: { Timeline: TimelineScreen, Add: AddBookScreen, Search: SearchScreen },
   films: { Timeline: MoviesTimelineScreen, Add: AddMovieScreen, Search: MoviesSearchScreen },
+  concerts: { Timeline: ConcertsTimelineScreen, Add: AddConcertScreen, Search: ConcertsSearchScreen },
 };
 type ScreensSection = keyof typeof sectionScreens;
 
@@ -59,6 +64,7 @@ function AppContent() {
         const updated = await Promise.all([
           syncCollection(booksCollection, settings, remoteSha),
           syncCollection(moviesCollection, settings, remoteSha),
+          syncCollection(concertsCollection, settings, remoteSha),
         ]);
         if (updated.some(Boolean)) {
           console.log('[Poller] SHA mismatch detected, cache updated');

@@ -4,13 +4,15 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 interface Props {
   value: string[];
   onChange: (tags: string[]) => void;
+  lowercase?: boolean;   // теги приводятся к нижнему регистру, имена (разогрев концерта) — нет
+  placeholder?: string;
 }
 
-export default function TagInput({ value, onChange }: Props) {
+export default function TagInput({ value, onChange, lowercase = true, placeholder = 'добавить тег…' }: Props) {
   const [input, setInput] = useState('');
 
   const add = (text: string) => {
-    const tag = text.trim().toLowerCase();
+    const tag = lowercase ? text.trim().toLowerCase() : text.trim();
     if (tag && !value.includes(tag)) onChange([...value, tag]);
     setInput('');
   };
@@ -37,7 +39,7 @@ export default function TagInput({ value, onChange }: Props) {
         onSubmitEditing={() => add(input)}
         returnKeyType="done"
         blurOnSubmit={false}
-        placeholder={value.length === 0 ? 'добавить тег…' : ''}
+        placeholder={value.length === 0 ? placeholder : ''}
         placeholderTextColor="#aaa"
       />
     </View>
