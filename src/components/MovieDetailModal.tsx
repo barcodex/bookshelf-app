@@ -72,6 +72,7 @@ export default function MovieDetailModal({ movie, onClose, onEdit }: Props) {
           {!!movie.date_watched && (
             <Row label={t(language, 'movie.dateWatched')} value={formatDate(movie.date_watched, language)} />
           )}
+          <Row label={t(language, 'movie.whereWatched')} value={movie.where_watched} />
           {(movie.rating > 0 || movie.abandoned) && (
             <View style={styles.row}>
               <Text style={styles.rowLabel}>{t(language, 'movie.rating')}</Text>

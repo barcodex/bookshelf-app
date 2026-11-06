@@ -22,6 +22,7 @@ export function serializeMovie(data: MovieFormData): string {
     data.rating && !data.abandoned ? `rating: ${data.rating}` : null,
     data.abandoned     ? 'abandoned: true'                    : null,
     `date_watched: ${data.date_watched}`,
+    data.where_watched.trim() ? `where_watched: ${data.where_watched.trim()}` : null,
     '---',
   ].filter(Boolean).join('\n');
 
@@ -41,6 +42,7 @@ export function parseMovie(raw: string, slug: string): MovieFormData {
     rating: fm.rating && fm.abandoned !== 'true' ? parseInt(fm.rating, 10) : 0,
     abandoned: fm.abandoned === 'true',
     date_watched: fm.date_watched ?? '',
+    where_watched: fm.where_watched ?? '',
     summary,
     review,
   };

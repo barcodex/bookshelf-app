@@ -88,6 +88,8 @@
     "year": "Year",
     "imdbPlaceholder": "Link or tt0069293",
     "dateWatched": "Date watched",
+    "whereWatched": "Where watched",
+    "whereWatchedPlaceholder": "Cinema, Apple TV, Netflix…",
     "rating": "Rating",
     "abandoned": "Not finished",
     "abandonedShort": "not finished",

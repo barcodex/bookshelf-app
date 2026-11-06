@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../services/i18n';
 import { autoSlug } from '../services/markdown';
+import { moviesCollection } from '../services/moviesService';
 import { MovieFormData } from '../types/movie';
 import Checkbox from './Checkbox';
 import DateInput from './DateInput';
@@ -13,6 +14,23 @@ interface Props {
   value: MovieFormData;
   onChange: (data: MovieFormData) => void;
   showSlug?: boolean; // только при создании новой карточки
+}
+
+// Подсказки для «где смотрел», если в кэше ещё нет ни одного значения
+const DEFAULT_WHERE = ['Apple TV', 'Netflix'];
+const MAX_WHERE_SUGGESTIONS = 6;
+
+// Уже встречавшиеся места просмотра, самые частые первыми, чтобы писать их одинаково
+export function whereSuggestions(movies: { where_watched?: string }[]): string[] {
+  const counts = new Map<string, number>();
+  for (const m of movies) {
+    const w = m.where_watched?.trim();
+    if (w) counts.set(w, (counts.get(w) ?? 0) + 1);
+  }
+  const used = [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([w]) => w);
+  const lower = new Set(used.map(w => w.toLowerCase()));
+  const defaults = DEFAULT_WHERE.filter(w => !lower.has(w.toLowerCase()));
+  return [...used, ...defaults].slice(0, MAX_WHERE_SUGGESTIONS);
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
@@ -27,6 +45,13 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 export default function MovieForm({ value, onChange, showSlug = false }: Props) {
   const { language } = useLanguage();
   const slugEditedRef = useRef(false);
+  const [suggestions, setSuggestions] = useState<string[]>(DEFAULT_WHERE);
+
+  useEffect(() => {
+    moviesCollection.cache.get().then(cached => {
+      if (cached) setSuggestions(whereSuggestions(cached));
+    }).catch(() => {});
+  }, []);
 
   const set = (field: keyof MovieFormData) => (text: string) =>
     onChange({ ...value, [field]: text });
@@ -102,6 +127,23 @@ export default function MovieForm({ value, onChange, showSlug = false }: Props) 
 
       <Field label={t(language, 'movie.dateWatched')}>
         <DateInput value={value.date_watched} onChange={set('date_watched')} placeholder="Не указано" />
+      </Field>
+
+      <Field label={t(language, 'movie.whereWatched')}>
+        <TextInput
+          style={styles.input}
+          value={value.where_watched}
+          onChangeText={set('where_watched')}
+          placeholder={t(language, 'movie.whereWatchedPlaceholder')}
+          placeholderTextColor="#aaa"
+        />
+        <View style={styles.chips}>
+          {suggestions.filter(w => w !== value.where_watched.trim()).map(w => (
+            <Pressable key={w} style={styles.chip} onPress={() => set('where_watched')(w)}>
+              <Text style={styles.chipText}>{w}</Text>
+            </Pressable>
+          ))}
+        </View>
       </Field>
 
       <Field label={t(language, 'movie.rating')}>
@@ -180,4 +222,14 @@ const styles = StyleSheet.create({
   },
   multiline: { minHeight: 120 },
   hint: { fontSize: 12, color: '#999' },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  chip: {
+    backgroundColor: '#f0f0f0',
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  chipText: { fontSize: 13, color: '#444' },
 });

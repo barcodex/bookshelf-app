@@ -107,6 +107,8 @@
     "year": "Год",
     "imdbPlaceholder": "Ссылка или tt0069293",
     "dateWatched": "Дата просмотра",
+    "whereWatched": "Где смотрел",
+    "whereWatchedPlaceholder": "Кинотеатр, Apple TV, Netflix…",
     "rating": "Рейтинг",
     "abandoned": "Не досмотрено",
     "abandonedShort": "не досмотрено",
