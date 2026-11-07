@@ -3,8 +3,9 @@ import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useLanguage } from '../context/LanguageContext';
 import { concertSlug } from '../services/concertMarkdown';
 import { t } from '../services/i18n';
-import { ConcertFormData } from '../types/concert';
+import { ConcertFormData, ConcertKind } from '../types/concert';
 import DateInput from './DateInput';
+import SegmentedControl from './SegmentedControl';
 import StarRating from './StarRating';
 import TagInput from './TagInput';
 
@@ -46,7 +47,16 @@ export default function ConcertForm({ value, onChange, showSlug = false }: Props
 
   return (
     <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
-      <Field label={t(language, 'concert.artist')}>
+      <SegmentedControl<ConcertKind>
+        options={[
+          { value: 'concert', label: t(language, 'concert.kindConcert') },
+          { value: 'standup', label: t(language, 'concert.kindStandup') },
+        ]}
+        value={value.kind}
+        onChange={(kind) => onChange({ ...value, kind })}
+      />
+
+      <Field label={t(language, value.kind === 'standup' ? 'concert.comedian' : 'concert.artist')}>
         <TextInput
           style={styles.input}
           value={value.artist}
@@ -60,7 +70,7 @@ export default function ConcertForm({ value, onChange, showSlug = false }: Props
           value={value.support}
           onChange={(support) => onChange({ ...value, support })}
           lowercase={false}
-          placeholder={t(language, 'concert.supportPlaceholder')}
+          placeholder={t(language, value.kind === 'standup' ? 'concert.supportPlaceholderStandup' : 'concert.supportPlaceholder')}
         />
       </Field>
 

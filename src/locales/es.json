@@ -143,7 +143,91 @@
     "count": "{count} conciertos",
     "undated": "Sin fecha",
     "empty": "Aún no hay conciertos. ¡Añade el primero!",
-    "searchHint": "Artista, teloneros, recinto, reseña…"
+    "searchHint": "Artista, teloneros, recinto, reseña…",
+    "kind": "Tipo",
+    "kindConcert": "Concierto",
+    "kindStandup": "Stand-up",
+    "comedian": "Cómico",
+    "supportPlaceholderStandup": "Nombre, luego Enter o coma",
+    "countStandup": "stand-up: {count}"
+  },
+  "theatre": {
+    "kind": {
+      "musical": "Musical",
+      "play": "Obra",
+      "opera": "Ópera",
+      "ballet": "Ballet"
+    },
+    "kindPlural": {
+      "musical": "Musicales",
+      "play": "Obras",
+      "opera": "Óperas",
+      "ballet": "Ballets"
+    },
+    "author": {
+      "musical": "Autor",
+      "play": "Autor",
+      "opera": "Autor",
+      "ballet": "Autor"
+    },
+    "kindLabel": "Tipo",
+    "title": "Título",
+    "originalTitle": "Título original",
+    "originalTitlePlaceholder": "Si es distinto",
+    "authorPlaceholder": "Compositor, dramaturgo, coreógrafo",
+    "company": "Compañía",
+    "companyPlaceholder": "Teatro, compañía o gira",
+    "venue": "Sala",
+    "venuePlaceholder": "Sala, ciudad",
+    "link": "Enlace",
+    "linkPlaceholder": "Página del montaje",
+    "openLink": "Abrir sitio web",
+    "date": "Fecha",
+    "rating": "Valoración",
+    "tags": "Etiquetas",
+    "summary": "Resumen",
+    "review": "Reseña",
+    "fileName": "Nombre del archivo",
+    "validationError": "Rellena el título y la sala",
+    "editTitle": "Editar",
+    "total": "Total",
+    "undated": "Sin fecha",
+    "empty": "Aún vacío. ¡Añade tu primer musical u obra!",
+    "searchHint": "Título, autor, compañía, sala, reseña…"
+  },
+  "exhibition": {
+    "kind": {
+      "exhibition": "Exposición",
+      "lecture": "Charla"
+    },
+    "kindPlural": {
+      "exhibition": "Exposiciones",
+      "lecture": "Charlas"
+    },
+    "author": {
+      "exhibition": "Artista",
+      "lecture": "Ponente"
+    },
+    "kindLabel": "Tipo",
+    "title": "Título",
+    "authorPlaceholder": "Nombre",
+    "venue": "Lugar",
+    "venuePlaceholder": "Museo o sala, ciudad",
+    "link": "Enlace",
+    "linkPlaceholder": "Página de la exposición o charla",
+    "openLink": "Abrir sitio web",
+    "date": "Fecha",
+    "rating": "Valoración",
+    "tags": "Etiquetas",
+    "summary": "Resumen",
+    "review": "Reseña",
+    "fileName": "Nombre del archivo",
+    "validationError": "Rellena el título y el lugar",
+    "editTitle": "Editar",
+    "total": "Total",
+    "undated": "Sin fecha",
+    "empty": "Aún vacío. ¡Añade tu primera exposición o charla!",
+    "searchHint": "Título, artista, ponente, lugar, reseña…"
   },
   "addBook": {
     "title": "Añadir libro",
@@ -187,7 +271,8 @@
     "books": "Libros",
     "films": "Películas",
     "series": "Series",
-    "exhibitions": "Exposiciones",
+    "theatre": "Teatro",
+    "exhibitions": "Exposiciones y charlas",
     "concerts": "Conciertos",
     "soon": "pronto"
   }

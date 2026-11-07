@@ -143,7 +143,91 @@
     "count": "{count} concerti",
     "undated": "Senza data",
     "empty": "Ancora nessun concerto. Aggiungi il primo!",
-    "searchHint": "Artista, gruppo spalla, location, recensione…"
+    "searchHint": "Artista, gruppo spalla, location, recensione…",
+    "kind": "Tipo",
+    "kindConcert": "Concerto",
+    "kindStandup": "Stand-up",
+    "comedian": "Comico",
+    "supportPlaceholderStandup": "Nome, poi Invio o virgola",
+    "countStandup": "stand-up: {count}"
+  },
+  "theatre": {
+    "kind": {
+      "musical": "Musical",
+      "play": "Spettacolo",
+      "opera": "Opera",
+      "ballet": "Balletto"
+    },
+    "kindPlural": {
+      "musical": "Musical",
+      "play": "Spettacoli",
+      "opera": "Opere",
+      "ballet": "Balletti"
+    },
+    "author": {
+      "musical": "Autore",
+      "play": "Autore",
+      "opera": "Autore",
+      "ballet": "Autore"
+    },
+    "kindLabel": "Tipo",
+    "title": "Titolo",
+    "originalTitle": "Titolo originale",
+    "originalTitlePlaceholder": "Se diverso",
+    "authorPlaceholder": "Compositore, drammaturgo, coreografo",
+    "company": "Compagnia",
+    "companyPlaceholder": "Teatro, compagnia o tour",
+    "venue": "Sala",
+    "venuePlaceholder": "Sala, città",
+    "link": "Link",
+    "linkPlaceholder": "Pagina della produzione",
+    "openLink": "Apri sito",
+    "date": "Data",
+    "rating": "Valutazione",
+    "tags": "Tag",
+    "summary": "Riassunto",
+    "review": "Recensione",
+    "fileName": "Nome file",
+    "validationError": "Inserisci titolo e sala",
+    "editTitle": "Modifica",
+    "total": "Totale",
+    "undated": "Senza data",
+    "empty": "Ancora vuoto. Aggiungi il tuo primo musical o spettacolo!",
+    "searchHint": "Titolo, autore, compagnia, sala, recensione…"
+  },
+  "exhibition": {
+    "kind": {
+      "exhibition": "Mostra",
+      "lecture": "Conferenza"
+    },
+    "kindPlural": {
+      "exhibition": "Mostre",
+      "lecture": "Conferenze"
+    },
+    "author": {
+      "exhibition": "Artista",
+      "lecture": "Relatore"
+    },
+    "kindLabel": "Tipo",
+    "title": "Titolo",
+    "authorPlaceholder": "Nome",
+    "venue": "Luogo",
+    "venuePlaceholder": "Museo o sala, città",
+    "link": "Link",
+    "linkPlaceholder": "Pagina della mostra o conferenza",
+    "openLink": "Apri sito",
+    "date": "Data",
+    "rating": "Valutazione",
+    "tags": "Tag",
+    "summary": "Riassunto",
+    "review": "Recensione",
+    "fileName": "Nome file",
+    "validationError": "Inserisci titolo e luogo",
+    "editTitle": "Modifica",
+    "total": "Totale",
+    "undated": "Senza data",
+    "empty": "Ancora vuoto. Aggiungi la tua prima mostra o conferenza!",
+    "searchHint": "Titolo, artista, relatore, luogo, recensione…"
   },
   "addBook": {
     "title": "Aggiungi libro",
@@ -187,7 +271,8 @@
     "books": "Libri",
     "films": "Film",
     "series": "Serie TV",
-    "exhibitions": "Mostre",
+    "theatre": "Teatro",
+    "exhibitions": "Mostre e conferenze",
     "concerts": "Concerti",
     "soon": "presto"
   }

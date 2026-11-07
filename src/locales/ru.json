@@ -143,7 +143,91 @@
     "count": "Концертов: {count}",
     "undated": "Без даты",
     "empty": "Концертов ещё нет. Добавьте первый!",
-    "searchHint": "Артист, разогрев, площадка, текст отзыва…"
+    "searchHint": "Артист, разогрев, площадка, текст отзыва…",
+    "kind": "Тип",
+    "kindConcert": "Концерт",
+    "kindStandup": "Стендап",
+    "comedian": "Комик",
+    "supportPlaceholderStandup": "Имя, Enter или запятая",
+    "countStandup": "стендап: {count}"
+  },
+  "theatre": {
+    "kind": {
+      "musical": "Мюзикл",
+      "play": "Спектакль",
+      "opera": "Опера",
+      "ballet": "Балет"
+    },
+    "kindPlural": {
+      "musical": "Мюзиклы",
+      "play": "Спектакли",
+      "opera": "Опера",
+      "ballet": "Балет"
+    },
+    "author": {
+      "musical": "Автор",
+      "play": "Автор",
+      "opera": "Автор",
+      "ballet": "Автор"
+    },
+    "kindLabel": "Тип",
+    "title": "Название",
+    "originalTitle": "Оригинальное название",
+    "originalTitlePlaceholder": "Если отличается",
+    "authorPlaceholder": "Композитор, драматург, хореограф",
+    "company": "Труппа",
+    "companyPlaceholder": "Театр, компания или тур",
+    "venue": "Площадка",
+    "venuePlaceholder": "Площадка, город",
+    "link": "Ссылка",
+    "linkPlaceholder": "Страница постановки",
+    "openLink": "Открыть сайт",
+    "date": "Дата",
+    "rating": "Рейтинг",
+    "tags": "Теги",
+    "summary": "Резюме",
+    "review": "Отзыв",
+    "fileName": "Имя файла",
+    "validationError": "Заполните название и площадку",
+    "editTitle": "Редактирование",
+    "total": "Всего",
+    "undated": "Без даты",
+    "empty": "Пока пусто. Добавьте первый мюзикл или спектакль!",
+    "searchHint": "Название, автор, труппа, площадка, текст отзыва…"
+  },
+  "exhibition": {
+    "kind": {
+      "exhibition": "Выставка",
+      "lecture": "Лекция"
+    },
+    "kindPlural": {
+      "exhibition": "Выставки",
+      "lecture": "Лекции"
+    },
+    "author": {
+      "exhibition": "Художник",
+      "lecture": "Лектор"
+    },
+    "kindLabel": "Тип",
+    "title": "Название",
+    "authorPlaceholder": "Имя",
+    "venue": "Площадка",
+    "venuePlaceholder": "Музей или зал, город",
+    "link": "Ссылка",
+    "linkPlaceholder": "Страница выставки или лекции",
+    "openLink": "Открыть сайт",
+    "date": "Дата",
+    "rating": "Рейтинг",
+    "tags": "Теги",
+    "summary": "Резюме",
+    "review": "Отзыв",
+    "fileName": "Имя файла",
+    "validationError": "Заполните название и площадку",
+    "editTitle": "Редактирование",
+    "total": "Всего",
+    "undated": "Без даты",
+    "empty": "Пока пусто. Добавьте первую выставку или лекцию!",
+    "searchHint": "Название, художник, лектор, площадка, текст отзыва…"
   },
   "addBook": {
     "title": "Добавить книгу",
@@ -187,7 +271,8 @@
     "books": "Книги",
     "films": "Фильмы",
     "series": "Сериалы",
-    "exhibitions": "Выставки",
+    "theatre": "Театр",
+    "exhibitions": "Выставки и лекции",
     "concerts": "Концерты",
     "soon": "скоро"
   }

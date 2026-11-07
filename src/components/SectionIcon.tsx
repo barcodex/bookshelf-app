@@ -54,6 +54,15 @@ function Glyph({ section }: { section: SectionId }) {
           <Path d="M3 20.5h4M10 20.5h4M17 20.5h4" />
         </>
       );
+    case 'theatre':
+      // Театральная маска: лоб, щёки, прорези глаз и улыбка
+      return (
+        <>
+          <Path d="M4 4.5c5.3-1.6 10.7-1.6 16 0v6.5a8 8 0 0 1-16 0z" />
+          <Path d="M7.5 9.2c.8-.9 2.2-.9 3 0M13.5 9.2c.8-.9 2.2-.9 3 0" />
+          <Path d="M8.5 14a4.5 4.5 0 0 0 7 0" />
+        </>
+      );
     case 'exhibitions':
       return (
         <>

@@ -17,6 +17,7 @@ export function serializeConcert(data: ConcertFormData): string {
   const fm = [
     '---',
     `artist: ${data.artist}`,
+    data.kind === 'standup' ? 'kind: standup'                         : null,
     data.support.length ? `support: ${data.support.join(', ')}`        : null,
     `venue: ${data.venue}`,
     data.spotify.trim() ? `spotify: ${normalizeSpotify(data.spotify)}` : null,
@@ -33,6 +34,7 @@ export function parseConcert(raw: string, slug: string): ConcertFormData {
   const { fm, summary, review } = parseCard(raw);
   return {
     slug,
+    kind: fm.kind === 'standup' ? 'standup' : 'concert',
     artist: fm.artist ?? '',
     support: parseTags(fm.support),
     venue: fm.venue ?? '',

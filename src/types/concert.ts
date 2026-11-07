@@ -1,5 +1,8 @@
+export type ConcertKind = 'concert' | 'standup';
+
 export interface ConcertFormData {
   slug: string;           // имя файла без .md — не хранится во фронтматтере
+  kind: ConcertKind;      // во фронтматтере только kind: standup, обычный концерт без поля
   artist: string;         // хедлайнер
   support: string[];      // разогрев, может быть несколько групп
   venue: string;          // площадка и город: «Unibet Arena, Tallinn»
@@ -13,6 +16,7 @@ export interface ConcertFormData {
 
 export const emptyConcert: ConcertFormData = {
   slug: '',
+  kind: 'concert',
   artist: '',
   support: [],
   venue: '',
