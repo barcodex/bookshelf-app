@@ -9,6 +9,7 @@ export interface MovieFormData {
   rating: number;         // 0 = не задан, 1–10; у недосмотренного всегда 0
   abandoned: boolean;     // «не досмотрено» — исключает оценку
   date_watched: string;   // ISO YYYY-MM-DD, YYYY или ''
+  where_watched: string;  // где смотрел: кинотеатр, Apple TV, Netflix… или ''
   summary: string;
   review: string;
 }
@@ -24,6 +25,7 @@ export const emptyMovie: MovieFormData = {
   rating: 0,
   abandoned: false,
   date_watched: '',
+  where_watched: '',
   summary: '',
   review: '',
 };

@@ -54,7 +54,7 @@ export default function MoviesSearchScreen() {
       const terms = q.split(/\s+/);
       result = result.filter(m => {
         const haystack = [
-          m.title, m.original_title, m.director, m.year, m.summary, m.review, ...m.tags,
+          m.title, m.original_title, m.director, m.year, m.where_watched, m.summary, m.review, ...m.tags,
         ].join(' ').toLowerCase();
         return terms.every(w => haystack.includes(w));
       });
