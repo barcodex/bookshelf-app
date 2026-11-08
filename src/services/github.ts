@@ -150,3 +150,26 @@ export async function ensureBooksFolder(settings: Settings): Promise<void> {
     }
   }
 }
+
+// Пишет несколько файлов одним коммитом через Git Data API; возвращает SHA нового коммита
+export async function commitFiles(
+  settings: Settings,
+  files: { path: string; content: string }[],
+  message: string,
+): Promise<string> {
+  const repo = `/repos/${settings.repo}`;
+  const head = await getLatestCommitSha(settings);
+  const parent = await request<{ tree: { sha: string } }>(settings, 'GET', `${repo}/git/commits/${head}`);
+  const tree = await request<{ sha: string }>(settings, 'POST', `${repo}/git/trees`, {
+    base_tree: parent.tree.sha,
+    tree: files.map(f => ({ path: f.path, mode: '100644', type: 'blob', content: f.content })),
+  });
+  const commit = await request<{ sha: string }>(settings, 'POST', `${repo}/git/commits`, {
+    message,
+    tree: tree.sha,
+    parents: [head],
+  });
+  // Без force: если ветка ушла вперёд, GitHub откажет, и импорт можно просто повторить
+  await request(settings, 'PATCH', `${repo}/git/refs/heads/main`, { sha: commit.sha });
+  return commit.sha;
+}

@@ -6,11 +6,25 @@ import { useLanguage } from '../context/LanguageContext';
 import { t, getLanguageName } from '../services/i18n';
 import LegalScreen from './LegalScreen';
 import LanguageSelectScreen from './LanguageSelectScreen';
+import ExportScreen from './ExportScreen';
+import ImportScreen from './ImportScreen';
 
 export default function SettingsScreen() {
   const { language } = useLanguage();
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showLanguage, setShowLanguage] = useState(false);
+  const [exchange, setExchange] = useState<'export' | 'import' | null>(null);
+
+  if (exchange) {
+    return (
+      <SafeAreaView style={styles.container} edges={TAB_EDGES}>
+        <Pressable style={styles.backButton} onPress={() => setExchange(null)}>
+          <Text style={styles.backText}>← {t(language, 'common.back')}</Text>
+        </Pressable>
+        {exchange === 'export' ? <ExportScreen /> : <ImportScreen />}
+      </SafeAreaView>
+    );
+  }
 
   if (showPrivacy) {
     return (
@@ -43,6 +57,18 @@ export default function SettingsScreen() {
   return (
     <SafeAreaView style={styles.container} edges={TAB_EDGES}>
       <ScrollView contentContainerStyle={styles.content}>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>{t(language, 'exchange.title')}</Text>
+          <Pressable style={styles.row} onPress={() => setExchange('export')}>
+            <Text style={styles.rowText}>{t(language, 'exchange.export')}</Text>
+            <Text style={styles.rowArrow}>›</Text>
+          </Pressable>
+          <Pressable style={styles.row} onPress={() => setExchange('import')}>
+            <Text style={styles.rowText}>{t(language, 'exchange.import')}</Text>
+            <Text style={styles.rowArrow}>›</Text>
+          </Pressable>
+        </View>
+
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t(language, 'settings.legal')}</Text>
           <Pressable style={styles.row} onPress={() => setShowLanguage(true)}>
