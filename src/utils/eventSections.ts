@@ -6,8 +6,8 @@ import { EventFormData, emptyEvent } from '../types/event';
 
 // Раздел с карточками-событиями: папка, виды, набор полей и префикс переводов
 export interface EventSection {
-  id: 'theatre' | 'exhibitions';
-  i18n: string;                       // 'theatre' | 'exhibition' в locales/*.json
+  id: 'theatre' | 'exhibitions' | 'lectures';
+  i18n: string;                       // 'theatre' | 'exhibition' | 'lecture' в locales/*.json
   schema: EventSchema;
   collection: Collection<EventFormData>;
 }
@@ -34,12 +34,18 @@ export const theatreSection = makeSection('theatre', 'theatre', 'theatre', {
 });
 
 export const exhibitionsSection = makeSection('exhibitions', 'exhibitions', 'exhibition', {
-  kinds: ['exhibition', 'lecture'],
+  kinds: ['exhibition'],
   originalTitle: false,
   company: false,
 });
 
-export const eventSections = [theatreSection, exhibitionsSection];
+export const lecturesSection = makeSection('lectures', 'lectures', 'lecture', {
+  kinds: ['lecture'],
+  originalTitle: false,
+  company: false,
+});
+
+export const eventSections = [theatreSection, exhibitionsSection, lecturesSection];
 
 export const emptyFor = (section: EventSection): EventFormData => ({ ...emptyEvent, kind: section.schema.kinds[0] });
 
@@ -58,7 +64,8 @@ export function eventCountLabel(section: EventSection, items: EventFormData[], l
     .join(' · ') || `${t(language, `${section.i18n}.total`)}: 0`;
 }
 
-// «Мюзикл · Andrew Lloyd Webber · Theater 11, Zürich»
+// «Мюзикл · Andrew Lloyd Webber · Theater 11, Zürich»; вид пишется, только если их в разделе несколько
 export function eventSubtitle(section: EventSection, item: EventFormData, language: Language): string {
-  return [kindLabel(section, item.kind, language), item.author, item.venue].filter(Boolean).join(' · ');
+  const kind = section.schema.kinds.length > 1 ? kindLabel(section, item.kind, language) : '';
+  return [kind, item.author, item.venue].filter(Boolean).join(' · ');
 }

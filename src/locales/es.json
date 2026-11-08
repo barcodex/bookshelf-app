@@ -197,24 +197,21 @@
   },
   "exhibition": {
     "kind": {
-      "exhibition": "Exposición",
-      "lecture": "Charla"
+      "exhibition": "Exposición"
     },
     "kindPlural": {
-      "exhibition": "Exposiciones",
-      "lecture": "Charlas"
+      "exhibition": "Exposiciones"
     },
     "author": {
-      "exhibition": "Artista",
-      "lecture": "Ponente"
+      "exhibition": "Artista"
     },
     "kindLabel": "Tipo",
     "title": "Título",
     "authorPlaceholder": "Nombre",
     "venue": "Lugar",
-    "venuePlaceholder": "Museo o sala, ciudad",
+    "venuePlaceholder": "Museo o galería, ciudad",
     "link": "Enlace",
-    "linkPlaceholder": "Página de la exposición o charla",
+    "linkPlaceholder": "Página de la exposición",
     "openLink": "Abrir sitio web",
     "date": "Fecha",
     "rating": "Valoración",
@@ -224,10 +221,41 @@
     "fileName": "Nombre del archivo",
     "validationError": "Rellena el título y el lugar",
     "editTitle": "Editar",
-    "total": "Total",
+    "total": "Exposiciones",
     "undated": "Sin fecha",
-    "empty": "Aún vacío. ¡Añade tu primera exposición o charla!",
-    "searchHint": "Título, artista, ponente, lugar, reseña…"
+    "empty": "Aún no hay exposiciones. ¡Añade la primera!",
+    "searchHint": "Título, artista, lugar, reseña…"
+  },
+  "lecture": {
+    "kind": {
+      "lecture": "Charla"
+    },
+    "kindPlural": {
+      "lecture": "Charlas"
+    },
+    "author": {
+      "lecture": "Ponente"
+    },
+    "kindLabel": "Tipo",
+    "title": "Título",
+    "authorPlaceholder": "Nombre",
+    "venue": "Lugar",
+    "venuePlaceholder": "Sala, universidad o museo, ciudad",
+    "link": "Enlace",
+    "linkPlaceholder": "Página de la charla",
+    "openLink": "Abrir sitio web",
+    "date": "Fecha",
+    "rating": "Valoración",
+    "tags": "Etiquetas",
+    "summary": "Resumen",
+    "review": "Reseña",
+    "fileName": "Nombre del archivo",
+    "validationError": "Rellena el título y el lugar",
+    "editTitle": "Editar",
+    "total": "Charlas",
+    "undated": "Sin fecha",
+    "empty": "Aún no hay charlas. ¡Añade la primera!",
+    "searchHint": "Título, ponente, lugar, reseña…"
   },
   "addBook": {
     "title": "Añadir libro",
@@ -272,7 +300,8 @@
     "films": "Películas",
     "series": "Series",
     "theatre": "Teatro",
-    "exhibitions": "Exposiciones y charlas",
+    "exhibitions": "Exposiciones",
+    "lectures": "Charlas",
     "concerts": "Conciertos",
     "soon": "pronto"
   }

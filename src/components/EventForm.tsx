@@ -50,11 +50,13 @@ export default function EventForm({ section, value, onChange, showSlug = false }
 
   return (
     <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
-      <SegmentedControl<string>
-        options={section.schema.kinds.map(kind => ({ value: kind, label: kindLabel(section, kind, language) }))}
-        value={value.kind}
-        onChange={(kind) => onChange({ ...value, kind })}
-      />
+      {section.schema.kinds.length > 1 && (
+        <SegmentedControl<string>
+          options={section.schema.kinds.map(kind => ({ value: kind, label: kindLabel(section, kind, language) }))}
+          value={value.kind}
+          onChange={(kind) => onChange({ ...value, kind })}
+        />
+      )}
 
       <Field label={k('title')}>
         <TextInput style={styles.input} value={value.title} onChangeText={set('title')} placeholderTextColor="#aaa" />

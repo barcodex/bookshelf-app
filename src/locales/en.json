@@ -178,24 +178,21 @@
   },
   "exhibition": {
     "kind": {
-      "exhibition": "Exhibition",
-      "lecture": "Talk"
+      "exhibition": "Exhibition"
     },
     "kindPlural": {
-      "exhibition": "Exhibitions",
-      "lecture": "Talks"
+      "exhibition": "Exhibitions"
     },
     "author": {
-      "exhibition": "Artist",
-      "lecture": "Speaker"
+      "exhibition": "Artist"
     },
     "kindLabel": "Type",
     "title": "Title",
     "authorPlaceholder": "Name",
     "venue": "Venue",
-    "venuePlaceholder": "Museum or hall, city",
+    "venuePlaceholder": "Museum or gallery, city",
     "link": "Link",
-    "linkPlaceholder": "Exhibition or talk page",
+    "linkPlaceholder": "Exhibition page",
     "openLink": "Open website",
     "date": "Date",
     "rating": "Rating",
@@ -205,10 +202,41 @@
     "fileName": "File name",
     "validationError": "Enter the title and venue",
     "editTitle": "Edit",
-    "total": "Total",
+    "total": "Exhibitions",
     "undated": "Undated",
-    "empty": "Nothing yet. Add your first exhibition or talk!",
-    "searchHint": "Title, artist, speaker, venue, review text…"
+    "empty": "No exhibitions yet. Add the first one!",
+    "searchHint": "Title, artist, venue, review text…"
+  },
+  "lecture": {
+    "kind": {
+      "lecture": "Talk"
+    },
+    "kindPlural": {
+      "lecture": "Talks"
+    },
+    "author": {
+      "lecture": "Speaker"
+    },
+    "kindLabel": "Type",
+    "title": "Title",
+    "authorPlaceholder": "Name",
+    "venue": "Venue",
+    "venuePlaceholder": "Hall, university or museum, city",
+    "link": "Link",
+    "linkPlaceholder": "Talk page",
+    "openLink": "Open website",
+    "date": "Date",
+    "rating": "Rating",
+    "tags": "Tags",
+    "summary": "Summary",
+    "review": "Review",
+    "fileName": "File name",
+    "validationError": "Enter the title and venue",
+    "editTitle": "Edit",
+    "total": "Talks",
+    "undated": "Undated",
+    "empty": "No talks yet. Add the first one!",
+    "searchHint": "Title, speaker, venue, review text…"
   },
   "timeline": {
     "title": "Timeline",
@@ -272,7 +300,8 @@
     "films": "Films",
     "series": "TV series",
     "theatre": "Theatre",
-    "exhibitions": "Exhibitions & talks",
+    "exhibitions": "Exhibitions",
+    "lectures": "Talks",
     "concerts": "Concerts",
     "soon": "soon"
   }

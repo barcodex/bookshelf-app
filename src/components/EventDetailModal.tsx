@@ -68,7 +68,9 @@ export default function EventDetailModal({ section, item, onClose, onEdit }: Pro
         </View>
 
         <ScrollView contentContainerStyle={styles.content}>
-          <Row label={k('kindLabel')} value={kindLabel(section, item.kind, language)} />
+          {section.schema.kinds.length > 1 && (
+            <Row label={k('kindLabel')} value={kindLabel(section, item.kind, language)} />
+          )}
           {!!item.date_attended && (
             <Row label={k('date')} value={formatDate(item.date_attended, language)} />
           )}

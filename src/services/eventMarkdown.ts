@@ -25,7 +25,8 @@ export function serializeEvent(schema: EventSchema, data: EventFormData): string
     '---',
     `title: ${data.title}`,
     schema.originalTitle && originalTitle && originalTitle !== data.title ? `original_title: ${originalTitle}` : null,
-    `kind: ${schema.kinds.includes(data.kind) ? data.kind : schema.kinds[0]}`,
+    // Вид пишется, только если в разделе их несколько (театр); у выставок и лекций он один
+    schema.kinds.length > 1 ? `kind: ${schema.kinds.includes(data.kind) ? data.kind : schema.kinds[0]}` : null,
     data.author.trim()                    ? `author: ${data.author.trim()}`    : null,
     schema.company && data.company.trim() ? `company: ${data.company.trim()}`  : null,
     `venue: ${data.venue}`,

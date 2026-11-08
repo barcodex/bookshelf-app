@@ -197,24 +197,21 @@
   },
   "exhibition": {
     "kind": {
-      "exhibition": "Ausstellung",
-      "lecture": "Vortrag"
+      "exhibition": "Ausstellung"
     },
     "kindPlural": {
-      "exhibition": "Ausstellungen",
-      "lecture": "Vorträge"
+      "exhibition": "Ausstellungen"
     },
     "author": {
-      "exhibition": "Künstler",
-      "lecture": "Referent"
+      "exhibition": "Künstler"
     },
     "kindLabel": "Art",
     "title": "Titel",
     "authorPlaceholder": "Name",
     "venue": "Ort",
-    "venuePlaceholder": "Museum oder Saal, Stadt",
+    "venuePlaceholder": "Museum oder Galerie, Stadt",
     "link": "Link",
-    "linkPlaceholder": "Seite der Ausstellung oder des Vortrags",
+    "linkPlaceholder": "Seite der Ausstellung",
     "openLink": "Website öffnen",
     "date": "Datum",
     "rating": "Bewertung",
@@ -224,10 +221,41 @@
     "fileName": "Dateiname",
     "validationError": "Titel und Ort ausfüllen",
     "editTitle": "Bearbeiten",
-    "total": "Gesamt",
+    "total": "Ausstellungen",
     "undated": "Ohne Datum",
-    "empty": "Noch leer. Füge deine erste Ausstellung oder deinen ersten Vortrag hinzu!",
-    "searchHint": "Titel, Künstler, Referent, Ort, Rezension…"
+    "empty": "Noch keine Ausstellungen. Füge die erste hinzu!",
+    "searchHint": "Titel, Künstler, Ort, Rezension…"
+  },
+  "lecture": {
+    "kind": {
+      "lecture": "Vortrag"
+    },
+    "kindPlural": {
+      "lecture": "Vorträge"
+    },
+    "author": {
+      "lecture": "Referent"
+    },
+    "kindLabel": "Art",
+    "title": "Titel",
+    "authorPlaceholder": "Name",
+    "venue": "Ort",
+    "venuePlaceholder": "Saal, Uni oder Museum, Stadt",
+    "link": "Link",
+    "linkPlaceholder": "Seite des Vortrags",
+    "openLink": "Website öffnen",
+    "date": "Datum",
+    "rating": "Bewertung",
+    "tags": "Tags",
+    "summary": "Zusammenfassung",
+    "review": "Rezension",
+    "fileName": "Dateiname",
+    "validationError": "Titel und Ort ausfüllen",
+    "editTitle": "Bearbeiten",
+    "total": "Vorträge",
+    "undated": "Ohne Datum",
+    "empty": "Noch keine Vorträge. Füge den ersten hinzu!",
+    "searchHint": "Titel, Referent, Ort, Rezension…"
   },
   "addBook": {
     "title": "Buch hinzufügen",
@@ -272,7 +300,8 @@
     "films": "Filme",
     "series": "Serien",
     "theatre": "Theater",
-    "exhibitions": "Ausstellungen & Vorträge",
+    "exhibitions": "Ausstellungen",
+    "lectures": "Vorträge",
     "concerts": "Konzerte",
     "soon": "bald"
   }

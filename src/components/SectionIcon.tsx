@@ -70,6 +70,14 @@ function Glyph({ section }: { section: SectionId }) {
           <Path d="M5.5 11.5v6.5M10 11.5v6.5M14 11.5v6.5M18.5 11.5v6.5M3 21h18" />
         </>
       );
+    case 'lectures':
+      // Доска для презентации на треноге
+      return (
+        <>
+          <Rect x={3} y={3.5} width={18} height={11.5} rx={1} />
+          <Path d="M12 15v3.5M8 21.5l4-3 4 3M7.5 8h6M7.5 11h9" />
+        </>
+      );
     case 'concerts':
       return (
         <>

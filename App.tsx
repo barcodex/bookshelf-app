@@ -12,7 +12,7 @@ import { booksCollection } from './src/services/booksService';
 import { syncCollection } from './src/services/cardsService';
 import { moviesCollection } from './src/services/moviesService';
 import { concertsCollection } from './src/services/concertsService';
-import { exhibitionsSection, theatreSection } from './src/utils/eventSections';
+import { exhibitionsSection, lecturesSection, theatreSection } from './src/utils/eventSections';
 import { Settings, getSettings, saveSettings } from './src/services/storage';
 import SetupScreen from './src/screens/SetupScreen';
 import TimelineScreen from './src/screens/TimelineScreen';
@@ -24,7 +24,7 @@ import MoviesSearchScreen from './src/screens/MoviesSearchScreen';
 import ConcertsTimelineScreen from './src/screens/ConcertsTimelineScreen';
 import AddConcertScreen from './src/screens/AddConcertScreen';
 import ConcertsSearchScreen from './src/screens/ConcertsSearchScreen';
-import { exhibitionsScreens, theatreScreens } from './src/screens/eventScreens';
+import { exhibitionsScreens, lecturesScreens, theatreScreens } from './src/screens/eventScreens';
 import SettingsScreen from './src/screens/SettingsScreen';
 import LanguageSelectScreen from './src/screens/LanguageSelectScreen';
 import OnboardingRepositoryScreen from './src/screens/OnboardingRepositoryScreen';
@@ -41,6 +41,7 @@ const sectionScreens = {
   films: { Timeline: MoviesTimelineScreen, Add: AddMovieScreen, Search: MoviesSearchScreen },
   theatre: theatreScreens,
   exhibitions: exhibitionsScreens,
+  lectures: lecturesScreens,
   concerts: { Timeline: ConcertsTimelineScreen, Add: AddConcertScreen, Search: ConcertsSearchScreen },
 };
 type ScreensSection = keyof typeof sectionScreens;
@@ -71,6 +72,7 @@ function AppContent() {
           syncCollection(concertsCollection, settings, remoteSha),
           syncCollection(theatreSection.collection, settings, remoteSha),
           syncCollection(exhibitionsSection.collection, settings, remoteSha),
+          syncCollection(lecturesSection.collection, settings, remoteSha),
         ]);
         if (updated.some(Boolean)) {
           console.log('[Poller] SHA mismatch detected, cache updated');

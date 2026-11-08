@@ -1,5 +1,5 @@
 // Разделы культурного дневника. Работают все, кроме сериалов — они «скоро».
-export type SectionId = 'books' | 'films' | 'series' | 'theatre' | 'exhibitions' | 'concerts';
+export type SectionId = 'books' | 'films' | 'series' | 'theatre' | 'exhibitions' | 'lectures' | 'concerts';
 
 export interface SectionDef {
   id: SectionId;
@@ -13,6 +13,7 @@ export const sections: SectionDef[] = [
   { id: 'series',      color: '#6b3fa0', available: false },
   { id: 'theatre',     color: '#b07a1a', available: true },
   { id: 'exhibitions', color: '#2f7a55', available: true },
+  { id: 'lectures',    color: '#1d7f8c', available: true },
   { id: 'concerts',    color: '#b23a48', available: true },
 ];
 

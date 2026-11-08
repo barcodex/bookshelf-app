@@ -197,24 +197,21 @@
   },
   "exhibition": {
     "kind": {
-      "exhibition": "Выставка",
-      "lecture": "Лекция"
+      "exhibition": "Выставка"
     },
     "kindPlural": {
-      "exhibition": "Выставки",
-      "lecture": "Лекции"
+      "exhibition": "Выставки"
     },
     "author": {
-      "exhibition": "Художник",
-      "lecture": "Лектор"
+      "exhibition": "Художник"
     },
     "kindLabel": "Тип",
     "title": "Название",
     "authorPlaceholder": "Имя",
     "venue": "Площадка",
-    "venuePlaceholder": "Музей или зал, город",
+    "venuePlaceholder": "Музей или галерея, город",
     "link": "Ссылка",
-    "linkPlaceholder": "Страница выставки или лекции",
+    "linkPlaceholder": "Страница выставки",
     "openLink": "Открыть сайт",
     "date": "Дата",
     "rating": "Рейтинг",
@@ -224,10 +221,41 @@
     "fileName": "Имя файла",
     "validationError": "Заполните название и площадку",
     "editTitle": "Редактирование",
-    "total": "Всего",
+    "total": "Выставки",
     "undated": "Без даты",
-    "empty": "Пока пусто. Добавьте первую выставку или лекцию!",
-    "searchHint": "Название, художник, лектор, площадка, текст отзыва…"
+    "empty": "Выставок ещё нет. Добавьте первую!",
+    "searchHint": "Название, художник, площадка, текст отзыва…"
+  },
+  "lecture": {
+    "kind": {
+      "lecture": "Лекция"
+    },
+    "kindPlural": {
+      "lecture": "Лекции"
+    },
+    "author": {
+      "lecture": "Лектор"
+    },
+    "kindLabel": "Тип",
+    "title": "Название",
+    "authorPlaceholder": "Имя",
+    "venue": "Площадка",
+    "venuePlaceholder": "Зал, университет или музей, город",
+    "link": "Ссылка",
+    "linkPlaceholder": "Страница лекции",
+    "openLink": "Открыть сайт",
+    "date": "Дата",
+    "rating": "Рейтинг",
+    "tags": "Теги",
+    "summary": "Резюме",
+    "review": "Отзыв",
+    "fileName": "Имя файла",
+    "validationError": "Заполните название и площадку",
+    "editTitle": "Редактирование",
+    "total": "Лекции",
+    "undated": "Без даты",
+    "empty": "Лекций ещё нет. Добавьте первую!",
+    "searchHint": "Название, лектор, площадка, текст отзыва…"
   },
   "addBook": {
     "title": "Добавить книгу",
@@ -272,7 +300,8 @@
     "films": "Фильмы",
     "series": "Сериалы",
     "theatre": "Театр",
-    "exhibitions": "Выставки и лекции",
+    "exhibitions": "Выставки",
+    "lectures": "Лекции",
     "concerts": "Концерты",
     "soon": "скоро"
   }

@@ -197,24 +197,21 @@
   },
   "exhibition": {
     "kind": {
-      "exhibition": "Exposition",
-      "lecture": "Conférence"
+      "exhibition": "Exposition"
     },
     "kindPlural": {
-      "exhibition": "Expositions",
-      "lecture": "Conférences"
+      "exhibition": "Expositions"
     },
     "author": {
-      "exhibition": "Artiste",
-      "lecture": "Conférencier"
+      "exhibition": "Artiste"
     },
     "kindLabel": "Type",
     "title": "Titre",
     "authorPlaceholder": "Nom",
     "venue": "Lieu",
-    "venuePlaceholder": "Musée ou salle, ville",
+    "venuePlaceholder": "Musée ou galerie, ville",
     "link": "Lien",
-    "linkPlaceholder": "Page de l'exposition ou de la conférence",
+    "linkPlaceholder": "Page de l'exposition",
     "openLink": "Ouvrir le site",
     "date": "Date",
     "rating": "Note",
@@ -224,10 +221,41 @@
     "fileName": "Nom du fichier",
     "validationError": "Renseignez le titre et le lieu",
     "editTitle": "Modifier",
-    "total": "Total",
+    "total": "Expositions",
     "undated": "Sans date",
-    "empty": "Rien pour l'instant. Ajoutez votre première exposition ou conférence !",
-    "searchHint": "Titre, artiste, conférencier, lieu, critique…"
+    "empty": "Aucune exposition. Ajoutez la première !",
+    "searchHint": "Titre, artiste, lieu, critique…"
+  },
+  "lecture": {
+    "kind": {
+      "lecture": "Conférence"
+    },
+    "kindPlural": {
+      "lecture": "Conférences"
+    },
+    "author": {
+      "lecture": "Conférencier"
+    },
+    "kindLabel": "Type",
+    "title": "Titre",
+    "authorPlaceholder": "Nom",
+    "venue": "Lieu",
+    "venuePlaceholder": "Salle, université ou musée, ville",
+    "link": "Lien",
+    "linkPlaceholder": "Page de la conférence",
+    "openLink": "Ouvrir le site",
+    "date": "Date",
+    "rating": "Note",
+    "tags": "Tags",
+    "summary": "Résumé",
+    "review": "Critique",
+    "fileName": "Nom du fichier",
+    "validationError": "Renseignez le titre et le lieu",
+    "editTitle": "Modifier",
+    "total": "Conférences",
+    "undated": "Sans date",
+    "empty": "Aucune conférence. Ajoutez la première !",
+    "searchHint": "Titre, conférencier, lieu, critique…"
   },
   "addBook": {
     "title": "Ajouter un livre",
@@ -272,7 +300,8 @@
     "films": "Films",
     "series": "Séries",
     "theatre": "Théâtre",
-    "exhibitions": "Expos et conférences",
+    "exhibitions": "Expositions",
+    "lectures": "Conférences",
     "concerts": "Concerts",
     "soon": "bientôt"
   }
