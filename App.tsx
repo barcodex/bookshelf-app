@@ -21,6 +21,7 @@ import SearchScreen from './src/screens/SearchScreen';
 import MoviesTimelineScreen from './src/screens/MoviesTimelineScreen';
 import AddMovieScreen from './src/screens/AddMovieScreen';
 import MoviesSearchScreen from './src/screens/MoviesSearchScreen';
+import MoviesRatingScreen from './src/screens/MoviesRatingScreen';
 import ConcertsTimelineScreen from './src/screens/ConcertsTimelineScreen';
 import AddConcertScreen from './src/screens/AddConcertScreen';
 import ConcertsSearchScreen from './src/screens/ConcertsSearchScreen';
@@ -35,16 +36,22 @@ import { SectionId } from './src/utils/sections';
 
 const Tab = createBottomTabNavigator();
 
-// Экраны вкладок для каждого работающего раздела; имена маршрутов общие, чтобы теги вели в «Поиск» раздела
-const sectionScreens = {
+// Экраны вкладок для каждого работающего раздела; имена маршрутов общие, чтобы теги вели в «Поиск» раздела.
+// Ranking — лестница рейтинга, пока только у фильмов
+type Screens = {
+  Timeline: React.ComponentType;
+  Add: React.ComponentType;
+  Search: React.ComponentType;
+  Ranking?: React.ComponentType;
+};
+const sectionScreens: Record<string, Screens> = {
   books: { Timeline: TimelineScreen, Add: AddBookScreen, Search: SearchScreen },
-  films: { Timeline: MoviesTimelineScreen, Add: AddMovieScreen, Search: MoviesSearchScreen },
+  films: { Timeline: MoviesTimelineScreen, Add: AddMovieScreen, Search: MoviesSearchScreen, Ranking: MoviesRatingScreen },
   theatre: theatreScreens,
   exhibitions: exhibitionsScreens,
   lectures: lecturesScreens,
   concerts: { Timeline: ConcertsTimelineScreen, Add: AddConcertScreen, Search: ConcertsSearchScreen },
 };
-type ScreensSection = keyof typeof sectionScreens;
 
 function AppContent() {
   const { language, isLoading: languageLoading } = useLanguage();
@@ -54,7 +61,7 @@ function AppContent() {
   const [onboardingStep, setOnboardingStep] = useState<'repository' | 'setup' | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const [section, setSection] = useState<SectionId>('books');
-  const screens = sectionScreens[section as ScreensSection] ?? sectionScreens.books;
+  const screens = sectionScreens[section] ?? sectionScreens.books;
 
   useEffect(() => {
     initializeApp();
@@ -195,6 +202,16 @@ function AppContent() {
                 tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>🔍</Text>,
               }}
             />
+            {screens.Ranking && (
+              <Tab.Screen
+                name="Ranking"
+                component={screens.Ranking}
+                options={{
+                  title: t(language, 'tabs.ranking'),
+                  tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>🪜</Text>,
+                }}
+              />
+            )}
             <Tab.Screen
               name="Settings"
               component={SettingsScreen}

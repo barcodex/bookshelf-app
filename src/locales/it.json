@@ -292,7 +292,8 @@
     "timeline": "Timeline",
     "add": "Aggiungi",
     "search": "Ricerca",
-    "more": "Altro"
+    "more": "Altro",
+    "ranking": "Voto"
   },
   "sections": {
     "diary": "Diario culturale",
@@ -304,5 +305,17 @@
     "lectures": "Conferenze",
     "concerts": "Concerti",
     "soon": "presto"
+  },
+  "ladder": {
+    "hint": "Trascina le schede da ⠿ e le linee di voto dal loro numero. Tutto ciò che sta sotto la linea 0 resta senza voto.",
+    "unrated": "Senza voto",
+    "save": "Salva",
+    "saving": "Salvataggio…",
+    "saved": "Salvato",
+    "unsaved": "Non salvato: {count}",
+    "noChanges": "Nessuna modifica",
+    "saveError": "Salvataggio non riuscito",
+    "drag": "Trascina",
+    "empty": "Ancora niente da confrontare"
   }
 }

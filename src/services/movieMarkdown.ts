@@ -18,8 +18,8 @@ export function serializeMovie(data: MovieFormData): string {
     `year: ${data.year}`,
     data.imdb.trim()   ? `imdb: ${normalizeImdb(data.imdb)}`  : null,
     data.tags.length   ? `tags: ${data.tags.join(', ')}`      : null,
-    // Недосмотренный фильм не оценивается
-    data.rating && !data.abandoned ? `rating: ${data.rating}` : null,
+    // Дробная оценка приходит с лестницы рейтинга; недосмотренному её можно дать только там
+    data.rating        ? `rating: ${data.rating}`             : null,
     data.abandoned     ? 'abandoned: true'                    : null,
     `date_watched: ${data.date_watched}`,
     data.where_watched.trim() ? `where_watched: ${data.where_watched.trim()}` : null,
@@ -39,7 +39,7 @@ export function parseMovie(raw: string, slug: string): MovieFormData {
     year: fm.year ?? '',
     imdb: fm.imdb ?? '',
     tags: parseTags(fm.tags),
-    rating: fm.rating && fm.abandoned !== 'true' ? parseInt(fm.rating, 10) : 0,
+    rating: fm.rating ? parseFloat(fm.rating) || 0 : 0,
     abandoned: fm.abandoned === 'true',
     date_watched: fm.date_watched ?? '',
     where_watched: fm.where_watched ?? '',

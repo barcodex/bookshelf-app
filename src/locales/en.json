@@ -292,7 +292,8 @@
     "timeline": "Timeline",
     "add": "Add",
     "search": "Search",
-    "more": "More"
+    "more": "More",
+    "ranking": "Rating"
   },
   "sections": {
     "diary": "Cultural diary",
@@ -304,5 +305,17 @@
     "lectures": "Talks",
     "concerts": "Concerts",
     "soon": "soon"
+  },
+  "ladder": {
+    "hint": "Drag cards by ⠿ and rating lines by their number. Everything below line 0 stays unrated.",
+    "unrated": "Unrated",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "unsaved": "Unsaved: {count}",
+    "noChanges": "No changes",
+    "saveError": "Could not save",
+    "drag": "Drag",
+    "empty": "Nothing to compare yet"
   }
 }

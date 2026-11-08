@@ -292,7 +292,8 @@
     "timeline": "Chronologie",
     "add": "Ajouter",
     "search": "Rechercher",
-    "more": "Plus"
+    "more": "Plus",
+    "ranking": "Note"
   },
   "sections": {
     "diary": "Journal culturel",
@@ -304,5 +305,17 @@
     "lectures": "Conférences",
     "concerts": "Concerts",
     "soon": "bientôt"
+  },
+  "ladder": {
+    "hint": "Faites glisser les fiches par ⠿ et les lignes de note par leur numéro. Tout ce qui est sous la ligne 0 reste sans note.",
+    "unrated": "Sans note",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "saved": "Enregistré",
+    "unsaved": "Non enregistré : {count}",
+    "noChanges": "Aucun changement",
+    "saveError": "Échec de l’enregistrement",
+    "drag": "Déplacer",
+    "empty": "Rien à comparer pour l’instant"
   }
 }
