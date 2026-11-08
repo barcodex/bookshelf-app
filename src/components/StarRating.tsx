@@ -8,16 +8,18 @@ interface Props {
 
 export default function StarRating({ value, onChange, size = 'md' }: Props) {
   const fontSize = size === 'sm' ? 18 : 24;
+  // Дробная оценка с лестницы рейтинга показывается округлённой
+  const shown = Math.round(value);
   return (
     <View style={styles.row}>
       {Array.from({ length: 10 }, (_, i) => i + 1).map(star => (
         <Pressable
           key={star}
-          onPress={() => onChange(star === value ? 0 : star)}
+          onPress={() => onChange(star === shown ? 0 : star)}
           hitSlop={4}
         >
           <Text style={[styles.star, { fontSize }]}>
-            {star <= value ? '★' : '☆'}
+            {star <= shown ? '★' : '☆'}
           </Text>
         </Pressable>
       ))}

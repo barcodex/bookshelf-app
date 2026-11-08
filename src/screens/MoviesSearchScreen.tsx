@@ -59,7 +59,7 @@ export default function MoviesSearchScreen() {
         return terms.every(w => haystack.includes(w));
       });
     }
-    if (minRating > 0) result = result.filter(m => m.rating >= minRating);
+    if (minRating > 0) result = result.filter(m => Math.round(m.rating) >= minRating);
     if (activeTags.length > 0) result = result.filter(m => activeTags.every(tag => m.tags.includes(tag)));
     return result;
   }, [movies, debouncedQuery, minRating, activeTags]);

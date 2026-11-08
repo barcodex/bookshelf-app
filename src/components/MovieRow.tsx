@@ -23,7 +23,7 @@ export default function MovieRow({ movie, date, backgroundColor, onPress }: Prop
         <Text style={styles.itemSubtitle} numberOfLines={1}>{movieSubtitle(movie)}</Text>
       </View>
       <View style={styles.itemRight}>
-        {movie.rating > 0 && <Text style={styles.itemRating}>{movie.rating}★</Text>}
+        {Math.round(movie.rating) > 0 && <Text style={styles.itemRating}>{Math.round(movie.rating)}★</Text>}
         {movie.abandoned && <Text style={styles.itemAbandoned}>{t(language, 'movie.abandonedShort')}</Text>}
       </View>
     </Pressable>

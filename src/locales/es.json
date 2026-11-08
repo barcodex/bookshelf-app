@@ -292,7 +292,8 @@
     "timeline": "Línea de tiempo",
     "add": "Añadir",
     "search": "Buscar",
-    "more": "Más"
+    "more": "Más",
+    "ranking": "Valoración"
   },
   "sections": {
     "diary": "Diario cultural",
@@ -304,5 +305,17 @@
     "lectures": "Charlas",
     "concerts": "Conciertos",
     "soon": "pronto"
+  },
+  "ladder": {
+    "hint": "Arrastra las tarjetas por ⠿ y las líneas de valoración por su número. Todo lo que queda bajo la línea 0 no tiene valoración.",
+    "unrated": "Sin valorar",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "saved": "Guardado",
+    "unsaved": "Sin guardar: {count}",
+    "noChanges": "Sin cambios",
+    "saveError": "No se pudo guardar",
+    "drag": "Arrastrar",
+    "empty": "Aún no hay nada que comparar"
   }
 }
