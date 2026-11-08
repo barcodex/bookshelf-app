@@ -124,7 +124,119 @@
     "count": "{count} concerts",
     "undated": "Undated",
     "empty": "No concerts yet. Add the first one!",
-    "searchHint": "Artist, support, venue, review text…"
+    "searchHint": "Artist, support, venue, review text…",
+    "kind": "Type",
+    "kindConcert": "Concert",
+    "kindStandup": "Stand-up",
+    "comedian": "Comedian",
+    "supportPlaceholderStandup": "Name, then Enter or comma",
+    "countStandup": "stand-up: {count}"
+  },
+  "theatre": {
+    "kind": {
+      "musical": "Musical",
+      "play": "Play",
+      "opera": "Opera",
+      "ballet": "Ballet"
+    },
+    "kindPlural": {
+      "musical": "Musicals",
+      "play": "Plays",
+      "opera": "Opera",
+      "ballet": "Ballet"
+    },
+    "author": {
+      "musical": "Author",
+      "play": "Author",
+      "opera": "Author",
+      "ballet": "Author"
+    },
+    "kindLabel": "Type",
+    "title": "Title",
+    "originalTitle": "Original title",
+    "originalTitlePlaceholder": "If different",
+    "authorPlaceholder": "Composer, playwright, choreographer",
+    "company": "Company",
+    "companyPlaceholder": "Theatre, company or tour",
+    "venue": "Venue",
+    "venuePlaceholder": "Venue, city",
+    "link": "Link",
+    "linkPlaceholder": "Production page",
+    "openLink": "Open website",
+    "date": "Date",
+    "rating": "Rating",
+    "tags": "Tags",
+    "summary": "Summary",
+    "review": "Review",
+    "fileName": "File name",
+    "validationError": "Enter the title and venue",
+    "editTitle": "Edit",
+    "total": "Total",
+    "undated": "Undated",
+    "empty": "Nothing yet. Add your first musical or play!",
+    "searchHint": "Title, author, company, venue, review text…"
+  },
+  "exhibition": {
+    "kind": {
+      "exhibition": "Exhibition"
+    },
+    "kindPlural": {
+      "exhibition": "Exhibitions"
+    },
+    "author": {
+      "exhibition": "Artist"
+    },
+    "kindLabel": "Type",
+    "title": "Title",
+    "authorPlaceholder": "Name",
+    "venue": "Venue",
+    "venuePlaceholder": "Museum or gallery, city",
+    "link": "Link",
+    "linkPlaceholder": "Exhibition page",
+    "openLink": "Open website",
+    "date": "Date",
+    "rating": "Rating",
+    "tags": "Tags",
+    "summary": "Summary",
+    "review": "Review",
+    "fileName": "File name",
+    "validationError": "Enter the title and venue",
+    "editTitle": "Edit",
+    "total": "Exhibitions",
+    "undated": "Undated",
+    "empty": "No exhibitions yet. Add the first one!",
+    "searchHint": "Title, artist, venue, review text…"
+  },
+  "lecture": {
+    "kind": {
+      "lecture": "Talk"
+    },
+    "kindPlural": {
+      "lecture": "Talks"
+    },
+    "author": {
+      "lecture": "Speaker"
+    },
+    "kindLabel": "Type",
+    "title": "Title",
+    "authorPlaceholder": "Name",
+    "venue": "Venue",
+    "venuePlaceholder": "Hall, university or museum, city",
+    "link": "Link",
+    "linkPlaceholder": "Talk page",
+    "openLink": "Open website",
+    "date": "Date",
+    "rating": "Rating",
+    "tags": "Tags",
+    "summary": "Summary",
+    "review": "Review",
+    "fileName": "File name",
+    "validationError": "Enter the title and venue",
+    "editTitle": "Edit",
+    "total": "Talks",
+    "undated": "Undated",
+    "empty": "No talks yet. Add the first one!",
+    "searchHint": "Title, speaker, venue, review text…"
   },
   "timeline": {
     "title": "Timeline",
@@ -187,7 +299,9 @@
     "books": "Books",
     "films": "Films",
     "series": "TV series",
+    "theatre": "Theatre",
     "exhibitions": "Exhibitions",
+    "lectures": "Talks",
     "concerts": "Concerts",
     "soon": "soon"
   }

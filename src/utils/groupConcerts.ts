@@ -1,3 +1,4 @@
+import { Language, t } from '../services/i18n';
 import { ConcertFormData } from '../types/concert';
 import { undatedBg, yearBg } from './theme';
 
@@ -38,9 +39,22 @@ export function buildConcertSections(concerts: ConcertFormData[], includeUndated
   return sections;
 }
 
-// «Unibet Arena, Tallinn · + Soilwork, Orbit Culture»
-export function concertSubtitle(concert: ConcertFormData): string {
-  return [concert.venue, concert.support.length ? `+ ${concert.support.join(', ')}` : '']
+// «Unibet Arena, Tallinn · + Soilwork, Orbit Culture», у стендапа впереди «Стендап»
+export function concertSubtitle(concert: ConcertFormData, language: Language): string {
+  return [
+    concert.kind === 'standup' ? t(language, 'concert.kindStandup') : '',
+    concert.venue,
+    concert.support.length ? `+ ${concert.support.join(', ')}` : '',
+  ]
     .filter(Boolean)
     .join(' · ');
+}
+
+// «Концертов: 5 · стендап: 2» — стендап считается отдельно, для итогов года
+export function concertCountLabel(concerts: ConcertFormData[], language: Language): string {
+  const standup = concerts.filter(c => c.kind === 'standup').length;
+  const music = t(language, 'concert.count').replace('{count}', String(concerts.length - standup));
+  if (standup === 0) return music;
+  const comedy = t(language, 'concert.countStandup').replace('{count}', String(standup));
+  return concerts.length === standup ? comedy.charAt(0).toUpperCase() + comedy.slice(1) : `${music} · ${comedy}`;
 }

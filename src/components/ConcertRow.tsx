@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useLanguage } from '../context/LanguageContext';
 import { ConcertFormData } from '../types/concert';
 import { concertSubtitle } from '../utils/groupConcerts';
 import { colors } from '../utils/theme';
@@ -12,12 +13,13 @@ interface Props {
 
 // Строка концерта в ленте и в результатах поиска
 export default function ConcertRow({ concert, date, backgroundColor, onPress }: Props) {
+  const { language } = useLanguage();
   return (
     <Pressable style={[styles.item, { backgroundColor }]} onPress={onPress}>
       <Text style={[styles.itemDate, !date && styles.itemDateEmpty]}>{date || '—'}</Text>
       <View style={styles.itemMeta}>
         <Text style={styles.itemTitle} numberOfLines={1}>{concert.artist}</Text>
-        <Text style={styles.itemSubtitle} numberOfLines={1}>{concertSubtitle(concert)}</Text>
+        <Text style={styles.itemSubtitle} numberOfLines={1}>{concertSubtitle(concert, language)}</Text>
       </View>
       {concert.rating > 0 && <Text style={styles.itemRating}>{concert.rating}★</Text>}
     </Pressable>

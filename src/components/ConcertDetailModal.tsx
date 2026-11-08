@@ -65,6 +65,9 @@ export default function ConcertDetailModal({ concert, onClose, onEdit }: Props) 
         </View>
 
         <ScrollView contentContainerStyle={styles.content}>
+          {concert.kind === 'standup' && (
+            <Row label={t(language, 'concert.kind')} value={t(language, 'concert.kindStandup')} />
+          )}
           {!!concert.date_attended && (
             <Row label={t(language, 'concert.date')} value={formatDate(concert.date_attended, language)} />
           )}

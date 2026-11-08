@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useState } from 'react';
 import { clearBooksCache } from '../services/booksCache';
 import { concertsCache } from '../services/concertsCache';
 import { moviesCache } from '../services/moviesCache';
+import { eventSections } from '../utils/eventSections';
 
 interface CacheContextType {
   cacheVersion: number;
@@ -27,6 +28,7 @@ export function useCacheProvider(): CacheContextType {
     clearBooksCache();
     moviesCache.clear();
     concertsCache.clear();
+    eventSections.forEach(s => s.collection.cache.clear());
     setCacheVersion(v => v + 1);
   }, []);
   return { cacheVersion, bumpVersion, forceReload };

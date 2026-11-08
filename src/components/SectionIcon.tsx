@@ -54,11 +54,28 @@ function Glyph({ section }: { section: SectionId }) {
           <Path d="M3 20.5h4M10 20.5h4M17 20.5h4" />
         </>
       );
+    case 'theatre':
+      // Театральная маска: лоб, щёки, прорези глаз и улыбка
+      return (
+        <>
+          <Path d="M4 4.5c5.3-1.6 10.7-1.6 16 0v6.5a8 8 0 0 1-16 0z" />
+          <Path d="M7.5 9.2c.8-.9 2.2-.9 3 0M13.5 9.2c.8-.9 2.2-.9 3 0" />
+          <Path d="M8.5 14a4.5 4.5 0 0 0 7 0" />
+        </>
+      );
     case 'exhibitions':
       return (
         <>
           <Path d="M3 9l9-5.5L21 9z" />
           <Path d="M5.5 11.5v6.5M10 11.5v6.5M14 11.5v6.5M18.5 11.5v6.5M3 21h18" />
+        </>
+      );
+    case 'lectures':
+      // Доска для презентации на треноге
+      return (
+        <>
+          <Rect x={3} y={3.5} width={18} height={11.5} rx={1} />
+          <Path d="M12 15v3.5M8 21.5l4-3 4 3M7.5 8h6M7.5 11h9" />
         </>
       );
     case 'concerts':

@@ -143,7 +143,119 @@
     "count": "{count} Konzerte",
     "undated": "Ohne Datum",
     "empty": "Noch keine Konzerte. Füge das erste hinzu!",
-    "searchHint": "Künstler, Vorband, Location, Rezension…"
+    "searchHint": "Künstler, Vorband, Location, Rezension…",
+    "kind": "Art",
+    "kindConcert": "Konzert",
+    "kindStandup": "Stand-up",
+    "comedian": "Comedian",
+    "supportPlaceholderStandup": "Name, dann Enter oder Komma",
+    "countStandup": "Stand-up: {count}"
+  },
+  "theatre": {
+    "kind": {
+      "musical": "Musical",
+      "play": "Schauspiel",
+      "opera": "Oper",
+      "ballet": "Ballett"
+    },
+    "kindPlural": {
+      "musical": "Musicals",
+      "play": "Schauspiele",
+      "opera": "Oper",
+      "ballet": "Ballett"
+    },
+    "author": {
+      "musical": "Autor",
+      "play": "Autor",
+      "opera": "Autor",
+      "ballet": "Autor"
+    },
+    "kindLabel": "Art",
+    "title": "Titel",
+    "originalTitle": "Originaltitel",
+    "originalTitlePlaceholder": "Falls abweichend",
+    "authorPlaceholder": "Komponist, Autor, Choreograf",
+    "company": "Ensemble",
+    "companyPlaceholder": "Theater, Kompanie oder Tour",
+    "venue": "Spielort",
+    "venuePlaceholder": "Spielort, Stadt",
+    "link": "Link",
+    "linkPlaceholder": "Seite der Inszenierung",
+    "openLink": "Website öffnen",
+    "date": "Datum",
+    "rating": "Bewertung",
+    "tags": "Tags",
+    "summary": "Zusammenfassung",
+    "review": "Rezension",
+    "fileName": "Dateiname",
+    "validationError": "Titel und Spielort ausfüllen",
+    "editTitle": "Bearbeiten",
+    "total": "Gesamt",
+    "undated": "Ohne Datum",
+    "empty": "Noch leer. Füge dein erstes Musical oder Stück hinzu!",
+    "searchHint": "Titel, Autor, Ensemble, Spielort, Rezension…"
+  },
+  "exhibition": {
+    "kind": {
+      "exhibition": "Ausstellung"
+    },
+    "kindPlural": {
+      "exhibition": "Ausstellungen"
+    },
+    "author": {
+      "exhibition": "Künstler"
+    },
+    "kindLabel": "Art",
+    "title": "Titel",
+    "authorPlaceholder": "Name",
+    "venue": "Ort",
+    "venuePlaceholder": "Museum oder Galerie, Stadt",
+    "link": "Link",
+    "linkPlaceholder": "Seite der Ausstellung",
+    "openLink": "Website öffnen",
+    "date": "Datum",
+    "rating": "Bewertung",
+    "tags": "Tags",
+    "summary": "Zusammenfassung",
+    "review": "Rezension",
+    "fileName": "Dateiname",
+    "validationError": "Titel und Ort ausfüllen",
+    "editTitle": "Bearbeiten",
+    "total": "Ausstellungen",
+    "undated": "Ohne Datum",
+    "empty": "Noch keine Ausstellungen. Füge die erste hinzu!",
+    "searchHint": "Titel, Künstler, Ort, Rezension…"
+  },
+  "lecture": {
+    "kind": {
+      "lecture": "Vortrag"
+    },
+    "kindPlural": {
+      "lecture": "Vorträge"
+    },
+    "author": {
+      "lecture": "Referent"
+    },
+    "kindLabel": "Art",
+    "title": "Titel",
+    "authorPlaceholder": "Name",
+    "venue": "Ort",
+    "venuePlaceholder": "Saal, Uni oder Museum, Stadt",
+    "link": "Link",
+    "linkPlaceholder": "Seite des Vortrags",
+    "openLink": "Website öffnen",
+    "date": "Datum",
+    "rating": "Bewertung",
+    "tags": "Tags",
+    "summary": "Zusammenfassung",
+    "review": "Rezension",
+    "fileName": "Dateiname",
+    "validationError": "Titel und Ort ausfüllen",
+    "editTitle": "Bearbeiten",
+    "total": "Vorträge",
+    "undated": "Ohne Datum",
+    "empty": "Noch keine Vorträge. Füge den ersten hinzu!",
+    "searchHint": "Titel, Referent, Ort, Rezension…"
   },
   "addBook": {
     "title": "Buch hinzufügen",
@@ -187,7 +299,9 @@
     "books": "Bücher",
     "films": "Filme",
     "series": "Serien",
+    "theatre": "Theater",
     "exhibitions": "Ausstellungen",
+    "lectures": "Vorträge",
     "concerts": "Konzerte",
     "soon": "bald"
   }

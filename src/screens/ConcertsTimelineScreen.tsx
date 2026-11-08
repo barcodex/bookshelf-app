@@ -11,7 +11,7 @@ import { useConcerts } from '../hooks/useConcerts';
 import { t } from '../services/i18n';
 import { ConcertFormData } from '../types/concert';
 import { formatDisplayDate } from '../utils/groupBooks';
-import { ConcertSection, buildConcertSections } from '../utils/groupConcerts';
+import { ConcertSection, buildConcertSections, concertCountLabel } from '../utils/groupConcerts';
 import { colors } from '../utils/theme';
 
 export default function ConcertsTimelineScreen() {
@@ -53,7 +53,7 @@ export default function ConcertsTimelineScreen() {
               {section.kind === 'undated' ? t(language, 'concert.undated') : section.year}
             </Text>
             <Text style={styles.yearCount}>
-              {t(language, 'concert.count').replace('{count}', section.data.length.toString())}
+              {concertCountLabel(section.data, language)}
             </Text>
           </View>
         )}

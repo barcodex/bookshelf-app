@@ -13,7 +13,7 @@ import { useConcerts } from '../hooks/useConcerts';
 import { t } from '../services/i18n';
 import { ConcertFormData } from '../types/concert';
 import { formatDisplayDate } from '../utils/groupBooks';
-import { ConcertSection, buildConcertSections } from '../utils/groupConcerts';
+import { ConcertSection, buildConcertSections, concertCountLabel } from '../utils/groupConcerts';
 import { colors } from '../utils/theme';
 
 export default function ConcertsSearchScreen() {
@@ -54,7 +54,7 @@ export default function ConcertsSearchScreen() {
       const terms = q.split(/\s+/);
       result = result.filter(c => {
         const haystack = [
-          c.artist, ...c.support, c.venue, c.date_attended, c.summary, c.review, ...c.tags,
+          c.artist, c.kind === 'standup' ? t(language, 'concert.kindStandup') : '', ...c.support, c.venue, c.date_attended, c.summary, c.review, ...c.tags,
         ].join(' ').toLowerCase();
         return terms.every(w => haystack.includes(w));
       });
@@ -62,7 +62,7 @@ export default function ConcertsSearchScreen() {
     if (minRating > 0) result = result.filter(c => c.rating >= minRating);
     if (activeTags.length > 0) result = result.filter(c => activeTags.every(tag => c.tags.includes(tag)));
     return result;
-  }, [concerts, debouncedQuery, minRating, activeTags]);
+  }, [concerts, debouncedQuery, minRating, activeTags, language]);
 
   const sections = useMemo(() => (filtered ? buildConcertSections(filtered) : []), [filtered]);
 
@@ -107,7 +107,7 @@ export default function ConcertsSearchScreen() {
             ? t(language, 'common.loading')
             : filtered === null
             ? t(language, 'search.noFilter')
-            : t(language, 'concert.count').replace('{count}', filtered.length.toString())}
+            : concertCountLabel(filtered, language)}
         </Text>
         {hasFilters && (
           <Pressable onPress={resetFilters}>
