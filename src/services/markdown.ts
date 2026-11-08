@@ -6,13 +6,17 @@ const TRANSLIT: Record<string, string> = {
   и:'i', й:'y', к:'k', л:'l', м:'m', н:'n', о:'o', п:'p', р:'r',
   с:'s', т:'t', у:'u', ф:'f', х:'kh', ц:'ts', ч:'ch', ш:'sh',
   щ:'shch', ъ:'', ы:'y', ь:'', э:'e', ю:'yu', я:'ya',
+  ß:'ss', æ:'ae', œ:'oe', ø:'o', ł:'l',
 };
+
+// Латиница с диакритикой теряет знак: é → e, ü → u, ñ → n
+const stripAccent = (c: string) => c.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
 export function toSlug(text: string): string {
   return text
     .toLowerCase()
     .split('')
-    .map(c => TRANSLIT[c] ?? (c.match(/[a-z0-9]/) ? c : '-'))
+    .map(c => TRANSLIT[c] ?? (/^[a-z0-9]$/.test(stripAccent(c)) ? stripAccent(c) : '-'))
     .join('')
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '');
