@@ -1,5 +1,5 @@
 import { CardCache } from './cardCache';
-import { GitHubError, getChangedFiles, getFile, getLatestCommitSha, listDirectory, saveFile } from './github';
+import { GitHubError, commitFiles, getChangedFiles, getFile, getLatestCommitSha, listDirectory, saveFile } from './github';
 import { Settings } from './storage';
 
 const BATCH_SIZE = 20;
@@ -127,6 +127,41 @@ export async function saveCard<T extends { slug: string }>(
     await collection.cache.updateCommitSha(commitSha);
   }
   return commitSha;
+}
+
+// Меняет поля сразу у нескольких карточек одним коммитом. Перед записью подтягивает свежие
+// карточки с GitHub, чтобы не затереть правки, сделанные в другом месте; patch применяется к ним.
+// Возвращает обновлённые карточки (пустой список, если менять нечего).
+export async function saveCardsPatch<T extends { slug: string }>(
+  collection: Collection<T>,
+  settings: Settings,
+  patch: Record<string, Partial<T>>,
+  message: string,
+): Promise<T[]> {
+  for (let attempt = 0; ; attempt++) {
+    const headSha = await getLatestCommitSha(settings);
+    await syncCollection(collection, settings, headSha);
+    const items = (await collection.cache.get()) ?? [];
+    const updated = items
+      .filter(item => patch[item.slug])
+      .map(item => ({ ...item, ...patch[item.slug] }));
+    if (updated.length === 0) return [];
+    try {
+      const commitSha = await commitFiles(
+        settings,
+        headSha,
+        updated.map(item => ({ path: cardPath(collection, item.slug), content: collection.serialize(item) })),
+        message,
+      );
+      for (const item of updated) await collection.cache.upsert(item);
+      await collection.cache.updateCommitSha(commitSha);
+      return updated;
+    } catch (e) {
+      // Ветка сдвинулась между чтением и записью — пробуем ещё раз на свежем состоянии
+      if (attempt < 2 && e instanceof GitHubError && e.status === 422) continue;
+      throw e;
+    }
+  }
 }
 
 export function todayIso(): string {

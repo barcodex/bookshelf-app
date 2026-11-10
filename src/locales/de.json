@@ -292,7 +292,8 @@
     "timeline": "Zeitstrahl",
     "add": "Hinzufügen",
     "search": "Suche",
-    "more": "Mehr"
+    "more": "Mehr",
+    "ranking": "Bewertung"
   },
   "sections": {
     "diary": "Kulturtagebuch",
@@ -304,6 +305,18 @@
     "lectures": "Vorträge",
     "concerts": "Konzerte",
     "soon": "bald"
+  },
+  "ladder": {
+    "hint": "Ziehe Karten an ⠿ und Bewertungslinien an ihrer Zahl. Alles unter Linie 0 bleibt ohne Bewertung.",
+    "unrated": "Ohne Bewertung",
+    "save": "Speichern",
+    "saving": "Speichere…",
+    "saved": "Gespeichert",
+    "unsaved": "Nicht gespeichert: {count}",
+    "noChanges": "Keine Änderungen",
+    "saveError": "Speichern fehlgeschlagen",
+    "drag": "Ziehen",
+    "empty": "Noch nichts zu vergleichen"
   },
   "exchange": {
     "title": "Kartenaustausch",

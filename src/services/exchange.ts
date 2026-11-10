@@ -3,7 +3,7 @@
 import { booksCollection } from './booksService';
 import { Collection, loadAll } from './cardsService';
 import { concertsCollection } from './concertsService';
-import { commitFiles } from './github';
+import { commitFiles, getLatestCommitSha } from './github';
 import { cardBody, parseCard, toSlug } from './markdown';
 import { moviesCollection } from './moviesService';
 import { Settings } from './storage';
@@ -275,8 +275,10 @@ export async function runImport(
   }
   if (writes.length === 0) return { commitSha: null, written: 0 };
 
+  // Если ветка ушла вперёд между чтением и записью, GitHub откажет, и импорт можно просто повторить
   const commitSha = await commitFiles(
     settings,
+    await getLatestCommitSha(settings),
     writes.map(w => ({ path: `${w.section.folder}/${w.card.slug}.md`, content: w.section.collection.serialize(w.card) })),
     `Import ${writes.length} card${writes.length === 1 ? '' : 's'}`,
   );
