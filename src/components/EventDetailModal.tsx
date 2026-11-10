@@ -81,7 +81,7 @@ export default function EventDetailModal({ section, item, onClose, onEdit }: Pro
             <View style={styles.row}>
               <Text style={styles.rowLabel}>{k('rating')}</Text>
               <View style={styles.ratingValue}>
-                <StarRating value={item.rating} onChange={() => {}} size="sm" />
+                <StarRating value={item.rating} size="sm" exact />
               </View>
             </View>
           )}

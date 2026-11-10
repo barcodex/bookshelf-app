@@ -316,7 +316,8 @@
     "noChanges": "Keine Änderungen",
     "saveError": "Speichern fehlgeschlagen",
     "drag": "Ziehen",
-    "empty": "Noch nichts zu vergleichen"
+    "empty": "Noch nichts zu vergleichen",
+    "abandonedBook": "abgebrochen"
   },
   "exchange": {
     "title": "Kartenaustausch",

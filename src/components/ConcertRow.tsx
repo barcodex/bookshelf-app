@@ -21,7 +21,7 @@ export default function ConcertRow({ concert, date, backgroundColor, onPress }: 
         <Text style={styles.itemTitle} numberOfLines={1}>{concert.artist}</Text>
         <Text style={styles.itemSubtitle} numberOfLines={1}>{concertSubtitle(concert, language)}</Text>
       </View>
-      {concert.rating > 0 && <Text style={styles.itemRating}>{concert.rating}★</Text>}
+      {Math.round(concert.rating) > 0 && <Text style={styles.itemRating}>{Math.round(concert.rating)}★</Text>}
     </Pressable>
   );
 }

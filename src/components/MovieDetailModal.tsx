@@ -77,7 +77,7 @@ export default function MovieDetailModal({ movie, onClose, onEdit }: Props) {
             <View style={styles.row}>
               <Text style={styles.rowLabel}>{t(language, 'movie.rating')}</Text>
               <View style={styles.ratingValue}>
-                {movie.rating > 0 && <StarRating value={movie.rating} onChange={() => {}} size="sm" />}
+                {movie.rating > 0 && <StarRating value={movie.rating} size="sm" exact />}
                 {movie.abandoned && <Text style={styles.abandoned}>{t(language, 'movie.abandoned')}</Text>}
               </View>
             </View>

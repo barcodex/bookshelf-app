@@ -204,7 +204,7 @@ export default function SearchScreen() {
       }
     }
 
-    if (minRating > 0) books = books.filter(b => b.rating >= minRating);
+    if (minRating > 0) books = books.filter(b => Math.round(b.rating) >= minRating);
     if (activeTags.length > 0)
       books = books.filter(b => activeTags.every(t => b.tags.includes(t)));
     if (activeMedia.length > 0)
@@ -373,8 +373,8 @@ export default function SearchScreen() {
                   <Text style={styles.itemTitle} numberOfLines={1}>{item.title}</Text>
                   <Text style={styles.itemAuthor} numberOfLines={1}>{item.author}</Text>
                 </View>
-                {item.rating > 0 && (
-                  <Text style={styles.itemRating}>{item.rating}★</Text>
+                {Math.round(item.rating) > 0 && (
+                  <Text style={styles.itemRating}>{Math.round(item.rating)}★</Text>
                 )}
               </Pressable>
             );

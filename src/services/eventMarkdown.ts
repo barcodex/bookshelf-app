@@ -52,7 +52,7 @@ export function parseEvent(schema: EventSchema, raw: string, slug: string): Even
     venue: fm.venue ?? '',
     link: fm.link ?? '',
     tags: parseTags(fm.tags),
-    rating: fm.rating ? parseInt(fm.rating, 10) : 0,
+    rating: fm.rating ? parseFloat(fm.rating) || 0 : 0,
     date_attended: fm.date_attended ?? '',
     summary,
     review,

@@ -40,7 +40,7 @@ export function parseConcert(raw: string, slug: string): ConcertFormData {
     venue: fm.venue ?? '',
     spotify: fm.spotify ?? '',
     tags: parseTags(fm.tags),
-    rating: fm.rating ? parseInt(fm.rating, 10) : 0,
+    rating: fm.rating ? parseFloat(fm.rating) || 0 : 0,
     date_attended: fm.date_attended ?? '',
     summary,
     review,
