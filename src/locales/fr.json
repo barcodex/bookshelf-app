@@ -316,7 +316,8 @@
     "noChanges": "Aucun changement",
     "saveError": "Échec de l’enregistrement",
     "drag": "Déplacer",
-    "empty": "Rien à comparer pour l’instant"
+    "empty": "Rien à comparer pour l’instant",
+    "abandonedBook": "abandonné"
   },
   "exchange": {
     "title": "Échange de fiches",

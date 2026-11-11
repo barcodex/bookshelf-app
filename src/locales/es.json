@@ -316,7 +316,8 @@
     "noChanges": "Sin cambios",
     "saveError": "No se pudo guardar",
     "drag": "Arrastrar",
-    "empty": "Aún no hay nada que comparar"
+    "empty": "Aún no hay nada que comparar",
+    "abandonedBook": "abandonado"
   },
   "exchange": {
     "title": "Intercambio de fichas",

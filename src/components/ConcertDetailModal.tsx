@@ -76,7 +76,7 @@ export default function ConcertDetailModal({ concert, onClose, onEdit }: Props) 
             <View style={styles.row}>
               <Text style={styles.rowLabel}>{t(language, 'concert.rating')}</Text>
               <View style={styles.ratingValue}>
-                <StarRating value={concert.rating} onChange={() => {}} size="sm" />
+                <StarRating value={concert.rating} size="sm" exact />
               </View>
             </View>
           )}

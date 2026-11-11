@@ -103,7 +103,7 @@ export function parse(raw: string, slug: string): BookFormData {
     media: (fm.media ?? '') as BookMedia,
     source: fm.source ?? '',
     tags: parseTags(fm.tags),
-    rating: fm.rating ? parseInt(fm.rating, 10) : 0,
+    rating: fm.rating ? parseFloat(fm.rating) || 0 : 0,
     date_started: fm.date_started ?? '',
     date_finished: fm.date_finished ?? '',
     date_abandoned: fm.date_abandoned ?? '',

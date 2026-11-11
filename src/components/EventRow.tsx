@@ -22,7 +22,7 @@ export default function EventRow({ section, item, date, backgroundColor, onPress
         <Text style={styles.itemTitle} numberOfLines={1}>{item.title}</Text>
         <Text style={styles.itemSubtitle} numberOfLines={1}>{eventSubtitle(section, item, language)}</Text>
       </View>
-      {item.rating > 0 && <Text style={styles.itemRating}>{item.rating}★</Text>}
+      {Math.round(item.rating) > 0 && <Text style={styles.itemRating}>{Math.round(item.rating)}★</Text>}
     </Pressable>
   );
 }

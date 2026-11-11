@@ -3,13 +3,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useCacheContext } from '../context/CacheContext';
 import { Collection, LoadProgress, loadAll, syncCollection } from '../services/cardsService';
 import { GitHubError } from '../services/github';
-
 import { getSettings } from '../services/storage';
-import { EventFormData } from '../types/event';
 
-// Карточки раздела-событий из кэша с фоновой сверкой SHA, при пустом кэше — полная загрузка папки
-export function useEventCards(collection: Collection<EventFormData>) {
-  const [items, setItems] = useState<EventFormData[]>([]);
+// Карточки любого раздела из кэша с фоновой сверкой SHA, при пустом кэше — полная загрузка папки
+export function useEventCards<T extends { slug: string }>(collection: Collection<T>) {
+  const [items, setItems] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [progress, setProgress] = useState<LoadProgress | null>(null);
@@ -71,7 +69,7 @@ export function useEventCards(collection: Collection<EventFormData>) {
     if (isFocused.current) load();
   }, [cacheVersion, load]);
 
-  const replaceItem = useCallback((updated: EventFormData) => {
+  const replaceItem = useCallback((updated: T) => {
     setItems(prev => prev.map(i => (i.slug === updated.slug ? updated : i)));
   }, [collection]);
 

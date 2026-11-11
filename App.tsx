@@ -21,7 +21,7 @@ import SearchScreen from './src/screens/SearchScreen';
 import MoviesTimelineScreen from './src/screens/MoviesTimelineScreen';
 import AddMovieScreen from './src/screens/AddMovieScreen';
 import MoviesSearchScreen from './src/screens/MoviesSearchScreen';
-import MoviesRatingScreen from './src/screens/MoviesRatingScreen';
+import { BooksRatingScreen, ConcertsRatingScreen, MoviesRatingScreen } from './src/screens/ratingScreens';
 import ConcertsTimelineScreen from './src/screens/ConcertsTimelineScreen';
 import AddConcertScreen from './src/screens/AddConcertScreen';
 import ConcertsSearchScreen from './src/screens/ConcertsSearchScreen';
@@ -37,7 +37,7 @@ import { SectionId } from './src/utils/sections';
 const Tab = createBottomTabNavigator();
 
 // Экраны вкладок для каждого работающего раздела; имена маршрутов общие, чтобы теги вели в «Поиск» раздела.
-// Ranking — лестница рейтинга, пока только у фильмов
+// Ranking — лестница рейтинга (книги, фильмы, концерты)
 type Screens = {
   Timeline: React.ComponentType;
   Add: React.ComponentType;
@@ -45,12 +45,12 @@ type Screens = {
   Ranking?: React.ComponentType;
 };
 const sectionScreens: Record<string, Screens> = {
-  books: { Timeline: TimelineScreen, Add: AddBookScreen, Search: SearchScreen },
+  books: { Timeline: TimelineScreen, Add: AddBookScreen, Search: SearchScreen, Ranking: BooksRatingScreen },
   films: { Timeline: MoviesTimelineScreen, Add: AddMovieScreen, Search: MoviesSearchScreen, Ranking: MoviesRatingScreen },
   theatre: theatreScreens,
   exhibitions: exhibitionsScreens,
   lectures: lecturesScreens,
-  concerts: { Timeline: ConcertsTimelineScreen, Add: AddConcertScreen, Search: ConcertsSearchScreen },
+  concerts: { Timeline: ConcertsTimelineScreen, Add: AddConcertScreen, Search: ConcertsSearchScreen, Ranking: ConcertsRatingScreen },
 };
 
 function AppContent() {

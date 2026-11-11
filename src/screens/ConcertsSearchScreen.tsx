@@ -59,7 +59,7 @@ export default function ConcertsSearchScreen() {
         return terms.every(w => haystack.includes(w));
       });
     }
-    if (minRating > 0) result = result.filter(c => c.rating >= minRating);
+    if (minRating > 0) result = result.filter(c => Math.round(c.rating) >= minRating);
     if (activeTags.length > 0) result = result.filter(c => activeTags.every(tag => c.tags.includes(tag)));
     return result;
   }, [concerts, debouncedQuery, minRating, activeTags, language]);

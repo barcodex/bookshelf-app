@@ -316,7 +316,8 @@
     "noChanges": "Nessuna modifica",
     "saveError": "Salvataggio non riuscito",
     "drag": "Trascina",
-    "empty": "Ancora niente da confrontare"
+    "empty": "Ancora niente da confrontare",
+    "abandonedBook": "abbandonato"
   },
   "exchange": {
     "title": "Scambio di schede",

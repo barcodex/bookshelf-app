@@ -316,7 +316,8 @@
     "noChanges": "No changes",
     "saveError": "Could not save",
     "drag": "Drag",
-    "empty": "Nothing to compare yet"
+    "empty": "Nothing to compare yet",
+    "abandonedBook": "abandoned"
   },
   "exchange": {
     "title": "Card exchange",

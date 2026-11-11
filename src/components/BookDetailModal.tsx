@@ -112,7 +112,7 @@ export default function BookDetailModal({ book, onClose, onEdit, onBookUpdated }
           {book.rating > 0 && (
             <View style={styles.row}>
               <Text style={styles.rowLabel}>{t(language, 'book.rating')}</Text>
-              <StarRating value={book.rating} onChange={() => {}} size="sm" />
+              <StarRating value={book.rating} size="sm" exact />
             </View>
           )}
           {book.tags.length > 0 && (
