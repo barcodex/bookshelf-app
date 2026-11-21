@@ -87,6 +87,30 @@ export function parseCard(raw: string): ParsedCard {
   };
 }
 
+// Переносит в новый текст карточки строки frontmatter из старого текста, которых приложение
+// не знает (keep решает, какие ключи оставить). Так поле, добавленное в карточку вручную или
+// более новой версией приложения, не пропадает при сохранении из приложения.
+export function carryOverFrontmatter(
+  original: string,
+  serialized: string,
+  keep: (key: string) => boolean,
+): string {
+  const parts = original.split(/^---$/m);
+  if (parts.length < 3) return serialized;
+  const present = new Set(Object.keys(parseCard(serialized).fm));
+  const extra = parts[1].trim().split('\n').filter(line => {
+    const i = line.indexOf(':');
+    if (i === -1) return false;
+    const key = line.slice(0, i).trim();
+    return key !== '' && !present.has(key) && keep(key);
+  });
+  if (extra.length === 0) return serialized;
+  // Вставляем перед закрывающим «---» frontmatter
+  const close = serialized.indexOf('\n---', 3);
+  if (close === -1) return serialized;
+  return `${serialized.slice(0, close)}\n${extra.join('\n')}${serialized.slice(close)}`;
+}
+
 export function parseTags(value: string | undefined): string[] {
   return value ? value.split(',').map(t => t.trim()).filter(Boolean) : [];
 }

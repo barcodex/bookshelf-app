@@ -1,5 +1,6 @@
 import { CardCache } from './cardCache';
 import { GitHubError, commitFiles, getChangedFiles, getFile, getLatestCommitSha, listDirectory, saveFile } from './github';
+import { carryOverFrontmatter } from './markdown';
 import { Settings } from './storage';
 
 const BATCH_SIZE = 20;
@@ -70,25 +71,27 @@ export async function applyUpdate<T extends { slug: string }>(
       || (f.status === 'renamed' && f.previous_filename?.startsWith(prefix))
   );
 
-  await Promise.all(
+  // Файлы читаем параллельно, а кэш меняем по очереди: upsert и remove — это «прочитать
+  // весь кэш, поправить, записать», и одновременные вызовы затирали бы друг друга
+  const ops = await Promise.all(
     changes.map(async change => {
-      if (change.status === 'renamed' && change.previous_filename?.startsWith(prefix)) {
-        const oldSlug = slugFromPath(collection, change.previous_filename);
-        if (change.previous_filename !== change.filename) {
-          await collection.cache.remove(oldSlug);
-        }
+      const removed: string[] = [];
+      if (change.status === 'renamed' && change.previous_filename?.startsWith(prefix)
+        && change.previous_filename !== change.filename) {
+        removed.push(slugFromPath(collection, change.previous_filename));
       }
       // Файл переехал из папки раздела в другое место
-      if (!change.filename.startsWith(prefix) || !change.filename.endsWith('.md')) return;
+      if (!change.filename.startsWith(prefix) || !change.filename.endsWith('.md')) return { removed, item: null };
       const slug = slugFromPath(collection, change.filename);
-      if (change.status === 'removed') {
-        await collection.cache.remove(slug);
-        return;
-      }
-      const { content } = await getFile(settings, change.filename);
-      await collection.cache.upsert(collection.parse(content, slug));
+      if (change.status === 'removed') return { removed: [...removed, slug], item: null };
+      const { content } = await getFile(settings, change.filename, newSha);
+      return { removed, item: collection.parse(content, slug) };
     })
   );
+  for (const op of ops) {
+    for (const slug of op.removed) await collection.cache.remove(slug);
+    if (op.item) await collection.cache.upsert(op.item);
+  }
 
   await collection.cache.updateCommitSha(newSha);
 }
@@ -107,6 +110,43 @@ export async function syncCollection<T extends { slug: string }>(
   return true;
 }
 
+// Текст карточки для записи: serialize плюс строки frontmatter из прежнего файла, которых
+// приложение не знает (их нет среди полей разобранной карточки)
+export function cardContent<T extends { slug: string }>(
+  collection: Collection<T>,
+  item: T,
+  original: string | undefined,
+): string {
+  const serialized = collection.serialize(item);
+  if (original === undefined) return serialized;
+  let known: Set<string>;
+  try {
+    known = new Set(Object.keys(collection.parse(original, item.slug)));
+  } catch {
+    return serialized;
+  }
+  return carryOverFrontmatter(original, serialized, key => !known.has(key));
+}
+
+// Переводит кэш с прежнего коммита на commitSha, подтягивая и свои, и чужие изменения.
+// Просто записать новый SHA нельзя: если между ними были коммиты из другого места
+// (правки вручную, другое устройство), кэш остался бы без них, и следующее сохранение
+// перезаписало бы файлы устаревшими данными.
+async function advanceCache<T extends { slug: string }>(
+  collection: Collection<T>,
+  settings: Settings,
+  cachedSha: string,
+  commitSha: string,
+  saved: T[],
+): Promise<void> {
+  try {
+    await applyUpdate(collection, settings, cachedSha, commitSha);
+  } catch {
+    // Не вышло сверить: кладём свои карточки, а SHA оставляем прежним — следующая сверка догонит
+    for (const item of saved) await collection.cache.upsert(item);
+  }
+}
+
 // Создаёт или перезаписывает карточку и обновляет кэш; возвращает SHA коммита
 export async function saveCard<T extends { slug: string }>(
   collection: Collection<T>,
@@ -114,23 +154,23 @@ export async function saveCard<T extends { slug: string }>(
   item: T,
 ): Promise<string> {
   const path = cardPath(collection, item.slug);
-  let sha: string | undefined;
+  let existing: { content: string; sha: string } | undefined;
   try {
-    sha = (await getFile(settings, path)).sha;
+    existing = await getFile(settings, path);
   } catch (e) {
     if (!(e instanceof GitHubError && e.type === 'not_found')) throw e;
   }
-  const commitSha = await saveFile(settings, path, collection.serialize(item), sha);
+  const commitSha = await saveFile(settings, path, cardContent(collection, item, existing?.content), existing?.sha);
   // Кэш, который ещё ни разу не загружался, не трогаем — иначе в нём окажется одна эта карточка
-  if (await collection.cache.getCommitSha() !== null) {
-    await collection.cache.upsert(item);
-    await collection.cache.updateCommitSha(commitSha);
-  }
+  const cachedSha = await collection.cache.getCommitSha();
+  if (cachedSha !== null) await advanceCache(collection, settings, cachedSha, commitSha, [item]);
   return commitSha;
 }
 
-// Меняет поля сразу у нескольких карточек одним коммитом. Перед записью подтягивает свежие
-// карточки с GitHub, чтобы не затереть правки, сделанные в другом месте; patch применяется к ним.
+// Меняет поля сразу у нескольких карточек одним коммитом. Каждую карточку перед записью
+// читает с GitHub на том коммите, поверх которого пишет, и меняет в ней только поля из patch.
+// Кэш для этого не используется: он может отставать или быть собран старой версией
+// приложения, не знающей части полей, и тогда запись из него стёрла бы эти поля.
 // Возвращает обновлённые карточки (пустой список, если менять нечего).
 export async function saveCardsPatch<T extends { slug: string }>(
   collection: Collection<T>,
@@ -140,21 +180,30 @@ export async function saveCardsPatch<T extends { slug: string }>(
 ): Promise<T[]> {
   for (let attempt = 0; ; attempt++) {
     const headSha = await getLatestCommitSha(settings);
-    await syncCollection(collection, settings, headSha);
-    const items = (await collection.cache.get()) ?? [];
-    const updated = items
-      .filter(item => patch[item.slug])
-      .map(item => ({ ...item, ...patch[item.slug] }));
-    if (updated.length === 0) return [];
+    const files: { path: string; content: string }[] = [];
+    const updated: T[] = [];
+    for (let i = 0; i < Object.keys(patch).length; i += BATCH_SIZE) {
+      const slugs = Object.keys(patch).slice(i, i + BATCH_SIZE);
+      await Promise.all(slugs.map(async slug => {
+        const path = cardPath(collection, slug);
+        let original: string;
+        try {
+          original = (await getFile(settings, path, headSha)).content;
+        } catch (e) {
+          // Карточку удалили или переименовали в другом месте — менять нечего
+          if (e instanceof GitHubError && e.type === 'not_found') return;
+          throw e;
+        }
+        const item = { ...collection.parse(original, slug), ...patch[slug], slug };
+        files.push({ path, content: cardContent(collection, item, original) });
+        updated.push(item);
+      }));
+    }
+    if (files.length === 0) return [];
     try {
-      const commitSha = await commitFiles(
-        settings,
-        headSha,
-        updated.map(item => ({ path: cardPath(collection, item.slug), content: collection.serialize(item) })),
-        message,
-      );
-      for (const item of updated) await collection.cache.upsert(item);
-      await collection.cache.updateCommitSha(commitSha);
+      const cachedSha = await collection.cache.getCommitSha();
+      const commitSha = await commitFiles(settings, headSha, files, message);
+      if (cachedSha !== null) await advanceCache(collection, settings, cachedSha, commitSha, updated);
       return updated;
     } catch (e) {
       // Ветка сдвинулась между чтением и записью — пробуем ещё раз на свежем состоянии
