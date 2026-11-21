@@ -1,9 +1,9 @@
 // Обмен карточками между дневниками: экспорт обезличенных карточек в JSON и импорт в свой репозиторий.
 // Формат файла описан в docs/export-format.md.
 import { booksCollection } from './booksService';
-import { Collection, loadAll } from './cardsService';
+import { Collection, cardContent, loadAll } from './cardsService';
 import { concertsCollection } from './concertsService';
-import { commitFiles, getLatestCommitSha } from './github';
+import { GitHubError, commitFiles, getFile, getLatestCommitSha } from './github';
 import { cardBody, parseCard, toSlug } from './markdown';
 import { moviesCollection } from './moviesService';
 import { Settings } from './storage';
@@ -276,10 +276,22 @@ export async function runImport(
   if (writes.length === 0) return { commitSha: null, written: 0 };
 
   // Если ветка ушла вперёд между чтением и записью, GitHub откажет, и импорт можно просто повторить
+  const headSha = await getLatestCommitSha(settings);
+  const files = await Promise.all(writes.map(async w => {
+    const path = `${w.section.folder}/${w.card.slug}.md`;
+    // Поля, которых приложение не знает, берём из файла как он есть сейчас, а не из кэша
+    let original: string | undefined;
+    try {
+      original = (await getFile(settings, path, headSha)).content;
+    } catch (e) {
+      if (!(e instanceof GitHubError && e.type === 'not_found')) throw e;
+    }
+    return { path, content: cardContent(w.section.collection, w.card, original) };
+  }));
   const commitSha = await commitFiles(
     settings,
-    await getLatestCommitSha(settings),
-    writes.map(w => ({ path: `${w.section.folder}/${w.card.slug}.md`, content: w.section.collection.serialize(w.card) })),
+    headSha,
+    files,
     `Import ${writes.length} card${writes.length === 1 ? '' : 's'}`,
   );
 

@@ -82,8 +82,10 @@ interface GithubDirEntry {
   type: 'file' | 'dir';
 }
 
-export async function getFile(settings: Settings, path: string) {
-  const data = await request<GithubFile>(settings, 'GET', `/repos/${settings.repo}/contents/${path}`);
+// ref — коммит или ветка, из которых читать файл; без него читается ветка по умолчанию
+export async function getFile(settings: Settings, path: string, ref?: string) {
+  const query = ref ? `?ref=${encodeURIComponent(ref)}` : '';
+  const data = await request<GithubFile>(settings, 'GET', `/repos/${settings.repo}/contents/${path}${query}`);
   return {
     content: fromBase64(data.content),
     sha: data.sha,

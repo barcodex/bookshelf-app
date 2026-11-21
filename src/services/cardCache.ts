@@ -20,15 +20,33 @@ export function createCardCache<T extends { slug: string }>(
     try {
       const raw = await AsyncStorage.getItem(itemsKey);
       if (!raw) return null;
-      // Дополняем поля, которых нет в кэше, сохранённом старой версией приложения
-      return (JSON.parse(raw) as T[]).map(item => ({ ...empty, ...item }));
+      const items = JSON.parse(raw) as T[];
+      // Кэш собран старой версией приложения, которая не знала части полей. Дополнять их
+      // пустыми значениями нельзя: в файлах эти поля могут быть заполнены, а карточка,
+      // сохранённая из такого кэша, их сотрёт. Сбрасываем кэш — раздел загрузится заново.
+      const keys = Object.keys(empty);
+      if (items.some(item => keys.some(k => !(k in item)))) {
+        await clear();
+        return null;
+      }
+      return items;
     } catch {
       return null;
     }
   };
 
+  const clear = async () => {
+    try {
+      await Promise.all([
+        AsyncStorage.removeItem(itemsKey),
+        AsyncStorage.removeItem(shaKey),
+      ]);
+    } catch {}
+  };
+
   return {
     get,
+    clear,
 
     async getCommitSha() {
       try {
@@ -58,7 +76,9 @@ export function createCardCache<T extends { slug: string }>(
 
     async upsert(item) {
       try {
-        const items = await get() || [];
+        // Кэша нет (не загружался или сброшен) — не создаём его из одной карточки
+        const items = await get();
+        if (!items) return;
         const index = items.findIndex(i => i.slug === item.slug);
         if (index >= 0) {
           items[index] = item;
@@ -72,15 +92,6 @@ export function createCardCache<T extends { slug: string }>(
     async updateCommitSha(sha) {
       try {
         await AsyncStorage.setItem(shaKey, sha);
-      } catch {}
-    },
-
-    async clear() {
-      try {
-        await Promise.all([
-          AsyncStorage.removeItem(itemsKey),
-          AsyncStorage.removeItem(shaKey),
-        ]);
       } catch {}
     },
   };
