@@ -5,6 +5,8 @@ import { t } from '../services/i18n';
 import { autoSlug } from '../services/markdown';
 import { moviesCollection } from '../services/moviesService';
 import { MovieFormData } from '../types/movie';
+import { findWikipediaPoster } from '../services/wikipedia';
+import CardImagesField from './CardImagesField';
 import Checkbox from './Checkbox';
 import DateInput from './DateInput';
 import StarRating from './StarRating';
@@ -45,6 +47,9 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 export default function MovieForm({ value, onChange, showSlug = false }: Props) {
   const { language } = useLanguage();
   const slugEditedRef = useRef(false);
+  // Картинки готовятся асинхронно: к их концу форма могла измениться
+  const valueRef = useRef(value);
+  valueRef.current = value;
   const [suggestions, setSuggestions] = useState<string[]>(DEFAULT_WHERE);
 
   useEffect(() => {
@@ -122,6 +127,17 @@ export default function MovieForm({ value, onChange, showSlug = false }: Props) 
           autoCapitalize="none"
           autoCorrect={false}
           keyboardType="url"
+        />
+      </Field>
+
+      <Field label={t(language, 'images.label')}>
+        <CardImagesField
+          folder={moviesCollection.folder}
+          slug={value.slug}
+          value={{ poster: value.poster, images: value.images }}
+          onChange={images => onChange({ ...valueRef.current, ...images })}
+          lookup={() => findWikipediaPoster(valueRef.current)}
+          autoLookupKey={value.imdb.match(/\btt\d{5,}\b/)?.[0]}
         />
       </Field>
 

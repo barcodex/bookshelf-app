@@ -1,9 +1,12 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../services/i18n';
+import { imagesSupported } from '../services/images';
+import { moviesCollection } from '../services/moviesService';
 import { MovieFormData } from '../types/movie';
 import { movieSubtitle } from '../utils/groupMovies';
 import { colors } from '../utils/theme';
+import RepoImage from './RepoImage';
 
 interface Props {
   movie: MovieFormData;
@@ -18,6 +21,9 @@ export default function MovieRow({ movie, date, backgroundColor, onPress }: Prop
   return (
     <Pressable style={[styles.item, { backgroundColor }]} onPress={onPress}>
       <Text style={[styles.itemDate, !date && styles.itemDateEmpty]}>{date || '—'}</Text>
+      {imagesSupported && (movie.poster
+        ? <RepoImage folder={moviesCollection.folder} slug={movie.slug} name={movie.poster} style={styles.thumb} />
+        : <View style={styles.thumbEmpty} />)}
       <View style={styles.itemMeta}>
         <Text style={styles.itemTitle} numberOfLines={1}>{movie.title}</Text>
         <Text style={styles.itemSubtitle} numberOfLines={1}>{movieSubtitle(movie)}</Text>
@@ -39,6 +45,9 @@ const styles = StyleSheet.create({
   itemDate: { fontSize: 13, color: colors.textFaint, width: 72 },
   itemDateEmpty: { color: colors.textEmpty },
   itemMeta: { flex: 1 },
+  // В ленте постер уменьшен до значка; места под него хватает и у фильмов без постера
+  thumb: { width: 30, height: 45, borderRadius: 3, marginVertical: -6 },
+  thumbEmpty: { width: 30 },
   itemTitle: { fontSize: 15, fontWeight: '600', color: colors.text, marginBottom: 2 },
   itemSubtitle: { fontSize: 13, color: colors.textMuted },
   itemRight: { alignItems: 'flex-end', gap: 2 },

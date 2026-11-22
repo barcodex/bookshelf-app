@@ -358,5 +358,19 @@
       "newer_version": "The file was made by a newer app version. Update the app and try again.",
       "empty": "The file has no cards."
     }
+  },
+  "images": {
+    "label": "Poster and images",
+    "findPoster": "Find on Wikipedia",
+    "paste": "Paste",
+    "chooseFile": "Choose file",
+    "chooseFiles": "Choose files",
+    "remove": "Remove",
+    "noPoster": "No poster",
+    "ownImages": "Your images",
+    "notFound": "No poster found on Wikipedia",
+    "failed": "Couldn't load the image",
+    "clipboardEmpty": "No image in the clipboard",
+    "foundOnWikipedia": "Poster from Wikipedia"
   }
 }

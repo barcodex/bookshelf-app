@@ -5,7 +5,8 @@ import { GitHubErrorScreen } from '../components/GitHubErrorView';
 import MovieForm from '../components/MovieForm';
 import { TAB_EDGES } from '../components/SectionHeader';
 import { useLanguage } from '../context/LanguageContext';
-import { saveCard } from '../services/cardsService';
+import { saveCardWithFiles } from '../services/cardsService';
+import { commitPending, imageCommitFiles } from '../services/images';
 import { GitHubError } from '../services/github';
 import { t } from '../services/i18n';
 import { normalizeImdb } from '../services/movieMarkdown';
@@ -47,7 +48,10 @@ export default function AddMovieScreen() {
 
     setSaving(true);
     try {
-      await saveCard(moviesCollection, settings, { ...data, imdb: normalizeImdb(data.imdb) });
+      const movie = { ...data, imdb: normalizeImdb(data.imdb) };
+      await saveCardWithFiles(moviesCollection, settings, movie,
+        await imageCommitFiles(moviesCollection.folder, movie));
+      await commitPending(moviesCollection.folder, movie);
       setSuccess(t(language, 'addBook.success'));
       reset();
     } catch (e) {

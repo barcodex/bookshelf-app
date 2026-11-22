@@ -1,11 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
 import { Linking, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLanguage } from '../context/LanguageContext';
 import { Language, t, toIntlLocale } from '../services/i18n';
 import { MovieFormData } from '../types/movie';
 import { isYearOnly } from '../utils/groupBooks';
+import { imagesSupported } from '../services/images';
+import { moviesCollection } from '../services/moviesService';
+import ImageViewer from './ImageViewer';
 import MarkdownText from './MarkdownText';
+import RepoImage from './RepoImage';
 import StarRating from './StarRating';
 
 interface Props {
@@ -37,6 +42,10 @@ export default function MovieDetailModal({ movie, onClose, onEdit }: Props) {
   const navigation = useNavigation<any>();
   const { language } = useLanguage();
   const insets = useSafeAreaInsets();
+  const [viewer, setViewer] = useState<number | null>(null);
+  const showImages = imagesSupported;
+  const allImages = [movie.poster, ...movie.images].filter(Boolean);
+  const folder = moviesCollection.folder;
 
   return (
     <Modal
@@ -65,47 +74,68 @@ export default function MovieDetailModal({ movie, onClose, onEdit }: Props) {
         </View>
 
         <ScrollView contentContainerStyle={styles.content}>
-          {!!movie.original_title && movie.original_title !== movie.title && (
-            <Row label={t(language, 'movie.originalTitle')} value={movie.original_title} />
-          )}
-          <Row label={t(language, 'movie.year')} value={movie.year} />
-          {!!movie.date_watched && (
-            <Row label={t(language, 'movie.dateWatched')} value={formatDate(movie.date_watched, language)} />
-          )}
-          <Row label={t(language, 'movie.whereWatched')} value={movie.where_watched} />
-          {(movie.rating > 0 || movie.abandoned) && (
-            <View style={styles.row}>
-              <Text style={styles.rowLabel}>{t(language, 'movie.rating')}</Text>
-              <View style={styles.ratingValue}>
-                {movie.rating > 0 && <StarRating value={movie.rating} size="sm" exact />}
-                {movie.abandoned && <Text style={styles.abandoned}>{t(language, 'movie.abandoned')}</Text>}
-              </View>
-            </View>
-          )}
-          {movie.tags.length > 0 && (
-            <View style={styles.tagsRow}>
-              {movie.tags.map(tag => (
+          <View style={styles.top}>
+            {showImages && !!movie.poster && (
+              <RepoImage
+                folder={folder} slug={movie.slug} name={movie.poster} style={styles.poster}
+                onPress={() => setViewer(0)}
+              />
+            )}
+            <View style={styles.topRows}>
+              {!!movie.original_title && movie.original_title !== movie.title && (
+                <Row label={t(language, 'movie.originalTitle')} value={movie.original_title} />
+              )}
+              <Row label={t(language, 'movie.year')} value={movie.year} />
+              {!!movie.date_watched && (
+                <Row label={t(language, 'movie.dateWatched')} value={formatDate(movie.date_watched, language)} />
+              )}
+              <Row label={t(language, 'movie.whereWatched')} value={movie.where_watched} />
+              {(movie.rating > 0 || movie.abandoned) && (
+                <View style={styles.row}>
+                  <Text style={styles.rowLabel}>{t(language, 'movie.rating')}</Text>
+                  <View style={styles.ratingValue}>
+                    {movie.rating > 0 && <StarRating value={movie.rating} size="sm" exact />}
+                    {movie.abandoned && <Text style={styles.abandoned}>{t(language, 'movie.abandoned')}</Text>}
+                  </View>
+                </View>
+              )}
+              {movie.tags.length > 0 && (
+                <View style={styles.tagsRow}>
+                  {movie.tags.map(tag => (
+                    <Pressable
+                      key={tag}
+                      style={styles.tag}
+                      onPress={() => {
+                        onClose();
+                        navigation.navigate('Search', { tag });
+                      }}
+                    >
+                      <Text style={styles.tagText}>{tag}</Text>
+                    </Pressable>
+                  ))}
+                </View>
+              )}
+              {!!movie.imdb && (
                 <Pressable
-                  key={tag}
-                  style={styles.tag}
-                  onPress={() => {
-                    onClose();
-                    navigation.navigate('Search', { tag });
-                  }}
+                  style={styles.imdbBtn}
+                  onPress={() => Linking.openURL(movie.imdb)}
+                  accessibilityRole="link"
                 >
-                  <Text style={styles.tagText}>{tag}</Text>
+                  <Text style={styles.imdbBtnText}>{t(language, 'movie.openImdb')} ↗</Text>
                 </Pressable>
+              )}
+            </View>
+          </View>
+
+          {showImages && movie.images.length > 0 && (
+            <View style={styles.gallery}>
+              {movie.images.map((name, i) => (
+                <RepoImage
+                  key={name} folder={folder} slug={movie.slug} name={name} style={styles.galleryImage}
+                  onPress={() => setViewer(movie.poster ? i + 1 : i)}
+                />
               ))}
             </View>
-          )}
-          {!!movie.imdb && (
-            <Pressable
-              style={styles.imdbBtn}
-              onPress={() => Linking.openURL(movie.imdb)}
-              accessibilityRole="link"
-            >
-              <Text style={styles.imdbBtnText}>{t(language, 'movie.openImdb')} ↗</Text>
-            </Pressable>
           )}
 
           {movie.summary ? (
@@ -123,6 +153,9 @@ export default function MovieDetailModal({ movie, onClose, onEdit }: Props) {
           ) : null}
         </ScrollView>
       </View>
+      {viewer !== null && (
+        <ImageViewer folder={folder} slug={movie.slug} names={allImages} index={viewer} onClose={() => setViewer(null)} />
+      )}
     </Modal>
   );
 }
@@ -159,6 +192,11 @@ const styles = StyleSheet.create({
   },
   closeBtnText: { fontSize: 14, color: '#555' },
   content: { padding: 20, gap: 12 },
+  top: { flexDirection: 'row', gap: 16, alignItems: 'flex-start' },
+  topRows: { flex: 1, gap: 12 },
+  poster: { width: 120, height: 180, borderRadius: 6 },
+  gallery: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  galleryImage: { width: 110, height: 110, borderRadius: 6 },
   row: { flexDirection: 'row', gap: 12 },
   rowLabel: { width: 140, fontSize: 14, color: '#888' },
   rowValue: { flex: 1, fontSize: 14, color: '#111' },

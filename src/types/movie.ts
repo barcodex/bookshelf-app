@@ -10,6 +10,8 @@ export interface MovieFormData {
   abandoned: boolean;     // «не досмотрено» — исключает оценку
   date_watched: string;   // ISO YYYY-MM-DD, YYYY или ''
   where_watched: string;  // где смотрел: кинотеатр, Apple TV, Netflix… или ''
+  poster: string;         // имя файла постера в movies/images/<slug>/ или ''
+  images: string[];       // имена своих картинок в той же папке
   summary: string;
   review: string;
 }
@@ -26,6 +28,8 @@ export const emptyMovie: MovieFormData = {
   abandoned: false,
   date_watched: '',
   where_watched: '',
+  poster: '',
+  images: [],
   summary: '',
   review: '',
 };
