@@ -109,19 +109,37 @@ export async function saveFile(
   return result.commit.sha;
 }
 
+// Файл для коммита: текст, двоичные данные в base64 (картинки) или удаление
+export type CommitFile =
+  | { path: string; content: string }
+  | { path: string; base64: string }
+  | { path: string; remove: true };
+
 // Записывает несколько файлов одним коммитом в main (Git Data API); возвращает SHA коммита.
 // Если ветка ушла вперёд после parentSha, GitHub отклонит обновление ссылки (422).
 export async function commitFiles(
   settings: Settings,
   parentSha: string,
-  files: { path: string; content: string }[],
+  files: CommitFile[],
   message: string,
 ): Promise<string> {
   const repo = `/repos/${settings.repo}`;
   const parent = await request<{ tree: { sha: string } }>(settings, 'GET', `${repo}/git/commits/${parentSha}`);
+  // Двоичные файлы нельзя передать в дереве текстом — сначала создаём для них блобы
+  const entries = await Promise.all(files.map(async f => {
+    if ('remove' in f) return { path: f.path, mode: '100644', type: 'blob', sha: null };
+    if ('base64' in f) {
+      const blob = await request<{ sha: string }>(settings, 'POST', `${repo}/git/blobs`, {
+        content: f.base64,
+        encoding: 'base64',
+      });
+      return { path: f.path, mode: '100644', type: 'blob', sha: blob.sha };
+    }
+    return { path: f.path, mode: '100644', type: 'blob', content: f.content };
+  }));
   const tree = await request<{ sha: string }>(settings, 'POST', `${repo}/git/trees`, {
     base_tree: parent.tree.sha,
-    tree: files.map(f => ({ path: f.path, mode: '100644', type: 'blob', content: f.content })),
+    tree: entries,
   });
   const commit = await request<{ sha: string }>(settings, 'POST', `${repo}/git/commits`, {
     message,
@@ -130,6 +148,26 @@ export async function commitFiles(
   });
   await request(settings, 'PATCH', `${repo}/git/refs/heads/main`, { sha: commit.sha });
   return commit.sha;
+}
+
+// Двоичный файл из репозитория (картинка) как Blob
+export async function getRawFile(settings: Settings, path: string): Promise<Blob> {
+  const url = `${BASE}/repos/${settings.repo}/contents/${path.split('/').map(encodeURIComponent).join('/')}`;
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${settings.token}`,
+        Accept: 'application/vnd.github.raw',
+      },
+    });
+  } catch {
+    throw new GitHubError('Нет подключения к GitHub', null, 'network');
+  }
+  if (!res.ok) {
+    throw new GitHubError(`GitHub ${res.status}: ${path}`, res.status, classifyStatus(res.status));
+  }
+  return res.blob();
 }
 
 export async function listDirectory(settings: Settings, path: string) {

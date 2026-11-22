@@ -9,7 +9,8 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLanguage } from '../context/LanguageContext';
-import { saveCard } from '../services/cardsService';
+import { saveCardWithFiles } from '../services/cardsService';
+import { commitPending, imageCommitFiles } from '../services/images';
 import { t } from '../services/i18n';
 import { normalizeImdb } from '../services/movieMarkdown';
 import { moviesCollection } from '../services/moviesService';
@@ -41,7 +42,9 @@ export default function EditMovieModal({ movie, onClose, onSaved }: Props) {
     setError('');
     try {
       const updated = { ...data, imdb: normalizeImdb(data.imdb) };
-      await saveCard(moviesCollection, settings, updated);
+      await saveCardWithFiles(moviesCollection, settings, updated,
+        await imageCommitFiles(moviesCollection.folder, updated, movie));
+      await commitPending(moviesCollection.folder, updated);
       onSaved(updated);
     } catch (e) {
       setError(e instanceof Error ? e.message : t(language, 'common.error'));

@@ -358,5 +358,19 @@
       "newer_version": "Il file proviene da una versione più recente dell'app. Aggiornala e riprova.",
       "empty": "Il file non contiene schede."
     }
+  },
+  "images": {
+    "label": "Locandina e immagini",
+    "findPoster": "Cerca su Wikipedia",
+    "paste": "Incolla",
+    "chooseFile": "Scegli file",
+    "chooseFiles": "Scegli file",
+    "remove": "Rimuovi",
+    "noPoster": "Nessuna locandina",
+    "ownImages": "Le tue immagini",
+    "notFound": "Nessuna locandina trovata su Wikipedia",
+    "failed": "Impossibile caricare l'immagine",
+    "clipboardEmpty": "Nessuna immagine negli appunti",
+    "foundOnWikipedia": "Locandina da Wikipedia"
   }
 }

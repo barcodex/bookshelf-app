@@ -3,6 +3,16 @@ name: Deploy to Vercel
 on:
   push:
     branches: [main]
+  # Превью для PR из веток этого репозитория (у PR из форков нет доступа к секретам)
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   VERCEL_ORG_ID: team_KHR3eKKwaDpydBeboFJq1Hl1
@@ -24,4 +34,26 @@ jobs:
           cp -r dist/. .vercel/output/static/
           printf '{"version":3,"routes":[{"handle":"filesystem"},{"src":"/(.*)","dest":"/index.html"}]}' \
             > .vercel/output/config.json
-      - run: npx vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy to production
+        if: github.event_name == 'push'
+        run: npx vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy preview
+        id: preview
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        run: echo "url=$(npx vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})" >> "$GITHUB_OUTPUT"
+      - name: Comment preview URL
+        if: steps.preview.outputs.url
+        uses: actions/github-script@v7
+        env:
+          PREVIEW_URL: ${{ steps.preview.outputs.url }}
+        with:
+          script: |
+            // Один комментарий на PR: при новых пушах он обновляется, а не множится
+            const marker = '<!-- vercel-preview -->';
+            const body = `${marker}\nПревью: ${process.env.PREVIEW_URL}\n\nКоммит ${context.payload.pull_request.head.sha.slice(0, 7)}`;
+            const { owner, repo } = context.repo;
+            const issue_number = context.payload.pull_request.number;
+            const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number });
+            const existing = comments.find(c => c.body?.includes(marker));
+            if (existing) await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            else await github.rest.issues.createComment({ owner, repo, issue_number, body });

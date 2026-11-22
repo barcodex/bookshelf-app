@@ -1,5 +1,5 @@
 import { CardCache } from './cardCache';
-import { GitHubError, commitFiles, getChangedFiles, getFile, getLatestCommitSha, listDirectory, saveFile } from './github';
+import { CommitFile, GitHubError, commitFiles, getChangedFiles, getFile, getLatestCommitSha, listDirectory, saveFile } from './github';
 import { carryOverFrontmatter } from './markdown';
 import { Settings } from './storage';
 
@@ -165,6 +165,40 @@ export async function saveCard<T extends { slug: string }>(
   const cachedSha = await collection.cache.getCommitSha();
   if (cachedSha !== null) await advanceCache(collection, settings, cachedSha, commitSha, [item]);
   return commitSha;
+}
+
+// Как saveCard, но вместе с карточкой одним коммитом пишет и удаляет другие файлы (картинки)
+export async function saveCardWithFiles<T extends { slug: string }>(
+  collection: Collection<T>,
+  settings: Settings,
+  item: T,
+  extra: CommitFile[],
+): Promise<string> {
+  if (extra.length === 0) return saveCard(collection, settings, item);
+  const path = cardPath(collection, item.slug);
+  for (let attempt = 0; ; attempt++) {
+    const headSha = await getLatestCommitSha(settings);
+    let original: string | undefined;
+    try {
+      original = (await getFile(settings, path, headSha)).content;
+    } catch (e) {
+      if (!(e instanceof GitHubError && e.type === 'not_found')) throw e;
+    }
+    try {
+      const cachedSha = await collection.cache.getCommitSha();
+      const commitSha = await commitFiles(
+        settings,
+        headSha,
+        [{ path, content: cardContent(collection, item, original) }, ...extra],
+        `${original === undefined ? 'Add' : 'Update'} ${path}`,
+      );
+      if (cachedSha !== null) await advanceCache(collection, settings, cachedSha, commitSha, [item]);
+      return commitSha;
+    } catch (e) {
+      if (attempt < 2 && e instanceof GitHubError && e.status === 422) continue;
+      throw e;
+    }
+  }
 }
 
 // Меняет поля сразу у нескольких карточек одним коммитом. Каждую карточку перед записью

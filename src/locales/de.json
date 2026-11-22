@@ -358,5 +358,19 @@
       "newer_version": "Die Datei stammt von einer neueren App-Version. Aktualisiere die App und versuche es erneut.",
       "empty": "Die Datei enthält keine Karten."
     }
+  },
+  "images": {
+    "label": "Poster und Bilder",
+    "findPoster": "Auf Wikipedia suchen",
+    "paste": "Einfügen",
+    "chooseFile": "Datei wählen",
+    "chooseFiles": "Dateien wählen",
+    "remove": "Entfernen",
+    "noPoster": "Kein Poster",
+    "ownImages": "Eigene Bilder",
+    "notFound": "Kein Poster auf Wikipedia gefunden",
+    "failed": "Bild konnte nicht geladen werden",
+    "clipboardEmpty": "Kein Bild in der Zwischenablage",
+    "foundOnWikipedia": "Poster von Wikipedia"
   }
 }

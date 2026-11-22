@@ -358,5 +358,19 @@
       "newer_version": "El archivo es de una versión más nueva de la app. Actualízala e inténtalo de nuevo.",
       "empty": "El archivo no tiene fichas."
     }
+  },
+  "images": {
+    "label": "Póster e imágenes",
+    "findPoster": "Buscar en Wikipedia",
+    "paste": "Pegar",
+    "chooseFile": "Elegir archivo",
+    "chooseFiles": "Elegir archivos",
+    "remove": "Quitar",
+    "noPoster": "Sin póster",
+    "ownImages": "Tus imágenes",
+    "notFound": "No se encontró póster en Wikipedia",
+    "failed": "No se pudo cargar la imagen",
+    "clipboardEmpty": "No hay imagen en el portapapeles",
+    "foundOnWikipedia": "Póster de Wikipedia"
   }
 }

@@ -71,8 +71,9 @@ export const exchangeSections: ExchangeSection[] = [
     id: 'films',
     folder: moviesCollection.folder,
     collection: moviesCollection,
-    // Когда и где смотрел и «не досмотрено» — личное
-    personal: [...COMMON_PERSONAL, 'abandoned', 'date_watched', 'where_watched'],
+    // Когда и где смотрел и «не досмотрено» — личное. Картинки лежат файлами в репозитории
+    // и в JSON не попадают: постер получатель найдёт сам по ссылке IMDb, свои фото личные
+    personal: [...COMMON_PERSONAL, 'abandoned', 'date_watched', 'where_watched', 'poster', 'images'],
     matchKeys: fm => keys(
       fm.imdb?.match(/tt\d{5,}/)?.[0] ?? '',
       key(fm.title, fm.year),

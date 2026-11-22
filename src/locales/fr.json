@@ -358,5 +358,19 @@
       "newer_version": "Le fichier vient d'une version plus récente de l'application. Mettez-la à jour et réessayez.",
       "empty": "Le fichier ne contient aucune fiche."
     }
+  },
+  "images": {
+    "label": "Affiche et images",
+    "findPoster": "Chercher sur Wikipédia",
+    "paste": "Coller",
+    "chooseFile": "Choisir un fichier",
+    "chooseFiles": "Choisir des fichiers",
+    "remove": "Retirer",
+    "noPoster": "Pas d'affiche",
+    "ownImages": "Vos images",
+    "notFound": "Aucune affiche trouvée sur Wikipédia",
+    "failed": "Impossible de charger l'image",
+    "clipboardEmpty": "Aucune image dans le presse-papiers",
+    "foundOnWikipedia": "Affiche de Wikipédia"
   }
 }
